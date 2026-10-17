@@ -269,7 +269,7 @@ func _draw() -> void:
 		_text(Vector2(bx + 6, 294), "HP %d   SPEED %.1f" % [int(f3.get("health", 1000)), float(f3.get("walk", 3))], 8, Color(0.6, 1.0, 0.6), false, 0)
 	var hint := "LIGHT: select   HEAVY: alt costume   MEDIUM: back"
 	if two_humans:
-		hint = "P1: WASD + J/L   P2: Arrows + Num1/Num3   back: K / Num2"
+		hint = "P1: WASD + J/L   P2: Arrows + Num1/Num3 (or , /)   back: K / Num2 (or .)"
 	_text(Vector2(320, 316), hint, 8, Color(0.8, 0.8, 0.9), true, 2)
 	if message_t > 0.0:
 		_text(Vector2(320, 164), message, 10, Color(1, 0.5, 0.4), true, 3)

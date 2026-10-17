@@ -31,23 +31,42 @@ Fighters are 158–182 px tall on a 640×360 pixel canvas, so each one is roughl
 
 You can also run it from a terminal: `godot --path /path/to/dcfightnight`
 
-### Exporting a Windows build
-`export_presets.cfg` includes **Windows Desktop** and **Linux** presets. Install the export templates (**Editor → Manage Export Templates**), then use **Project → Export**.
+## Windows, macOS and Linux builds
+
+The game runs on all three. It uses Godot's Compatibility (OpenGL 3.3) renderer, so older GPUs and Macs work too.
+
+**Download a ready-made build:** every push to GitHub runs the workflow in `.github/workflows/build.yml`. It runs the tests, then exports all three platforms. Open the repo's **Actions** tab, click the latest run, and download **FightNight-Windows**, **FightNight-macOS** or **FightNight-Linux** under *Artifacts*.
+
+| Platform | File | First launch |
+|---|---|---|
+| Windows (64-bit) | `FightNight.exe` | Double-click. Windows SmartScreen may say "Windows protected your PC" because the exe isn't code-signed. Click **More info → Run anyway**. |
+| macOS (Intel + Apple Silicon) | `FightNight.zip` → `DC's Arrowverse- Fight Night.app` | Unzip, then **right-click the app → Open → Open**. The app is only ad-hoc signed, so Gatekeeper asks once. If macOS says the app is "damaged", run `xattr -cr "DC's Arrowverse- Fight Night.app"` in Terminal, then open it again. |
+| Linux (x86_64) | `FightNight.x86_64` | `chmod +x FightNight.x86_64 && ./FightNight.x86_64` |
+
+**Build it yourself:** install Godot 4.3 and its export templates (**Editor → Manage Export Templates → Download**). Then use **Project → Export** and choose the *Windows Desktop*, *macOS* or *Linux* preset. Or export from a terminal:
+
+```
+godot --headless --path . --export-release "Windows Desktop" build/windows/FightNight.exe
+godot --headless --path . --export-release "macOS"           build/macos/FightNight.zip
+godot --headless --path . --export-release "Linux"           build/linux/FightNight.x86_64
+```
+
+All three presets can be exported from any OS. Settings and saves go to the standard per-user folder on each OS (`%APPDATA%\Godot\app_userdata\...` on Windows, `~/Library/Application Support/Godot/app_userdata/...` on macOS, `~/.local/share/godot/app_userdata/...` on Linux).
 
 ## Controls
 
 | Action | Player 1 (keyboard) | Player 2 (keyboard) | Gamepad |
 |---|---|---|---|
 | Move / jump / crouch | W A S D | Arrow keys | D-pad / left stick |
-| Light attack | J | Numpad 1 (or Delete) | X |
-| Medium attack | K | Numpad 2 (or End) | Y |
-| Heavy attack | L | Numpad 3 (or Page Down) | B |
-| Special | U | Numpad 4 (or Insert) | A / RB / RT |
-| Block (hold; add Down for a low block) | I | Numpad 5 (or Home) | LB / LT |
-| Throw (when close) | K + L | Num2 + Num3 | Y + B |
+| Light attack | J | Numpad 1 (or `,`) | X |
+| Medium attack | K | Numpad 2 (or `.`) | Y |
+| Heavy attack | L | Numpad 3 (or `/`) | B |
+| Special | U | Numpad 4 (or `;`) | A / RB / RT |
+| Block (hold; add Down for a low block) | I | Numpad 5 (or `'`) | LB / LT |
+| Throw (when close) | K + L | Num2 + Num3 (or `.` + `/`) | Y + B |
 | Pause | Esc / P | Esc / P | Start |
 
-Gamepad 1 controls Player 1 and gamepad 2 controls Player 2. You can swap them in Options. Keyboard keys can be remapped in **Options → Player 1/2 Controls**.
+On keyboards without a numpad (laptops, Mac keyboards), Player 2 uses the backup keys shown in brackets. Gamepad 1 controls Player 1 and gamepad 2 controls Player 2. You can swap them in Options. Keyboard keys can be remapped in **Options → Player 1/2 Controls**.
 
 **Menus:** move with the arrows or WASD. Confirm with J, Enter or gamepad X. Go back with K, Esc or gamepad Y. On the character select screen, confirm with **Heavy** to pick the alternate costume.
 

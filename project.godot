@@ -38,6 +38,7 @@ common/max_physics_steps_per_frame=4
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/canvas_textures/default_texture_filter=0
+textures/vram_compression/import_etc2_astc=true
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
 environment/defaults/default_clear_color=Color(0.02, 0.02, 0.04, 1)

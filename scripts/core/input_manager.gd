@@ -14,9 +14,9 @@ const DEFAULT_KEYS := {
 	1: {"up": KEY_UP, "down": KEY_DOWN, "left": KEY_LEFT, "right": KEY_RIGHT,
 		"light": KEY_KP_1, "medium": KEY_KP_2, "heavy": KEY_KP_3, "special": KEY_KP_4, "block": KEY_KP_5},
 }
-## Secondary P2 keys for keyboards without a numpad.
+## Secondary P2 keys for keyboards without a numpad (laptops, Mac keyboards).
 const ALT_KEYS := {
-	1: {"light": KEY_DELETE, "medium": KEY_END, "heavy": KEY_PAGEDOWN, "special": KEY_INSERT, "block": KEY_HOME},
+	1: {"light": KEY_COMMA, "medium": KEY_PERIOD, "heavy": KEY_SLASH, "special": KEY_SEMICOLON, "block": KEY_APOSTROPHE},
 }
 const PAD_BUTTONS := {
 	"up": [JOY_BUTTON_DPAD_UP], "down": [JOY_BUTTON_DPAD_DOWN], "left": [JOY_BUTTON_DPAD_LEFT], "right": [JOY_BUTTON_DPAD_RIGHT],
