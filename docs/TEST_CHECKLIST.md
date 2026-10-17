@@ -1,0 +1,52 @@
+# Manual Test Checklist
+
+Use this alongside the automated runner (`res://tests/TestRunner.tscn`). It follows the bible's acceptance checklist.
+
+## Launch
+- [ ] The project opens in Godot 4.3+ from a clean checkout with no script errors in the Output panel.
+- [ ] F5 shows the title screen. Menu music plays. The fighters on the title screen swap every 5 seconds.
+
+## Menus
+- [ ] Every main-menu item opens its screen. Back (K / Esc) returns from each one.
+- [ ] Options: each volume slider changes the volume right away. Mute, Fullscreen, Window Scale and Pixel Scaling all apply. Settings are still set after restarting the game.
+- [ ] Options → Player 1 Controls: rebind Light to another key. The new key works in a fight. If you rebind to a key that's already in use, the two actions swap.
+- [ ] Credits scroll. Any button returns to the menu.
+
+## Character / stage select
+- [ ] Versus: P1 (WASD + J) and P2 (arrows + Num1) move their cursors independently, and back (K / Num2) un-picks.
+- [ ] Confirming with Heavy picks the alternate costume. A mirror match gives P2 the other palette automatically.
+- [ ] Control Freak shows "?" until Story or Arcade is beaten.
+- [ ] Random picks an unlocked fighter.
+- [ ] Stage select previews each arena live. The locked boss stage can't be picked until it's unlocked.
+
+## Fight
+- [ ] The VS splash shows both fighters and the stage. Then ROUND 1 → FIGHT!
+- [ ] Walk, back-walk, crouch, neutral/forward/back jump, and forward/back dash (double-tap) all work.
+- [ ] Light, Medium and Heavy attacks, standing / crouching / in the air, visibly hit and show sparks.
+- [ ] Chains work: L → M → H and cL → cM → cH. A normal that hits can be cancelled into a special.
+- [ ] Block (I) stops high and mid attacks. Crouch-block (I + S) stops lows. Overheads (jump-ins) beat a crouch-block. Sweeps beat a standing block.
+- [ ] Throw (K + L) works up close. Pressing K + L right after being grabbed breaks the throw ("THROW BREAK").
+- [ ] Every special works for every fighter (check against `docs/MOVES.md`).
+- [ ] The super needs a full meter. It plays the darkened-stage banner freeze, then hits.
+- [ ] The combo counter shows hits and damage. Long juggles end, because the opponent becomes untouchable after 5 air hits.
+- [ ] K.O. gives slow motion, then "<NAME> WINS". FLAWLESS VICTORY appears if the winner took no damage. TIME decides by remaining health.
+- [ ] Best of 3 with round markers. The results menu offers Rematch, Character Select, Stage Select and Main Menu, and each one works.
+- [ ] Neither fighter can leave the screen or the stage. The camera follows both.
+- [ ] Pause (Esc) freezes the fight. Move List, Restart, Character Select and Main Menu all work. Resume works.
+
+## Modes
+- [ ] Story: the prologue plays, then chapters 1–9 in order. The finale asks you to choose a champion. Winning unlocks Control Freak and Freak's Studio, then shows the credits. Losing offers Retry or Quit. After quitting, Continue Story resumes at the reached chapter.
+- [ ] Arcade: 6 random opponents, then Control Freak at Freak's Studio, then the fighter's ending text, then the credits.
+- [ ] Survival: health carries over (+25% between fights). The win count goes up. The CPU gets harder every 3 wins.
+- [ ] Training: the timer shows "--". Health regenerates. Dummy modes (Stand / Crouch / Jump / Block / CPU), the Hitboxes toggle and R (reset) all work. The frame-data line updates.
+
+## Visual / audio
+- [ ] Pixel art stays crisp at 1280×720 and in fullscreen with Pixel Scaling set to CRISP.
+- [ ] Fighters are roughly half the screen height and easy to read on every stage.
+- [ ] The HUD stays legible on bright stages (D.E.O., National City).
+- [ ] Each fighter's special has its own effect and sound.
+- [ ] Reduce Flashing removes the full-screen white flashes. Screen Shake OFF stops the camera shake.
+
+## Gamepad
+- [ ] Gamepad 1 controls P1 and gamepad 2 controls P2. Swap Gamepads reverses them.
+- [ ] D-pad and left stick both move. LT/LB block. RT/RB/A do specials. Start pauses.

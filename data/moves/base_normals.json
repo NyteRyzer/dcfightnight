@@ -1,0 +1,13 @@
+{
+  "_doc": "Shared normal moves. Hitboxes are [x_forward, y_top, width, height] in units of fighter height, relative to the feet anchor. Fighter files override any field.",
+  "L":  {"name": "Jab", "pose": ["jab_w", "jab_s"], "startup": 4, "active": 3, "recovery": 8, "damage": 35, "hitstun": 15, "blockstun": 10, "hitbox": [0.16, -0.86, 0.29, 0.15], "level": "high", "push": 4, "chain": ["L", "M", "H"], "sfx": "hit_l"},
+  "M":  {"name": "Mid Kick", "pose": ["midkick_w", "midkick_s"], "startup": 7, "active": 3, "recovery": 12, "damage": 60, "hitstun": 18, "blockstun": 12, "hitbox": [0.18, -0.45, 0.32, 0.17], "level": "mid", "push": 7, "chain": ["H"], "sfx": "hit_m"},
+  "H":  {"name": "Haymaker", "pose": ["haymaker_w", "haymaker_s"], "startup": 11, "active": 4, "recovery": 18, "damage": 95, "hitstun": 22, "blockstun": 15, "hitbox": [0.18, -0.91, 0.32, 0.2], "level": "mid", "push": 12, "sfx": "hit_h"},
+  "cL": {"name": "Low Jab", "pose": ["crouch", "low_punch_s"], "startup": 4, "active": 3, "recovery": 8, "damage": 30, "hitstun": 14, "blockstun": 9, "hitbox": [0.16, -0.61, 0.29, 0.13], "level": "mid", "push": 4, "chain": ["cL", "cM", "cH"], "crouch": true, "sfx": "hit_l"},
+  "cM": {"name": "Low Kick", "pose": ["crouch", "low_kick_s"], "startup": 7, "active": 3, "recovery": 13, "damage": 55, "hitstun": 17, "blockstun": 12, "hitbox": [0.16, -0.13, 0.33, 0.13], "level": "low", "push": 6, "chain": ["cH"], "crouch": true, "sfx": "hit_m"},
+  "cH": {"name": "Uppercut", "pose": ["uppercut_w", "uppercut_s"], "startup": 9, "active": 5, "recovery": 22, "damage": 100, "hitstun": 30, "blockstun": 14, "hitbox": [0.0, -1.15, 0.32, 0.55], "level": "mid", "push": 4, "launch": [2.5, -11.0], "crouch_start": true, "sfx": "hit_h"},
+  "jL": {"name": "Air Punch", "pose": ["jump_tuck", "air_punch_s"], "startup": 4, "active": 6, "recovery": 6, "damage": 40, "hitstun": 16, "blockstun": 10, "hitbox": [0.12, -0.68, 0.3, 0.2], "level": "overhead", "air": true, "push": 4, "sfx": "hit_l"},
+  "jM": {"name": "Air Kick", "pose": ["jump_tuck", "air_kick_s"], "startup": 6, "active": 8, "recovery": 8, "damage": 65, "hitstun": 18, "blockstun": 12, "hitbox": [0.14, -0.27, 0.33, 0.22], "level": "overhead", "air": true, "push": 6, "sfx": "hit_m"},
+  "jH": {"name": "Hammer Fist", "pose": ["air_heavy_w", "air_heavy_s"], "startup": 9, "active": 6, "recovery": 10, "damage": 90, "hitstun": 20, "blockstun": 14, "hitbox": [0.12, -0.64, 0.32, 0.32], "level": "overhead", "air": true, "push": 8, "sfx": "hit_h"},
+  "throw": {"name": "Throw", "pose": ["throw_w", "throw_w"], "startup": 4, "active": 3, "recovery": 22, "damage": 120, "throw": true, "range": 0.5, "sfx": "throw"}
+}

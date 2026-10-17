@@ -1,0 +1,117 @@
+{
+  "_doc": "Story Mode chapters. Each chapter: cards shown before the fight, the fight itself (player/opponent/stage), and lines shown after a win. 'choose': true lets the player pick their champion.",
+  "intro": [
+    {"title": "DC'S ARROWVERSE: FIGHT NIGHT", "subtitle": "Prologue", "lines": [
+      ["", "Central City. A rare night off. Team Flash, Team Arrow, Team Supergirl and the Legends gather at S.T.A.R. Labs for a crossover celebration."],
+      ["vibe", "Okay, I have officially rigged the speakers, the lights, AND the karaoke machine. Nothing can go wrong."],
+      ["flash", "Cisco, you just said the words."],
+      ["control_freak", "GREETINGS, HEROES! Welcome to the ULTIMATE CROSSOVER EVENT!"],
+      ["supergirl", "Who is that? And why is he on every screen?"],
+      ["control_freak", "I'm the showrunner now! You're all contestants. Fight each other... or stay trapped in my simulation forever. Places, everyone!"],
+      ["", "The room twists into static. When it clears, the heroes are scattered across worlds stitched together from their own memories."]
+    ]}
+  ],
+  "chapters": [
+    {"act": "ACT I", "title": "The Rules of the Game", "player": "flash", "opponent": "green_arrow", "stage": "star_labs",
+     "before": [
+       ["green_arrow", "Barry. I don't like this any more than you do. But if fighting is the way out, we fight."],
+       ["flash", "Oliver, there has to be another way."],
+       ["control_freak", "There isn't! Speed versus tactics! ROLL CAMERA!"]
+     ],
+     "after": [
+       ["green_arrow", "...You held back."],
+       ["flash", "So did you. Something about this place feels wrong. Like it's reading us."]
+     ]},
+    {"act": "ACT I", "title": "Quick and Clean", "player": "supergirl", "opponent": "martian_manhunter", "stage": "deo",
+     "before": [
+       ["martian_manhunter", "Kara. His remote reaches into my mind. I cannot hold back for long."],
+       ["supergirl", "Then I'll end this fast. Nobody gets hurt. Promise."]
+     ],
+     "after": [
+       ["martian_manhunter", "Thank you. His grip has loosened. This world is built from memories... stolen ones."],
+       ["supergirl", "Then we steal them back."]
+     ]},
+    {"act": "ACT I", "title": "Push Back", "player": "black_canary", "opponent": "wild_dog", "stage": "arrow_bunker",
+     "before": [
+       ["wild_dog", "Look, Canary, I don't hit teammates. But this freak says the Glades get erased if I don't fight."],
+       ["black_canary", "Then we fight. And then we find him and make him regret every rule he wrote."]
+     ],
+     "after": [
+       ["wild_dog", "Okay. Okay. You win. Now can we go break his stupid remote?"],
+       ["black_canary", "That's the first good idea anyone's had all night."]
+     ]},
+    {"act": "ACT II", "title": "Glitches in the Arena", "player": "vibe", "opponent": "citizen_steel", "stage": "waverider",
+     "glitch": true,
+     "before": [
+       ["citizen_steel", "Cisco! The Waverider's windows are showing three different centuries at once!"],
+       ["vibe", "Temporal anomalies, repeating textures... Nate, this whole world is a recording!"],
+       ["control_freak", "Shh! No spoilers! FIGHT!"]
+     ],
+     "after": [
+       ["citizen_steel", "Okay, I'm a historian. Repeating details mean someone copy-pasted. That's lazy writing."],
+       ["vibe", "Which means there's a seam. And seams can be breached."]
+     ]},
+    {"act": "ACT II", "title": "Turned Against Us", "player": "citizen_steel", "opponent": "flash", "stage": "central_city",
+     "glitch": true,
+     "before": [
+       ["flash", "Nate... I can't stop running. He's scripting my legs!"],
+       ["citizen_steel", "Then I'll be the wall you run into. Sorry in advance, Barry."]
+     ],
+     "after": [
+       ["flash", "Thanks. My head's clear. He's adapting the arenas to us. Every fight he learns more."],
+       ["citizen_steel", "Then we stop playing the game he expects."]
+     ]},
+    {"act": "ACT II", "title": "Static on the Line", "player": "green_arrow", "opponent": "vibe", "stage": "star_city",
+     "glitch": true,
+     "before": [
+       ["vibe", "Oliver, my breaches keep opening on their own! I think he's using my powers as his doorway!"],
+       ["green_arrow", "Then I close the door. Brace yourself."]
+     ],
+     "after": [
+       ["vibe", "Ow. But it worked. I can feel his signal now. He's broadcasting from somewhere... wrong."],
+       ["green_arrow", "Find it. Everyone else, regroup."]
+     ]},
+    {"act": "ACT II", "title": "Hope Under Pressure", "player": "black_canary", "opponent": "supergirl", "stage": "national_city",
+     "glitch": true,
+     "before": [
+       ["supergirl", "Laurel, run! He's pushing red sun radiation through the code. I can't control my strength!"],
+       ["black_canary", "Not running. I'm loud enough to snap you out of it."]
+     ],
+     "after": [
+       ["supergirl", "That... was a very effective wake-up call."],
+       ["black_canary", "Told you. Now let's find this guy."]
+     ]},
+    {"act": "ACT III", "title": "Break the Show", "player": "martian_manhunter", "opponent": "wild_dog", "stage": "apocalypse",
+     "before": [
+       ["", "The heroes reach the edge of the simulation: Vandal Savage's ruined future, rebuilt from the Legends' nightmares."],
+       ["wild_dog", "J'onn... it's in my head. I see Zoe. He says if I lose, she's gone."],
+       ["martian_manhunter", "It is a lie, Rene. A script. Let me show you the difference between a man and a character."]
+     ],
+     "after": [
+       ["wild_dog", "...She's safe. It was never real."],
+       ["martian_manhunter", "And now neither is his control over us. The final door is ahead."]
+     ]},
+    {"act": "ACT III", "title": "Earth-X", "player": "supergirl", "opponent": "citizen_steel", "stage": "earth_x",
+     "before": [
+       ["citizen_steel", "Kara, he's thrown everything at us. He's going to make the last fight count."],
+       ["supergirl", "Then let's give him one last show... and stop following his script halfway through."],
+       ["control_freak", "Wait. What? That's not in the outline!"]
+     ],
+     "after": [
+       ["control_freak", "You... you broke the format! Nobody breaks the format!"],
+       ["supergirl", "We're not characters. We're people. And we're coming for you."]
+     ]},
+    {"act": "FINALE", "title": "Season Finale", "choose": true, "opponent": "control_freak", "stage": "freak_studio", "boss": true,
+     "before": [
+       ["control_freak", "FINE! If you won't play by my rules, I'll cancel you MYSELF! Season Finale, live, NOW!"],
+       ["", "Every hero lends their strength to one champion. The final battle begins."]
+     ],
+     "after": [
+       ["control_freak", "No... no no no. My ratings... my beautiful show..."],
+       ["vibe", "Remote's fried. The simulation's collapsing!"],
+       ["flash", "Everybody, hold on to each other. We're going home."],
+       ["", "The world dissolves into light. The heroes wake in S.T.A.R. Labs, the party lights still blinking. Together. Real."],
+       ["", "THE END. Control Freak is now playable, and Freak's Studio is unlocked for Versus."]
+     ]}
+  ]
+}

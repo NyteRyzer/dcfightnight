@@ -1,0 +1,15 @@
+{
+  "stages": [
+    {"id": "star_labs", "name": "S.T.A.R. Labs", "location": "Central City", "music": 0},
+    {"id": "ccpd", "name": "CCPD", "location": "Central City Police Dept.", "music": 1},
+    {"id": "arrow_bunker", "name": "Arrow Bunker", "location": "Star City", "music": 2},
+    {"id": "waverider", "name": "Waverider", "location": "The Temporal Zone", "music": 3},
+    {"id": "deo", "name": "D.E.O. Headquarters", "location": "National City", "music": 4},
+    {"id": "central_city", "name": "Central City Street", "location": "Central City", "music": 5},
+    {"id": "star_city", "name": "Star City Street", "location": "Star City", "music": 6},
+    {"id": "national_city", "name": "National City Street", "location": "National City", "music": 7},
+    {"id": "apocalypse", "name": "Future Apocalypse", "location": "Vandal Savage's 2166", "music": 8},
+    {"id": "earth_x", "name": "Earth-X", "location": "Occupied Earth-X", "music": 9},
+    {"id": "freak_studio", "name": "Freak's Studio", "location": "Control Freak's Simulation Core", "music": 10, "locked": true}
+  ]
+}

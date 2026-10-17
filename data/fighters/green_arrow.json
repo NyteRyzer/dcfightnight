@@ -1,0 +1,29 @@
+{
+  "id": "green_arrow", "name": "Green Arrow", "short": "ARROW", "real_name": "Oliver Queen", "team": "Team Arrow",
+  "archetype": "Mid-range zoning & traps", "bio": "Trained on Lian Yu. Controls space with trick arrows and punishes hard.",
+  "height": 172, "health": 1000, "walk": 3.4, "back_walk": 3.0, "dash": 7.5, "jump": [4.2, -16.0], "gravity": 0.8,
+  "victory_pose": "victory_bow",
+  "look": {
+    "skin": "#dba98a", "suit": "#2c5a2c", "arms": "#305f30", "forearm": "#1c2a1c", "gloves": "#141814", "legs": "#25482a", "boots": "#1a1a14",
+    "hood": "#2e6a2e", "mask": "#14301a", "hair": "#b8913c", "head": "hood", "emblem": "strap", "belt": "#2a2416",
+    "prop": "bow", "power": "#7cff6a", "bulk": 1.05
+  },
+  "alt_look": {"suit": "#202024", "arms": "#26262a", "legs": "#1c1c20", "hood": "#2a2a30", "mask": "#0a0a0c", "power": "#d0d0ff"},
+  "moves": {
+    "L": {"name": "Bow Jab"},
+    "M": {"name": "Lian Yu Kick", "hitbox": [0.18, -0.46, 0.34, 0.18]},
+    "H": {"name": "Bow Strike", "pose": ["highkick_w", "highkick_s"], "startup": 12, "damage": 100, "hitbox": [0.16, -1.0, 0.34, 0.3]},
+    "S": {"name": "Explosive Arrow", "input": "SP", "pose": ["bow_w", "bow_s"], "startup": 14, "active": 2, "recovery": 22, "sfx": "arrow",
+          "projectile": {"kind": "arrow_x", "frame": 14, "offset": [0.45, -0.79], "speed": 9, "damage": 80, "hitstun": 22, "blockstun": 14, "size": [30, 8], "level": "mid", "knockdown": true, "explode": 26, "single": true}},
+    "fS": {"name": "Grapple Kick", "input": "FWD + SP", "pose": ["jump_tuck", "air_kick_s"], "startup": 6, "active": 16, "recovery": 10,
+           "impulse": [7.5, -9.5], "impulse_frame": 6, "land_cancel": true, "hitbox": [0.12, -0.3, 0.38, 0.24], "damage": 85, "hitstun": 20, "blockstun": 14,
+           "level": "overhead", "knockdown": true, "push": 6, "sfx": "hit_h"},
+    "bS": {"name": "Trick-Arrow Volley", "input": "BACK + SP", "pose": ["bow_up_w", "bow_up_s"], "startup": 16, "active": 2, "recovery": 26, "sfx": "arrow",
+           "projectile": {"kind": "arrow_down", "frame": 16, "rain": {"spread": [-46, 0, 46], "height": -30, "delay": 18}, "speed": 0, "vy": 9, "damage": 34, "hitstun": 16, "blockstun": 10, "size": [8, 26], "level": "mid"}},
+    "dS": {"name": "Arrowstorm", "input": "DOWN + SP (full meter)", "super": true, "pose": ["bow_up_w", "bow_up_s"], "startup": 14, "active": 4, "recovery": 54, "sfx": "arrow",
+           "invuln": {"frames": [1, 16], "type": "all"},
+           "projectile": {"kind": "arrow_down", "frame": 16, "count": 10, "every": 5, "rain": {"spread": [-60, 30, -20, 50, -40, 10, 60, -10, 20, 0], "height": -40, "delay": 10}, "speed": 0, "vy": 12, "damage": 34, "hitstun": 22, "blockstun": 8, "size": [8, 28], "level": "mid", "launch_last": [3, -9]}}
+  },
+  "quotes": ["You have failed this tournament.", "I'm not a hero. I'm just the guy still standing.", "Next time, aim better."],
+  "ending": "Oliver tracks Control Freak's signal to its source and shuts it down with a single arrow through the master console. At the bunker, Felicity asks how he knew which wire to hit. Oliver doesn't answer. He just pours a drink and keeps his bow within reach."
+}

@@ -1,0 +1,5 @@
+{
+  "_doc": "Select-screen order. 'locked' fighters unlock through play (see Game.unlock).",
+  "fighters": ["flash", "green_arrow", "supergirl", "black_canary", "vibe", "wild_dog", "martian_manhunter", "citizen_steel", "control_freak"],
+  "locked": {"control_freak": "Beat Story Mode or Arcade Mode to unlock."}
+}

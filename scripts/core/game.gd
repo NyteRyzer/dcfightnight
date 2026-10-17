@@ -1,0 +1,323 @@
+extends Node
+## Global game state: current mode, selections, ladders, settings and save data.
+
+const SETTINGS_PATH := "user://settings.cfg"
+const SAVE_PATH := "user://save.cfg"
+
+const SCENES := {
+	"menu": "res://scenes/ui/MainMenu.tscn",
+	"select": "res://scenes/ui/CharacterSelect.tscn",
+	"stage": "res://scenes/ui/StageSelect.tscn",
+	"fight": "res://scenes/fight/FightStage.tscn",
+	"training": "res://scenes/fight/TrainingRoom.tscn",
+	"story": "res://scenes/story/StoryScene.tscn",
+	"options": "res://scenes/ui/Options.tscn",
+	"credits": "res://scenes/ui/Credits.tscn",
+}
+
+var font: Font
+var theme: Theme
+
+## Modes: story, arcade, survival, versus, versus_cpu, training, cpu_vs_cpu
+var mode := "versus"
+var chars := ["flash", "green_arrow"]
+var cpu := [false, true]
+var alt := [false, false]
+## Costume choice from character select (HEAVY = alternate palette).
+var alt_pref := [false, false]
+var stage_id := "star_labs"
+## Extra per-fight options (boss, glitch, single_round, labels...). Reset per fight.
+var fight_opts := {}
+
+var arcade := {"char": "", "ladder": [], "index": 0}
+var survival := {"char": "", "wins": 0, "health": 1.0, "seed": 0}
+var story_index := 0
+var story_champion := ""
+## Cards for StoryScene: [{title, subtitle, lines: [[speaker, text], ...]}]
+var story_cards: Array = []
+var story_next := "menu"
+
+var training := {"dummy": "stand", "meter": "infinite", "boxes": false, "regen": true}
+
+var settings := {
+	"music_vol": 0.6, "sfx_vol": 0.8, "voice_vol": 0.8, "mute": false,
+	"fullscreen": false, "window_scale": 2, "integer_scale": true,
+	"shake": true, "reduce_flash": false, "difficulty": 2,
+	"round_time": 99, "rounds": 2,
+}
+var save := {"story_done": false, "arcade_done": false, "story_progress": 0}
+
+
+func _ready() -> void:
+	_setup_theme()
+	load_settings()
+	load_save()
+	apply_settings()
+	randomize()
+
+
+func _setup_theme() -> void:
+	font = ThemeDB.fallback_font
+	if font is FontFile:
+		var ff: FontFile = (font as FontFile).duplicate()
+		ff.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+		ff.hinting = TextServer.HINTING_NONE
+		ff.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+		font = ff
+	theme = Theme.new()
+	theme.default_font = font
+	theme.default_font_size = 10
+	get_tree().root.theme = theme
+
+
+func goto(scene_key: String) -> void:
+	get_tree().paused = false
+	var path: String = SCENES.get(scene_key, scene_key)
+	get_tree().change_scene_to_file.call_deferred(path)
+
+
+# --- Unlocks ----------------------------------------------------------------
+
+func is_unlocked(fighter_id: String) -> bool:
+	if not Data.locked.has(fighter_id):
+		return true
+	return save.get("story_done", false) or save.get("arcade_done", false)
+
+
+func stage_unlocked(st: Dictionary) -> bool:
+	if not st.get("locked", false):
+		return true
+	return save.get("story_done", false) or save.get("arcade_done", false)
+
+
+func unlocked_fighters() -> Array:
+	var out := []
+	for id in Data.roster:
+		if is_unlocked(id):
+			out.append(id)
+	return out
+
+
+func hero_ids() -> Array:
+	var out := []
+	for id in Data.roster:
+		if not Data.locked.has(id):
+			out.append(id)
+	return out
+
+
+func random_stage(include_locked := false) -> String:
+	var pool := []
+	for st in Data.stages:
+		if include_locked or stage_unlocked(st):
+			if st["id"] != "freak_studio":
+				pool.append(st["id"])
+	return pool[randi() % pool.size()]
+
+
+# --- Mode flows ---------------------------------------------------------------
+
+func start_versus(p2_cpu: bool) -> void:
+	mode = "versus_cpu" if p2_cpu else "versus"
+	cpu = [false, p2_cpu]
+	goto("select")
+
+
+func start_training() -> void:
+	mode = "training"
+	cpu = [false, true]
+	goto("select")
+
+
+func begin_fight() -> void:
+	alt = alt_pref.duplicate()
+	if chars[0] == chars[1] and alt[0] == alt[1]:
+		alt[1] = not alt[0]
+	goto("training" if mode == "training" else "fight")
+
+
+## Arcade: pick a fighter, beat 6 random opponents, then Control Freak.
+func start_arcade(char_id: String) -> void:
+	mode = "arcade"
+	arcade = {"char": char_id, "ladder": [], "index": 0}
+	alt_pref[1] = false
+	var pool := hero_ids()
+	pool.erase(char_id)
+	pool.shuffle()
+	for i in mini(6, pool.size()):
+		arcade["ladder"].append({"opponent": pool[i], "stage": random_stage()})
+	arcade["ladder"].append({"opponent": "control_freak", "stage": "freak_studio", "boss": true})
+	_arcade_fight()
+
+
+func _arcade_fight() -> void:
+	var step: Dictionary = arcade["ladder"][arcade["index"]]
+	chars = [arcade["char"], step["opponent"]]
+	cpu = [false, true]
+	stage_id = step["stage"]
+	fight_opts = {"boss": step.get("boss", false), "ladder_label": "ARCADE %d/%d" % [arcade["index"] + 1, arcade["ladder"].size()]}
+	begin_fight()
+
+
+func arcade_won() -> void:
+	arcade["index"] += 1
+	if arcade["index"] >= arcade["ladder"].size():
+		save["arcade_done"] = true
+		write_save()
+		var f := Data.fighter(arcade["char"])
+		story_cards = [{"title": f.get("name", ""), "subtitle": "Arcade Ending", "speaker": arcade["char"],
+			"lines": [[arcade["char"], f.get("ending", "")], ["", "ARCADE COMPLETE. Control Freak and Freak's Studio are unlocked."]]}]
+		story_next = "credits"
+		goto("story")
+	else:
+		_arcade_fight()
+
+
+func arcade_retry() -> void:
+	_arcade_fight()
+
+
+## Survival: endless opponents, health carries over with a small heal.
+func start_survival(char_id: String) -> void:
+	mode = "survival"
+	survival = {"char": char_id, "wins": 0, "health": 1.0}
+	alt_pref[1] = false
+	_survival_fight()
+
+
+func _survival_fight() -> void:
+	var pool := unlocked_fighters()
+	pool.erase(survival["char"])
+	chars = [survival["char"], pool[randi() % pool.size()]]
+	cpu = [false, true]
+	stage_id = random_stage()
+	fight_opts = {"single_round": true, "start_health": survival["health"],
+		"cpu_level": mini(4, 1 + int(survival["wins"] / 3)), "ladder_label": "SURVIVAL  WINS: %d" % survival["wins"]}
+	begin_fight()
+
+
+func survival_won(health_ratio: float) -> void:
+	survival["wins"] += 1
+	survival["health"] = minf(1.0, health_ratio + 0.25)
+	_survival_fight()
+
+
+# --- Story ----------------------------------------------------------------------
+
+func start_story(from_chapter: int = 0) -> void:
+	mode = "story"
+	story_index = from_chapter
+	if from_chapter == 0:
+		story_cards = []
+		for c in Data.story.get("intro", []):
+			story_cards.append(c)
+		story_cards.append(_chapter_card(0))
+	else:
+		story_cards = [_chapter_card(from_chapter)]
+	story_next = "story_fight"
+	goto("story")
+
+
+func _chapter_card(i: int) -> Dictionary:
+	var ch: Dictionary = Data.story["chapters"][i]
+	return {"title": ch.get("title", ""), "subtitle": "%s  -  CHAPTER %d" % [ch.get("act", ""), i + 1], "lines": ch.get("before", [])}
+
+
+func story_chapter() -> Dictionary:
+	return Data.story["chapters"][story_index]
+
+
+## Called by StoryScene when the pre-fight cards finish.
+func story_continue() -> void:
+	var ch := story_chapter()
+	if ch.get("choose", false) and story_champion == "":
+		mode = "story_choose"
+		cpu = [false, true]
+		goto("select")
+		return
+	story_fight()
+
+
+func story_fight() -> void:
+	var ch := story_chapter()
+	mode = "story"
+	var player: String = story_champion if ch.get("choose", false) else ch["player"]
+	alt_pref = [false, false]
+	chars = [player, ch["opponent"]]
+	cpu = [false, true]
+	stage_id = ch["stage"]
+	fight_opts = {"single_round": not ch.get("boss", false), "boss": ch.get("boss", false), "glitch": ch.get("glitch", false),
+		"ladder_label": "%s - %s" % [ch.get("act", ""), ch.get("title", "")]}
+	begin_fight()
+
+
+func story_won() -> void:
+	var ch := story_chapter()
+	story_cards = [{"title": ch.get("title", ""), "subtitle": "AFTERMATH", "lines": ch.get("after", [])}]
+	story_index += 1
+	save["story_progress"] = maxi(int(save.get("story_progress", 0)), story_index)
+	if story_index >= Data.story["chapters"].size():
+		save["story_done"] = true
+		save["story_progress"] = 0
+		story_champion = ""
+		story_next = "credits"
+	else:
+		story_cards.append(_chapter_card(story_index))
+		story_next = "story_fight"
+	write_save()
+	goto("story")
+
+
+# --- Settings & save ---------------------------------------------------------------
+
+func load_settings() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) != OK:
+		return
+	for k in settings.keys():
+		settings[k] = cfg.get_value("settings", k, settings[k])
+	var keys = cfg.get_value("input", "keys", null)
+	if keys is Dictionary:
+		InputManager.import_keys(keys)
+
+
+func save_settings() -> void:
+	var cfg := ConfigFile.new()
+	for k in settings:
+		cfg.set_value("settings", k, settings[k])
+	cfg.set_value("input", "keys", InputManager.export_keys())
+	cfg.save(SETTINGS_PATH)
+
+
+func load_save() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SAVE_PATH) != OK:
+		return
+	for k in save.keys():
+		save[k] = cfg.get_value("save", k, save[k])
+
+
+func write_save() -> void:
+	var cfg := ConfigFile.new()
+	for k in save:
+		cfg.set_value("save", k, save[k])
+	cfg.save(SAVE_PATH)
+
+
+func apply_settings() -> void:
+	Sound.set_volumes(settings["music_vol"], settings["sfx_vol"], settings["voice_vol"], settings["mute"])
+	if DisplayServer.get_name() == "headless":
+		return
+	var win := get_tree().root
+	win.content_scale_stretch = Window.CONTENT_SCALE_STRETCH_INTEGER if settings["integer_scale"] else Window.CONTENT_SCALE_STRETCH_FRACTIONAL
+	if settings["fullscreen"]:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		var s: int = clampi(int(settings["window_scale"]), 1, 4)
+		var size := Vector2i(640 * s, 360 * s)
+		var screen := DisplayServer.screen_get_size()
+		if size.x <= screen.x and size.y <= screen.y and DisplayServer.window_get_size() != size:
+			DisplayServer.window_set_size(size)
+			DisplayServer.window_set_position((screen - size) / 2)

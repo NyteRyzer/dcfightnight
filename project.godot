@@ -1,0 +1,43 @@
+; Engine configuration file.
+; DC's Arrowverse: Fight Night — personal, noncommercial fan project.
+
+config_version=5
+
+[application]
+
+config/name="DC's Arrowverse: Fight Night"
+config/description="A 2D cinematic fan fighting game prototype."
+run/main_scene="res://scenes/ui/MainMenu.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Data="*res://scripts/core/data.gd"
+InputManager="*res://scripts/core/input_manager.gd"
+Sound="*res://scripts/audio/sound_manager.gd"
+Game="*res://scripts/core/game.gd"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+window/stretch/scale_mode="integer"
+
+[physics]
+
+common/physics_ticks_per_second=60
+common/max_physics_steps_per_frame=4
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
+environment/defaults/default_clear_color=Color(0.02, 0.02, 0.04, 1)
