@@ -13,6 +13,8 @@ var mode := "cpu"   # cpu | stand | crouch | jump | block
 var plan: Array = []
 var think_cd := 0
 var rng := RandomNumberGenerator.new()
+var _amp_tried := false
+var _prev_b := false
 
 const REACT := [30, 18, 11, 6, 3]
 const BLOCK_P := [0.2, 0.45, 0.68, 0.86, 0.95]
@@ -67,6 +69,9 @@ func think() -> Dictionary:
 			return {"u": true} if me.grounded() and me.frame % 50 == 0 else {}
 		"block":
 			return _dummy_block()
+	var sys := _system_moves()
+	if not sys.is_empty():
+		return sys
 	if plan.size() > 0:
 		var e: Dictionary = plan[0]
 		e["n"] -= 1
@@ -76,6 +81,22 @@ func think() -> Dictionary:
 	_decide()
 	if plan.size() > 0:
 		return think()
+	return {}
+
+
+## Meter tactics: Amplify specials and Breaker out of long combos.
+func _system_moves() -> Dictionary:
+	var bar: float = 1000.0 / 3.0
+	if me.state != "attack":
+		_amp_tried = false
+	elif not _amp_tried and me.move.get("special", false) and not me.move.get("super", false) and not me.move.get("hidden", false):
+		if me.sf <= int(me.move.get("startup", 1)) and me.meter >= bar and level >= 1:
+			_amp_tried = true
+			if rng.randf() < 0.12 * level:
+				return {"B": true}
+	if me.state in ["hitstun", "airhit"] and me.combo_hits >= 3 and me.meter >= bar * 2.0 and not me.breaker_used and level >= 2:
+		if rng.randf() < 0.025 * level:
+			return {"B": true, "f": true}
 	return {}
 
 
@@ -140,6 +161,15 @@ func _decide() -> void:
 			return
 		_push({"B": true, "d": low}, 12 + rng.randi() % 10)
 		think_cd = react / 3
+		return
+
+	# Whiff punish: opponent is stuck in recovery close by.
+	if opp.state == "attack" and opp.sf > int(opp.move.get("startup", 1)) + int(opp.move.get("active", 1)) and dist < 1.0 * H and rng.randf() < COMBO_P[level]:
+		if rng.randf() < 0.5:
+			_tap({"H": true})
+		else:
+			_tap({"S": true, "f": true}, {"f": true})
+		think_cd = 4
 		return
 
 	# Anti-air.

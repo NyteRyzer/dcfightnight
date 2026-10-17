@@ -12,16 +12,29 @@ extends RefCounted
 ##   draw     : bow string drawn to the back hand (Green Arrow)
 ##   gun      : pistols visible in the hands (Wild Dog)
 ##   stretch  : front arm length multiplier (Martian Manhunter)
+##   open     : open hands (palms) instead of fists
+##   blade    : sword angle relative to the forearm, in degrees
 
 const BASE := {
 	"hip": Vector2(0, -0.455), "t": 6.0, "h": 0.0,
 	"fh": Vector2(0.15, -0.10), "bh": Vector2(0.07, -0.07),
 	"ff": Vector2(0.11, 0), "bf": Vector2(-0.13, 0),
 	"rot": 0.0, "fe": 1.0, "be": 1.0, "draw": 0.0, "gun": 0.0, "stretch": 1.0,
+	"open": 0.0, "blade": -75.0,
 }
 
 const LIB := {
 	"idle": {},
+	"idle_heavy": {"hip": Vector2(0, -0.43), "t": 10.0, "fh": Vector2(0.17, -0.06), "bh": Vector2(0.10, -0.03), "ff": Vector2(0.15, 0), "bf": Vector2(-0.17, 0)},
+	"idle_heavy2": {"hip": Vector2(0, -0.42), "t": 12.0, "fh": Vector2(0.17, -0.045), "bh": Vector2(0.10, -0.015), "ff": Vector2(0.15, 0), "bf": Vector2(-0.17, 0)},
+	"idle_speed": {"hip": Vector2(0, -0.42), "t": 16.0, "h": -6.0, "fh": Vector2(0.17, -0.07), "bh": Vector2(0.02, 0.02), "ff": Vector2(0.16, 0), "bf": Vector2(-0.18, 0)},
+	"idle_speed2": {"hip": Vector2(0, -0.40), "t": 18.0, "h": -7.0, "fh": Vector2(0.17, -0.05), "bh": Vector2(0.03, 0.03), "ff": Vector2(0.16, 0), "bf": Vector2(-0.18, 0)},
+	"idle_fem": {"hip": Vector2(0, -0.465), "t": 3.0, "fh": Vector2(0.14, -0.13), "bh": Vector2(0.08, -0.10), "ff": Vector2(0.10, 0), "bf": Vector2(-0.11, 0)},
+	"idle_fem2": {"hip": Vector2(0, -0.458), "t": 4.0, "fh": Vector2(0.14, -0.115), "bh": Vector2(0.08, -0.085), "ff": Vector2(0.10, 0), "bf": Vector2(-0.11, 0)},
+	"idle_sword": {"hip": Vector2(0, -0.44), "t": 5.0, "fh": Vector2(0.19, -0.03), "bh": Vector2(0.03, -0.11), "ff": Vector2(0.14, 0), "bf": Vector2(-0.16, 0), "blade": -60.0},
+	"idle_sword2": {"hip": Vector2(0, -0.432), "t": 6.0, "fh": Vector2(0.19, -0.015), "bh": Vector2(0.03, -0.095), "ff": Vector2(0.14, 0), "bf": Vector2(-0.16, 0), "blade": -62.0},
+	"idle_guns": {"hip": Vector2(0, -0.45), "t": 4.0, "fh": Vector2(0.21, -0.05), "bh": Vector2(0.17, -0.03), "ff": Vector2(0.13, 0), "bf": Vector2(-0.14, 0), "gun": 1.0},
+	"idle_guns2": {"hip": Vector2(0, -0.442), "t": 5.0, "fh": Vector2(0.21, -0.035), "bh": Vector2(0.17, -0.015), "ff": Vector2(0.13, 0), "bf": Vector2(-0.14, 0), "gun": 1.0},
 	"idle2": {"hip": Vector2(0, -0.445), "t": 7.0, "fh": Vector2(0.15, -0.085), "bh": Vector2(0.07, -0.055)},
 	"walk1": {"hip": Vector2(0, -0.46), "t": 8.0, "ff": Vector2(0.17, 0), "bf": Vector2(-0.15, 0)},
 	"walk2": {"hip": Vector2(0, -0.48), "t": 8.0, "ff": Vector2(0.03, -0.07), "bf": Vector2(0.0, 0)},
@@ -68,20 +81,20 @@ const LIB := {
 	"air_heavy_s": {"hip": Vector2(0, -0.42), "t": 26.0, "fh": Vector2(0.25, 0.18), "bh": Vector2(0.22, 0.19), "ff": Vector2(0.10, -0.12), "bf": Vector2(-0.06, -0.05)},
 	"throw_w": {"t": 14.0, "fh": Vector2(0.28, -0.03), "bh": Vector2(0.26, 0.0), "ff": Vector2(0.17, 0)},
 	"throw_s": {"hip": Vector2(-0.03, -0.47), "t": -24.0, "h": -10.0, "fh": Vector2(-0.18, -0.26), "bh": Vector2(-0.20, -0.22), "ff": Vector2(0.15, 0), "bf": Vector2(-0.16, 0)},
-	"cast_w": {"t": -6.0, "fh": Vector2(-0.02, -0.04), "bh": Vector2(-0.06, 0.0)},
-	"cast_s": {"t": 12.0, "fh": Vector2(0.33, -0.07), "bh": Vector2(0.20, -0.05), "ff": Vector2(0.17, 0), "bf": Vector2(-0.15, 0)},
+	"cast_w": {"open": 1.0, "t": -6.0, "fh": Vector2(-0.02, -0.04), "bh": Vector2(-0.06, 0.0)},
+	"cast_s": {"open": 1.0, "t": 12.0, "fh": Vector2(0.33, -0.07), "bh": Vector2(0.20, -0.05), "ff": Vector2(0.17, 0), "bf": Vector2(-0.15, 0)},
 	"bow_w": {"t": 2.0, "fh": Vector2(0.32, -0.07), "bh": Vector2(0.16, -0.07), "draw": 1.0},
 	"bow_s": {"t": 4.0, "fh": Vector2(0.33, -0.07), "bh": Vector2(-0.04, -0.09), "draw": 1.0, "ff": Vector2(0.15, 0)},
 	"bow_up_w": {"t": -6.0, "h": -20.0, "fh": Vector2(0.20, -0.26), "bh": Vector2(0.12, -0.16), "draw": 1.0},
 	"bow_up_s": {"t": -10.0, "h": -25.0, "fh": Vector2(0.20, -0.26), "bh": Vector2(-0.02, -0.08), "draw": 1.0},
 	"beam_s": {"hip": Vector2(0, -0.46), "t": 6.0, "h": 12.0, "fh": Vector2(0.06, 0.17), "bh": Vector2(0.0, 0.18), "ff": Vector2(0.16, 0), "bf": Vector2(-0.17, 0)},
-	"breath_s": {"t": 2.0, "h": -4.0, "fh": Vector2(-0.02, 0.15), "bh": Vector2(-0.06, 0.15), "ff": Vector2(0.18, 0), "bf": Vector2(-0.16, 0)},
-	"scream_s": {"t": 12.0, "h": 6.0, "fh": Vector2(-0.13, 0.06), "bh": Vector2(-0.17, 0.07), "ff": Vector2(0.18, 0), "bf": Vector2(-0.17, 0)},
+	"breath_s": {"open": 1.0, "t": 2.0, "h": -4.0, "fh": Vector2(-0.02, 0.15), "bh": Vector2(-0.06, 0.15), "ff": Vector2(0.18, 0), "bf": Vector2(-0.16, 0)},
+	"scream_s": {"open": 1.0, "t": 12.0, "h": 6.0, "fh": Vector2(-0.13, 0.06), "bh": Vector2(-0.17, 0.07), "ff": Vector2(0.18, 0), "bf": Vector2(-0.17, 0)},
 	"rush_s": {"hip": Vector2(0.02, -0.42), "t": 30.0, "fh": Vector2(0.33, -0.02), "bh": Vector2(-0.12, 0.10), "ff": Vector2(0.21, 0), "bf": Vector2(-0.30, 0)},
 	"rush_s2": {"hip": Vector2(0.02, -0.42), "t": 28.0, "bh": Vector2(0.34, -0.04), "fh": Vector2(-0.04, 0.06), "ff": Vector2(0.21, 0), "bf": Vector2(-0.30, 0)},
 	"fly_s": {"hip": Vector2(0, -0.30), "t": 76.0, "h": -60.0, "fh": Vector2(0.33, -0.02), "bh": Vector2(-0.10, 0.12), "ff": Vector2(-0.38, -0.30), "bf": Vector2(-0.40, -0.24)},
 	"flip_kick": {"hip": Vector2(0, -0.45), "t": -20.0, "ff": Vector2(0.30, -0.80), "bf": Vector2(-0.05, -0.15), "rot": -40.0, "fh": Vector2(-0.10, 0.05), "bh": Vector2(-0.14, 0.02)},
-	"counter_stance": {"hip": Vector2(-0.03, -0.43), "t": -6.0, "fh": Vector2(0.19, -0.13), "bh": Vector2(0.13, -0.11), "ff": Vector2(0.14, 0), "bf": Vector2(-0.17, 0)},
+	"counter_stance": {"open": 1.0, "hip": Vector2(-0.03, -0.43), "t": -6.0, "fh": Vector2(0.19, -0.13), "bh": Vector2(0.13, -0.11), "ff": Vector2(0.14, 0), "bf": Vector2(-0.17, 0)},
 	"elbow_s": {"hip": Vector2(0.04, -0.45), "t": 20.0, "fh": Vector2(0.02, -0.12), "bh": Vector2(0.0, 0.05), "ff": Vector2(0.20, 0), "bf": Vector2(-0.13, 0)},
 	"slam_w": {"hip": Vector2(0, -0.50), "t": -12.0, "h": -15.0, "fh": Vector2(0.06, -0.32), "bh": Vector2(0.02, -0.32), "ff": Vector2(0.13, 0), "bf": Vector2(-0.13, 0)},
 	"slam_s": {"hip": Vector2(0.02, -0.30), "t": 44.0, "h": 10.0, "fh": Vector2(0.24, 0.25), "bh": Vector2(0.21, 0.26), "ff": Vector2(0.20, 0), "bf": Vector2(-0.19, 0)},
@@ -93,12 +106,24 @@ const LIB := {
 	"toss_s": {"t": 16.0, "bh": Vector2(0.28, -0.18), "fh": Vector2(0.02, 0.04), "ff": Vector2(0.16, 0)},
 	"stretch_s": {"t": 10.0, "fh": Vector2(0.62, -0.07), "bh": Vector2(0.05, -0.05), "stretch": 1.9, "ff": Vector2(0.17, 0), "bf": Vector2(-0.15, 0)},
 	"point_s": {"t": 6.0, "fh": Vector2(0.32, -0.12), "bh": Vector2(0.05, -0.04), "ff": Vector2(0.14, 0)},
-	"telepath_s": {"t": 0.0, "h": -6.0, "fh": Vector2(0.12, -0.27), "bh": Vector2(0.30, -0.08), "ff": Vector2(0.15, 0)},
+	"telepath_s": {"open": 1.0, "t": 0.0, "h": -6.0, "fh": Vector2(0.12, -0.27), "bh": Vector2(0.30, -0.08), "ff": Vector2(0.15, 0)},
+	"slash_w": {"hip": Vector2(-0.02, -0.46), "t": -10.0, "fh": Vector2(-0.04, -0.30), "bh": Vector2(0.02, -0.24), "blade": -40.0},
+	"slash_s": {"hip": Vector2(0.04, -0.42), "t": 26.0, "fh": Vector2(0.30, 0.08), "bh": Vector2(0.04, 0.08), "ff": Vector2(0.20, 0), "bf": Vector2(-0.16, 0), "blade": -15.0},
+	"hslash_w": {"t": -8.0, "fh": Vector2(-0.14, -0.08), "bh": Vector2(0.04, -0.08), "blade": -95.0},
+	"hslash_s": {"hip": Vector2(0.03, -0.44), "t": 16.0, "fh": Vector2(0.33, -0.08), "bh": Vector2(0.0, 0.02), "ff": Vector2(0.18, 0), "bf": Vector2(-0.15, 0), "blade": -5.0},
+	"rising_slash_s": {"hip": Vector2(0.03, -0.50), "t": 4.0, "h": -12.0, "fh": Vector2(0.18, -0.30), "bh": Vector2(0.0, 0.05), "ff": Vector2(0.12, 0), "bf": Vector2(-0.14, 0), "blade": -10.0},
+	"stab_s": {"hip": Vector2(0.05, -0.43), "t": 24.0, "fh": Vector2(0.34, -0.04), "bh": Vector2(-0.10, 0.05), "ff": Vector2(0.22, 0), "bf": Vector2(-0.24, 0), "blade": 0.0},
+	"slide_s": {"hip": Vector2(-0.04, -0.17), "t": -55.0, "h": 30.0, "fh": Vector2(0.10, 0.04), "bh": Vector2(-0.16, 0.12), "ff": Vector2(0.48, -0.01), "bf": Vector2(0.10, 0.0), "gun": 1.0},
+	"stomp_w": {"hip": Vector2(0, -0.50), "t": -6.0, "ff": Vector2(0.12, -0.30), "bf": Vector2(-0.08, 0), "fh": Vector2(0.10, -0.20), "bh": Vector2(-0.06, -0.18)},
+	"stomp_s": {"hip": Vector2(0, -0.38), "t": 16.0, "h": 8.0, "ff": Vector2(0.19, 0), "bf": Vector2(-0.18, 0), "fh": Vector2(0.20, 0.10), "bh": Vector2(-0.06, 0.12)},
+	"vibrate_s": {"hip": Vector2(0.04, -0.43), "t": 22.0, "fh": Vector2(0.34, -0.05), "bh": Vector2(-0.08, 0.06), "open": 1.0, "ff": Vector2(0.21, 0), "bf": Vector2(-0.26, 0)},
+	"heal_s": {"hip": Vector2(0, -0.47), "t": -10.0, "h": -18.0, "fh": Vector2(0.16, -0.24), "bh": Vector2(-0.10, -0.22), "open": 1.0, "ff": Vector2(0.15, 0), "bf": Vector2(-0.16, 0)},
+	"dual_shoot_s": {"t": 6.0, "fh": Vector2(0.33, -0.08), "bh": Vector2(0.30, 0.0), "gun": 1.0, "ff": Vector2(0.16, 0), "bf": Vector2(-0.16, 0)},
 	"dive_s": {"hip": Vector2(0, -0.45), "t": 35.0, "fh": Vector2(0.24, 0.16), "bh": Vector2(0.18, 0.18), "ff": Vector2(0.02, -0.04), "bf": Vector2(-0.14, -0.10)},
 }
 
 const VEC_KEYS := ["hip", "fh", "bh", "ff", "bf"]
-const NUM_KEYS := ["t", "h", "rot", "draw", "gun", "stretch"]
+const NUM_KEYS := ["t", "h", "rot", "draw", "gun", "stretch", "open", "blade"]
 
 static var _cache: Dictionary = {}
 

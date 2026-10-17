@@ -1,0 +1,263 @@
+{
+ "id": "vandal_savage",
+ "name": "Vandal Savage",
+ "short": "SAVAGE",
+ "real_name": "Vandal Savage",
+ "team": "Villain",
+ "archetype": "Immortal heavy",
+ "bio": "A 4,000-year-old conqueror empowered by a meteorite. Slow, durable, and able to shrug off punishment.",
+ "height": 182,
+ "health": 1100,
+ "walk": 2.8,
+ "back_walk": 2.4,
+ "dash": 6.5,
+ "jump": [
+  3.6,
+  -15.0
+ ],
+ "gravity": 0.82,
+ "stance": "heavy",
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#c89a78",
+  "suit": "#2a1e18",
+  "shirt": "#4a3a30",
+  "coat": "#1a1412",
+  "coat_len": 0.42,
+  "arms": "#1a1412",
+  "forearm": "#1a1412",
+  "gloves": "#3a2a20",
+  "glove_len": 0.2,
+  "legs": "#1e1a18",
+  "boots": "#120e0c",
+  "boot_len": 0.62,
+  "hair": "#1a120c",
+  "head": "long",
+  "beard": "#1a120c",
+  "belt": "#3a2a1a",
+  "weapon": "dagger",
+  "blade_color": "#b0b4bc",
+  "power": "#ff7a2a",
+  "bulk": 1.25
+ },
+ "look_name": "Legends (S1)",
+ "costumes": [
+  {
+   "name": "Hath-Set (Ancient Egypt)",
+   "look": {
+    "suit": "#d8c070",
+    "shirt": "#f0e8d0",
+    "coat": "#f0e8d0",
+    "coat_len": 0.5,
+    "arms": "#c89a78",
+    "forearm": "#c89a78",
+    "gloves": "#d8c070",
+    "legs": "#f0e8d0",
+    "boots": "#8a6a3a",
+    "power": "#ffd040",
+    "belt": "#b08a30"
+   }
+  },
+  {
+   "name": "Savage of 2166",
+   "look": {
+    "coat": "#3a0c0c",
+    "suit": "#1a1a1a",
+    "arms": "#3a0c0c",
+    "forearm": "#3a0c0c",
+    "belt": "#c8a040",
+    "buckle": "#f0d070",
+    "power": "#ff3a2a"
+   }
+  }
+ ],
+ "moves": {
+  "L": {
+   "name": "Backhand",
+   "damage": 40,
+   "startup": 5
+  },
+  "M": {
+   "name": "Warlord Kick",
+   "damage": 66,
+   "startup": 8
+  },
+  "H": {
+   "name": "Dagger Slash",
+   "pose": [
+    "hslash_w",
+    "hslash_s"
+   ],
+   "startup": 12,
+   "recovery": 20,
+   "damage": 108,
+   "hitbox": [
+    0.15,
+    -0.95,
+    0.45,
+    0.35
+   ],
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "cH": {
+   "name": "Rising Slash",
+   "pose": [
+    "uppercut_w",
+    "rising_slash_s"
+   ],
+   "damage": 105,
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "throw": {
+   "name": "Conqueror's Grip",
+   "damage": 150
+  },
+  "S": {
+   "name": "Ancient Dagger",
+   "input": "SP",
+   "pose": [
+    "toss_w",
+    "toss_s"
+   ],
+   "startup": 12,
+   "active": 2,
+   "recovery": 20,
+   "sfx": "whoosh",
+   "projectile": {
+    "kind": "dagger",
+    "frame": 12,
+    "offset": [
+     0.4,
+     -0.85
+    ],
+    "speed": 11,
+    "damage": 55,
+    "hitstun": 18,
+    "blockstun": 12,
+    "size": [
+     24,
+     8
+    ],
+    "level": "mid",
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Savage Lunge",
+   "input": "FWD + SP",
+   "pose": [
+    "hslash_w",
+    "stab_s"
+   ],
+   "startup": 12,
+   "active": 8,
+   "recovery": 22,
+   "vel": [
+    9,
+    0
+   ],
+   "vel_frames": [
+    8,
+    16
+   ],
+   "stop_on_hit": true,
+   "damage": 100,
+   "hitstun": 24,
+   "blockstun": 14,
+   "hitbox": [
+    0.1,
+    -0.9,
+    0.5,
+    0.36
+   ],
+   "level": "mid",
+   "knockdown": true,
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "bS": {
+   "name": "Immortal Resurgence",
+   "input": "BACK + SP",
+   "pose": [
+    "heal_s",
+    "heal_s"
+   ],
+   "startup": 8,
+   "active": 30,
+   "recovery": 14,
+   "utility": true,
+   "armor": {
+    "frames": [
+     1,
+     36
+    ],
+    "hits": 3
+   },
+   "heal": 70,
+   "heal_frame": 30,
+   "fx": "heal",
+   "sfx": "super"
+  },
+  "dS": {
+   "name": "Meteor's Wrath",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "heal_s",
+    "point_s"
+   ],
+   "startup": 16,
+   "active": 4,
+   "recovery": 50,
+   "sfx": "explode",
+   "invuln": {
+    "frames": [
+     1,
+     18
+    ],
+    "type": "all"
+   },
+   "projectile": {
+    "kind": "meteor",
+    "frame": 18,
+    "count": 5,
+    "every": 7,
+    "rain": {
+     "spread": [
+      -40,
+      30,
+      -10,
+      50,
+      0
+     ],
+     "height": -50,
+     "delay": 10
+    },
+    "speed": 0,
+    "vy": 11,
+    "damage": 56,
+    "hitstun": 24,
+    "blockstun": 10,
+    "size": [
+     36,
+     36
+    ],
+    "explode": 40,
+    "level": "mid",
+    "launch_last": [
+     5,
+     -11
+    ]
+   }
+  }
+ },
+ "quotes": [
+  "I have conquered empires older than your language.",
+  "Death is a friend I no longer visit.",
+  "Kneel before your eternal ruler."
+ ],
+ "ending": "Savage claims the simulation's core for himself, an engine that can rewrite reality itself. He has waited four thousand years for a weapon like this. The Legends arrive just as he flips the first switch, and history, once again, needs saving."
+}

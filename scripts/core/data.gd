@@ -70,11 +70,20 @@ func build_fighter(src: Dictionary) -> Dictionary:
 		if m.get("super", false) and not m.has("meter"):
 			m["meter"] = 1000
 	d["moves"] = moves
-	d["look"] = parse_look(src.get("look", {}))
-	var alt: Dictionary = src.get("look", {}).duplicate()
-	for k in src.get("alt_look", {}):
-		alt[k] = src["alt_look"][k]
-	d["alt_look"] = parse_look(alt)
+	var base_look: Dictionary = src.get("look", {})
+	d["look"] = parse_look(base_look)
+	# Costumes: index 0 is the default look; others override it field by field.
+	var costumes: Array = [{"name": src.get("look_name", "Classic"), "look": d["look"]}]
+	for c in src.get("costumes", []):
+		var merged: Dictionary = base_look.duplicate()
+		for k in c.get("look", {}):
+			merged[k] = c["look"][k]
+		costumes.append({"name": c.get("name", "Alternate"), "look": parse_look(merged)})
+	# Recoloured fallback so mirror matches always have a distinct look.
+	if costumes.size() == 1:
+		costumes.append({"name": "Alternate", "look": d["look"]})
+	d["costumes"] = costumes
+	d["alt_look"] = costumes[1]["look"]
 	return d
 
 
@@ -84,7 +93,7 @@ func parse_look(raw: Dictionary) -> Dictionary:
 		var v = raw[k]
 		if v is String and v.begins_with("#"):
 			out[k] = Color.html(v)
-		elif v == null:
+		elif v == null or (v is String and v == "none"):
 			continue
 		else:
 			out[k] = v

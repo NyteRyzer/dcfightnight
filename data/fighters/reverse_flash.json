@@ -1,0 +1,273 @@
+{
+ "id": "reverse_flash",
+ "name": "Reverse-Flash",
+ "short": "REV-FLASH",
+ "real_name": "Eobard Thawne",
+ "team": "Villain",
+ "archetype": "Aggressive speedster",
+ "bio": "The Flash's nemesis from the future. Negative Speed Force lightning, phasing strikes and time remnants.",
+ "height": 170,
+ "health": 990,
+ "walk": 4.3,
+ "back_walk": 3.7,
+ "dash": 10.5,
+ "jump": [
+  4.8,
+  -16.5
+ ],
+ "gravity": 0.8,
+ "flip_jump": true,
+ "trail": true,
+ "stance": "speed",
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#e0b090",
+  "suit": "#e0b818",
+  "suit2": "#a88010",
+  "arms": "#e6be1c",
+  "legs": "#d8b014",
+  "boots": "#c01818",
+  "boot_len": 0.5,
+  "gloves": "#d8b014",
+  "glove_len": 0.28,
+  "belt": "#c01818",
+  "buckle": "#ff4030",
+  "accent": "#c01818",
+  "mask": "#e0b818",
+  "head": "cowl",
+  "lens": "#ff2010",
+  "ear_color": "#c01818",
+  "emblem": "bolt",
+  "emblem_bg": "#141414",
+  "emblem_ring": "#c01818",
+  "emblem_fg": "#e01818",
+  "seams": "#a88010",
+  "glow_eyes": "#ff3020",
+  "muscles": true,
+  "power": "#ff2a1a",
+  "bulk": 1.0
+ },
+ "look_name": "Reverse-Flash (S1)",
+ "costumes": [
+  {
+   "name": "Negative Speed Force",
+   "look": {
+    "suit": "#1a1416",
+    "suit2": "#3a0a0a",
+    "arms": "#1e1618",
+    "legs": "#1a1416",
+    "boots": "#1a1416",
+    "gloves": "#1a1416",
+    "mask": "#1a1416",
+    "emblem_bg": "#e01818",
+    "emblem_fg": "#141414",
+    "ear_color": "#e01818",
+    "seams": "#3a0a0a",
+    "power": "#ff1010"
+   }
+  },
+  {
+   "name": "Season 5 Suit",
+   "look": {
+    "suit": "#c8a010",
+    "suit2": "#7a5a08",
+    "arms": "#ccA414",
+    "legs": "#bc9810",
+    "mask": "#c8a010",
+    "seams": "#7a5a08"
+   }
+  },
+  {
+   "name": "Harrison Wells",
+   "look": {
+    "head": "short",
+    "hair": "#3a2a1a",
+    "face": "glasses",
+    "mask": "none",
+    "suit": "#2a2e36",
+    "suit2": "none",
+    "arms": "#2a2e36",
+    "legs": "#3a3a3a",
+    "boots": "#2a2018",
+    "gloves": "#e0b090",
+    "emblem": "none",
+    "glow_eyes": "none",
+    "seams": "none",
+    "muscles": false,
+    "belt": "#1a1a1a"
+   }
+  }
+ ],
+ "moves": {
+  "L": {
+   "name": "Speed Jab",
+   "startup": 3,
+   "recovery": 7,
+   "damage": 30
+  },
+  "M": {
+   "startup": 6,
+   "damage": 54
+  },
+  "H": {
+   "name": "Negative Hook",
+   "startup": 10,
+   "damage": 88
+  },
+  "S": {
+   "name": "Red Lightning",
+   "input": "SP",
+   "pose": [
+    "cast_w",
+    "cast_s"
+   ],
+   "startup": 11,
+   "active": 2,
+   "recovery": 19,
+   "sfx": "zap",
+   "projectile": {
+    "kind": "bolt",
+    "frame": 11,
+    "offset": [
+     0.42,
+     -0.79
+    ],
+    "speed": 13,
+    "damage": 55,
+    "hitstun": 18,
+    "blockstun": 12,
+    "size": [
+     44,
+     12
+    ],
+    "level": "mid",
+    "single": true,
+    "color": "#ff2a1a"
+   }
+  },
+  "fS": {
+   "name": "Vibrating Hand",
+   "input": "FWD + SP",
+   "pose": [
+    "dash",
+    "vibrate_s"
+   ],
+   "startup": 9,
+   "active": 5,
+   "recovery": 20,
+   "vel": [
+    12,
+    0
+   ],
+   "vel_frames": [
+    6,
+    14
+   ],
+   "stop_on_hit": true,
+   "damage": 100,
+   "hitstun": 24,
+   "blockstun": 14,
+   "hitbox": [
+    0.1,
+    -0.95,
+    0.5,
+    0.36
+   ],
+   "level": "mid",
+   "knockdown": true,
+   "trail": true,
+   "sfx": "zap"
+  },
+  "bS": {
+   "name": "Time Remnant",
+   "input": "BACK + SP",
+   "pose": [
+    "cast_w",
+    "cast_s"
+   ],
+   "startup": 10,
+   "active": 2,
+   "recovery": 18,
+   "sfx": "zap",
+   "projectile": {
+    "kind": "remnant",
+    "frame": 10,
+    "offset": [
+     0.3,
+     -0.5
+    ],
+    "speed": 10,
+    "damage": 30,
+    "hits": 2,
+    "interval": 4,
+    "hitstun": 16,
+    "blockstun": 10,
+    "size": [
+     40,
+     110
+    ],
+    "level": "mid",
+    "single": true
+   }
+  },
+  "dS": {
+   "name": "Negative Speed Force",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "rush_s"
+   ],
+   "pose_cycle": [
+    "vibrate_s",
+    "rush_s2",
+    "haymaker_s",
+    "rush_s"
+   ],
+   "startup": 10,
+   "active": 52,
+   "recovery": 20,
+   "vel": [
+    14,
+    0
+   ],
+   "vel_frames": [
+    10,
+    24
+   ],
+   "stop_on_hit": true,
+   "hits": 10,
+   "hit_interval": 5,
+   "damage": 35,
+   "hitstun": 16,
+   "blockstun": 6,
+   "hitbox": [
+    0.0,
+    -1.0,
+    0.5,
+    1.0
+   ],
+   "level": "mid",
+   "launch_last": [
+    6,
+    -10
+   ],
+   "invuln": {
+    "frames": [
+     1,
+     14
+    ],
+    "type": "all"
+   },
+   "trail": true,
+   "sfx": "zap"
+  }
+ },
+ "quotes": [
+  "I've been waiting a very long time for this.",
+  "You'll never be faster than me.",
+  "It's all in the timeline. And the timeline says I win."
+ ],
+ "ending": "Eobard escapes the simulation a full second before anyone else and uses it well: he rewrites Control Freak's broadcast so every hero remembers losing. Then, smiling, he vanishes into the Speed Force. Barry wakes up with a headache and a feeling that something has changed."
+}

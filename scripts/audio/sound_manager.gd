@@ -277,6 +277,7 @@ func _build_sfx() -> void:
 	sfx["hit_m"] = _wav(_mix(_synth(0.13, 170, 60, "sine", 0.85, 0.0, 2.0), _synth(0.08, 0, 0, "sine", 0.0, 0.7, 2.5, 0.4)))
 	sfx["hit_h"] = _wav(_mix(_synth(0.22, 130, 40, "sine", 1.0, 0.0, 1.6), _synth(0.14, 0, 0, "sine", 0.0, 0.8, 2.0, 0.3)))
 	sfx["block"] = _wav(_mix(_synth(0.06, 1100, 700, "square", 0.25, 0.0, 3.0, 0.6), _synth(0.05, 0, 0, "sine", 0.0, 0.4, 4.0, 0.9)))
+	sfx["slash"] = _wav(_mix(_synth(0.14, 0, 0, "sine", 0.0, 0.6, 1.4, 0.35), _synth(0.3, 2400, 1800, "sine", 0.12, 0.0, 2.0, 1.0, 0.4)))
 	sfx["whoosh"] = _wav(_synth(0.16, 0, 0, "sine", 0.0, 0.55, 1.2, 0.08))
 	sfx["jump"] = _wav(_synth(0.08, 260, 420, "square", 0.12, 0.0, 2.0, 0.3))
 	sfx["land"] = _wav(_synth(0.08, 120, 60, "sine", 0.4, 0.2, 3.0, 0.2))

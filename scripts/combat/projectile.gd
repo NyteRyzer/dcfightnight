@@ -169,5 +169,33 @@ func _draw() -> void:
 			draw_rect(Rect2(-size * 0.5 + Vector2(3, 3), size - Vector2(10, 6)), Color(0.6 + randf() * 0.3, 0.9, 0.8))
 			draw_line(Vector2(-4, -size.y * 0.5), Vector2(-9, -size.y * 0.5 - 7), Color(0.1, 0.1, 0.1), 1.0)
 			draw_line(Vector2(4, -size.y * 0.5), Vector2(9, -size.y * 0.5 - 7), Color(0.1, 0.1, 0.1), 1.0)
+		"remnant":
+			for i in 4:
+				var off := Vector2(-i * 12.0 * f, 0)
+				var al := 0.7 - i * 0.16
+				draw_rect(Rect2(off + Vector2(-8, -size.y * 0.5), Vector2(16, size.y * 0.75)), Color(0.95, 0.75, 0.1, al))
+				draw_circle(off + Vector2(0, -size.y * 0.55), 7, Color(0.95, 0.75, 0.1, al))
+				draw_line(off + Vector2(-6, -size.y * 0.2), off + Vector2(6, size.y * 0.1), Color(1, 0.15, 0.1, al), 2.0)
+			draw_circle(Vector2(3 * f, -size.y * 0.57), 1.5, Color(1, 0.2, 0.1))
+		"dagger":
+			var dd := Vector2(f, 0).rotated(age * 0.0)
+			draw_line(-dd * size.x * 0.5, dd * size.x * 0.5, Color(0.1, 0.08, 0.06), 4.0)
+			draw_line(-dd * size.x * 0.1, dd * size.x * 0.5, Color(0.8, 0.82, 0.88), 2.0)
+			draw_line(-dd * size.x * 0.5, -dd * size.x * 0.15, Color(0.45, 0.3, 0.15), 3.0)
+			draw_line(-dd * size.x * 0.9, -dd * size.x * 0.5, Color(1, 0.6, 0.2, 0.4), 2.0)
+		"meteor":
+			draw_circle(Vector2(0, -size.y * 0.6), size.x * 0.45, Color(1, 0.55, 0.1, 0.35))
+			draw_circle(Vector2.ZERO, size.x * 0.5, Color(0.25, 0.18, 0.15))
+			draw_circle(Vector2(-3, -3), size.x * 0.32, Color(0.45, 0.32, 0.25))
+			for i in 3:
+				draw_circle(Vector2((randf() - 0.5) * size.x, -size.y * (0.6 + randf() * 0.5)), 3, Color(1, 0.7, 0.2, 0.7))
+		"mine":
+			draw_rect(Rect2(-size.x * 0.5 - 1, -size.y * 0.5 - 1, size.x + 2, size.y + 2), Color(0.03, 0.03, 0.04))
+			draw_rect(Rect2(-size.x * 0.5, -size.y * 0.5, size.x, size.y), Color(0.3, 0.32, 0.3))
+			draw_rect(Rect2(-size.x * 0.5, -size.y * 0.5, size.x, 2), Color(0.45, 0.48, 0.45))
+			if age % 20 < 10:
+				draw_circle(Vector2(0, -size.y * 0.5 - 1), 2, Color(1, 0.15, 0.1))
 		_:
 			draw_circle(Vector2.ZERO, size.y * 0.5, color)
+	if data.get("amp", false) and age % 4 < 2:
+		draw_arc(Vector2.ZERO, maxf(size.x, size.y) * 0.6, 0, TAU, 16, Color(1, 1, 1, 0.6), 1.0)

@@ -14,7 +14,7 @@ Use this alongside the automated runner (`res://tests/TestRunner.tscn`). It foll
 
 ## Character / stage select
 - [ ] Versus: P1 (WASD + J) and P2 (arrows + Num1) move their cursors independently, and back (K / Num2) un-picks.
-- [ ] Confirming with Heavy picks the alternate costume. A mirror match gives P2 the other palette automatically.
+- [ ] Y (controller) / U (keyboard) cycles through each fighter's suits, and the suit name updates under the preview. A mirror match with the same suit gives P2 the next suit automatically.
 - [ ] Control Freak shows "?" until Story or Arcade is beaten.
 - [ ] Random picks an unlocked fighter.
 - [ ] Stage select previews each arena live. The locked boss stage can't be picked until it's unlocked.
@@ -33,6 +33,24 @@ Use this alongside the automated runner (`res://tests/TestRunner.tscn`). It foll
 - [ ] Best of 3 with round markers. The results menu offers Rematch, Character Select, Stage Select and Main Menu, and each one works.
 - [ ] Neither fighter can leave the screen or the stage. The camera follows both.
 - [ ] Pause (Esc) freezes the fight. Move List, Restart, Character Select and Main Menu all work. Resume works.
+
+## Fighting systems
+- [ ] The meter shows 3 bars. Pressing Block during a special's start-up with 1+ bar shows "AMPLIFIED" and the special hits harder.
+- [ ] With 2+ bars, pressing Toward + Block while being comboed shows "BREAKER!" and knocks the attacker away. It works only once per round.
+- [ ] Hitting during the opponent's start-up shows "COUNTER HIT". Hitting during their recovery shows "PUNISH".
+- [ ] A hard launcher (e.g. an uppercut) into the screen edge shows "WALL BOUNCE".
+- [ ] Pressing a button while knocked down gives "QUICK RISE". Holding back while doing it rolls away.
+- [ ] Heavy hits, supers and KOs zoom the camera slightly. Strikes show a motion smear. Sword hits show slash arcs.
+
+## Controllers
+- [ ] Plugging in or unplugging a controller shows a notice at the top of the screen.
+- [ ] In single-player modes, any connected controller controls Player 1.
+- [ ] In 2-player Versus, controller 1 is P1 and controller 2 is P2. Swap Controllers reverses them.
+- [ ] Options → Player N Controller: remap a button, and it works in a fight. Remapping a button that's already in use moves it.
+- [ ] Vibration fires on hits, supers and KOs. It turns off with Vibration OFF, and Test Vibration works.
+- [ ] Holding the stick or D-pad in menus scrolls repeatedly.
+- [ ] Button prompts change between keyboard keys and controller buttons depending on the last device used.
+- [ ] Unplugging a player's controller mid-fight pauses the game.
 
 ## Modes
 - [ ] Story: the prologue plays, then chapters 1–9 in order. The finale asks you to choose a champion. Winning unlocks Control Freak and Freak's Studio, then shows the credits. Losing offers Retry or Quit. After quitting, Continue Story resumes at the reached chapter.

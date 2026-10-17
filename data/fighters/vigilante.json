@@ -1,0 +1,231 @@
+{
+ "id": "vigilante",
+ "name": "Vigilante",
+ "short": "VIGILANTE",
+ "real_name": "Adrian Chase",
+ "team": "Villain",
+ "archetype": "Akimbo gunslinger",
+ "bio": "Star City's masked executioner. Dual machine pistols, low slides and proximity mines.",
+ "height": 176,
+ "health": 1040,
+ "walk": 3.4,
+ "back_walk": 3.0,
+ "dash": 8.0,
+ "jump": [
+  4.2,
+  -15.8
+ ],
+ "gravity": 0.8,
+ "stance": "guns",
+ "victory_pose": "victory",
+ "look": {
+  "build": "male",
+  "skin": "#c09070",
+  "suit": "#2a2c30",
+  "arms": "#2c2e32",
+  "forearm": "#34363a",
+  "gloves": "#121214",
+  "glove_len": 0.5,
+  "legs": "#26282c",
+  "boots": "#121214",
+  "boot_len": 0.66,
+  "kneepads": "#1c1e22",
+  "head": "visor",
+  "mask": "#121214",
+  "hood": "#3a3c40",
+  "lens": "#d8e8ff",
+  "emblem": "vest",
+  "vest": "#1c1e22",
+  "belt": "#1c1e22",
+  "pouches": true,
+  "pads": true,
+  "pad_color": "#1c1e22",
+  "always_guns": true,
+  "power": "#e0e8ff",
+  "bulk": 1.1
+ },
+ "look_name": "Vigilante (S5)",
+ "costumes": [
+  {
+   "name": "Prometheus",
+   "look": {
+    "head": "prometheus",
+    "hood": "#141416",
+    "mask": "#141416",
+    "suit": "#18181a",
+    "arms": "#18181a",
+    "forearm": "#18181a",
+    "legs": "#18181a",
+    "lens": "#ff3010",
+    "power": "#ff4020"
+   }
+  },
+  {
+   "name": "Vigilante (S7)",
+   "look": {
+    "suit": "#3a3a3e",
+    "arms": "#3a3a3e",
+    "hood": "#4a4a50",
+    "lens": "#ff8040",
+    "power": "#ffb080"
+   }
+  }
+ ],
+ "moves": {
+  "L": {
+   "name": "Pistol Whip"
+  },
+  "M": {
+   "name": "Tactical Kick"
+  },
+  "H": {
+   "name": "Executioner Strike",
+   "damage": 96
+  },
+  "S": {
+   "name": "Dual Spray",
+   "input": "SP",
+   "pose": [
+    "dual_shoot_s",
+    "dual_shoot_s"
+   ],
+   "startup": 8,
+   "active": 2,
+   "recovery": 18,
+   "sfx": "shot",
+   "projectile": {
+    "kind": "bullet",
+    "frame": 8,
+    "count": 3,
+    "every": 4,
+    "offset": [
+     0.5,
+     -0.78
+    ],
+    "speed": 17,
+    "damage": 21,
+    "hitstun": 13,
+    "blockstun": 8,
+    "size": [
+     12,
+     4
+    ],
+    "level": "high"
+   }
+  },
+  "fS": {
+   "name": "Bullet Slide",
+   "input": "FWD + SP",
+   "pose": [
+    "crouch",
+    "slide_s"
+   ],
+   "startup": 7,
+   "active": 14,
+   "recovery": 16,
+   "vel": [
+    9,
+    0
+   ],
+   "vel_frames": [
+    6,
+    20
+   ],
+   "hitbox": [
+    0.15,
+    -0.22,
+    0.5,
+    0.22
+   ],
+   "damage": 70,
+   "hitstun": 20,
+   "blockstun": 14,
+   "level": "low",
+   "knockdown": true,
+   "sfx": "whoosh"
+  },
+  "bS": {
+   "name": "Grenade Mine",
+   "input": "BACK + SP",
+   "pose": [
+    "toss_w",
+    "toss_s"
+   ],
+   "startup": 12,
+   "active": 2,
+   "recovery": 18,
+   "sfx": "whoosh",
+   "projectile": {
+    "kind": "mine",
+    "frame": 12,
+    "offset": [
+     0.6,
+     -0.05
+    ],
+    "speed": 0,
+    "ground": true,
+    "life": 360,
+    "explode": 46,
+    "damage": 70,
+    "hitstun": 24,
+    "blockstun": 12,
+    "size": [
+     18,
+     10
+    ],
+    "level": "mid",
+    "knockdown": true,
+    "single": true
+   }
+  },
+  "dS": {
+   "name": "Judgment Day",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "dual_shoot_s",
+    "dual_shoot_s"
+   ],
+   "startup": 14,
+   "active": 4,
+   "recovery": 46,
+   "sfx": "shot",
+   "invuln": {
+    "frames": [
+     1,
+     16
+    ],
+    "type": "all"
+   },
+   "projectile": {
+    "kind": "bullet",
+    "frame": 14,
+    "count": 12,
+    "every": 3,
+    "offset": [
+     0.5,
+     -0.78
+    ],
+    "speed": 18,
+    "damage": 24,
+    "hitstun": 18,
+    "blockstun": 6,
+    "size": [
+     12,
+     4
+    ],
+    "level": "mid",
+    "launch_last": [
+     5,
+     -9
+    ]
+   }
+  }
+ },
+ "quotes": [
+  "Justice is a bullet.",
+  "The law failed. I didn't.",
+  "Star City has a new protector."
+ ],
+ "ending": "Adrian Chase walks out of the simulation and back into Star City's night, guns still warm. To him, Control Freak's tournament was just practice. Somewhere in the Glades, a criminal looks up at a rooftop and sees a masked shape watching."
+}

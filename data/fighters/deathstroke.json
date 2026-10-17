@@ -1,0 +1,300 @@
+{
+ "id": "deathstroke",
+ "name": "Deathstroke",
+ "short": "DEATHSTROKE",
+ "real_name": "Slade Wilson",
+ "team": "Villain",
+ "archetype": "Weapon master",
+ "bio": "Mirakuru-enhanced mercenary. Long katana reach, a sidearm, and a parry that punishes anything careless.",
+ "height": 178,
+ "health": 1000,
+ "walk": 3.3,
+ "back_walk": 2.9,
+ "dash": 8.0,
+ "jump": [
+  4.2,
+  -15.8
+ ],
+ "gravity": 0.8,
+ "stance": "sword",
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#c8a080",
+  "suit": "#1a1a1e",
+  "arms": "#1e1e22",
+  "forearm": "#2a2a30",
+  "gloves": "#141416",
+  "glove_len": 0.7,
+  "legs": "#1a1a1e",
+  "boots": "#121214",
+  "boot_len": 0.66,
+  "kneepads": "#3a3c44",
+  "plates": "#3a3c44",
+  "pads": true,
+  "pad_color": "#3a3c44",
+  "belt": "#24242a",
+  "pouches": true,
+  "head": "helmet",
+  "mask": "#121214",
+  "mask2": "#e06a10",
+  "weapon": "katana",
+  "hilt": "#1a1010",
+  "power": "#ff8a20",
+  "bulk": 1.15
+ },
+ "look_name": "Deathstroke (S2)",
+ "costumes": [
+  {
+   "name": "Unmasked (Mirakuru)",
+   "look": {
+    "head": "short",
+    "hair": "#b8b8b0",
+    "face": "eyepatch",
+    "beard": "#a8a8a0"
+   }
+  },
+  {
+   "name": "Season 6 Armor",
+   "look": {
+    "suit": "#2a2c32",
+    "arms": "#2c2e34",
+    "plates": "#555a64",
+    "pad_color": "#555a64",
+    "mask": "#2a2c32",
+    "mask2": "#c85a10"
+   }
+  }
+ ],
+ "moves": {
+  "L": {
+   "name": "Gauntlet Jab"
+  },
+  "M": {
+   "name": "Merc Kick"
+  },
+  "H": {
+   "name": "Katana Cleave",
+   "pose": [
+    "slash_w",
+    "slash_s"
+   ],
+   "startup": 12,
+   "damage": 100,
+   "hitbox": [
+    0.15,
+    -0.98,
+    0.5,
+    0.6
+   ],
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "cH": {
+   "name": "Rising Slash",
+   "pose": [
+    "uppercut_w",
+    "rising_slash_s"
+   ],
+   "hitbox": [
+    0.05,
+    -1.25,
+    0.45,
+    0.62
+   ],
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "jH": {
+   "name": "Air Slash",
+   "pose": [
+    "slash_w",
+    "slash_s"
+   ],
+   "hitbox": [
+    0.1,
+    -0.7,
+    0.5,
+    0.45
+   ],
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "S": {
+   "name": "Sidearm Shot",
+   "input": "SP",
+   "pose": [
+    "shoot_w",
+    "shoot_s"
+   ],
+   "startup": 9,
+   "active": 2,
+   "recovery": 17,
+   "sfx": "shot",
+   "projectile": {
+    "kind": "bullet",
+    "frame": 9,
+    "offset": [
+     0.5,
+     -0.78
+    ],
+    "speed": 17,
+    "damage": 42,
+    "hitstun": 15,
+    "blockstun": 9,
+    "size": [
+     12,
+     4
+    ],
+    "level": "high",
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Katana Lunge",
+   "input": "FWD + SP",
+   "pose": [
+    "hslash_w",
+    "stab_s"
+   ],
+   "startup": 10,
+   "active": 10,
+   "recovery": 18,
+   "vel": [
+    9,
+    0
+   ],
+   "vel_frames": [
+    8,
+    18
+   ],
+   "stop_on_hit": true,
+   "hits": 2,
+   "hit_interval": 5,
+   "damage": 42,
+   "hitstun": 18,
+   "blockstun": 12,
+   "hitbox": [
+    0.1,
+    -0.9,
+    0.62,
+    0.36
+   ],
+   "level": "mid",
+   "launch_last": [
+    4,
+    -7
+   ],
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "bS": {
+   "name": "Sword Parry",
+   "input": "BACK + SP",
+   "pose": [
+    "counter_stance",
+    "counter_stance"
+   ],
+   "startup": 3,
+   "active": 22,
+   "recovery": 16,
+   "utility": true,
+   "counter": {
+    "window": [
+     3,
+     24
+    ],
+    "move": "parry_slash"
+   }
+  },
+  "parry_slash": {
+   "name": "Parry Riposte",
+   "hidden": true,
+   "pose": [
+    "hslash_w",
+    "hslash_s"
+   ],
+   "startup": 3,
+   "active": 4,
+   "recovery": 18,
+   "hitbox": [
+    0.05,
+    -1.0,
+    0.62,
+    0.5
+   ],
+   "damage": 115,
+   "hitstun": 24,
+   "level": "mid",
+   "knockdown": true,
+   "invuln": {
+    "frames": [
+     1,
+     8
+    ],
+    "type": "all"
+   },
+   "sfx": "slash",
+   "fx_hit": "slash"
+  },
+  "dS": {
+   "name": "Contract Fulfilled",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "hslash_s"
+   ],
+   "pose_cycle": [
+    "hslash_s",
+    "slash_s",
+    "stab_s",
+    "rising_slash_s"
+   ],
+   "startup": 10,
+   "active": 48,
+   "recovery": 22,
+   "vel": [
+    13,
+    0
+   ],
+   "vel_frames": [
+    10,
+    22
+   ],
+   "stop_on_hit": true,
+   "hits": 9,
+   "hit_interval": 5,
+   "damage": 36,
+   "hitstun": 16,
+   "blockstun": 6,
+   "hitbox": [
+    0.0,
+    -1.05,
+    0.6,
+    1.05
+   ],
+   "level": "mid",
+   "launch_last": [
+    6,
+    -11
+   ],
+   "invuln": {
+    "frames": [
+     1,
+     14
+    ],
+    "type": "all"
+   },
+   "trail": true,
+   "sfx": "slash",
+   "fx_hit": "slash"
+  }
+ },
+ "quotes": [
+  "I always keep my promises, kid.",
+  "You're out of your league.",
+  "Contract complete."
+ ],
+ "ending": "Slade walks out of the collapsing simulation with Control Freak's remote in one hand and his katana in the other. He doesn't destroy it. A man like Slade Wilson never throws away a weapon. Somewhere, Oliver Queen gets a very bad feeling."
+}

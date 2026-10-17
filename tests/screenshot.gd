@@ -11,6 +11,27 @@ var name_s := ""
 var after := 0
 
 
+class BigSheet extends Node2D:
+	const Rig = preload("res://scripts/combat/rig.gd")
+	const Poses = preload("res://scripts/combat/poses.gd")
+	var ids: Array = []
+	var zoom := 1.0
+
+	func _draw() -> void:
+		draw_rect(Rect2(0, 0, 640, 360), Color(0.3, 0.32, 0.38))
+		for i in ids.size():
+			var parts: PackedStringArray = str(ids[i]).split("@")
+			var f: Dictionary = Data.fighter(parts[0])
+			var look: Dictionary = f["look"]
+			if parts.size() > 1 and f.has("costumes"):
+				look = f["costumes"][int(parts[1])]["look"]
+			var pose_name: String = parts[2] if parts.size() > 2 else "idle"
+			var x := 640.0 / ids.size() * (i + 0.5)
+			draw_set_transform(Vector2(x, 350), 0.0, Vector2(zoom, zoom))
+			Rig.draw(self, Vector2.ZERO, 1, Poses.get_pose(pose_name), look, float(f["height"]))
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+
 class PoseSheet extends Node2D:
 	const Rig = preload("res://scripts/combat/rig.gd")
 	const Poses = preload("res://scripts/combat/poses.gd")
@@ -67,6 +88,11 @@ func _start(s: String) -> void:
 			current = PoseSheet.new()
 			current.poses = parts.slice(1)
 			wait = 4
+		"big":
+			current = BigSheet.new()
+			current.ids = parts.slice(2)
+			current.zoom = float(parts[1])
+			wait = 4
 		"menu":
 			current = load("res://scenes/ui/MainMenu.tscn").instantiate()
 		"select":
@@ -84,7 +110,7 @@ func _start(s: String) -> void:
 		"fight", "training":
 			Game.chars = [parts[1], parts[2]]
 			Game.stage_id = parts[3]
-			Game.alt = [false, parts[1] == parts[2]]
+			Game.costume = [0, 1 if parts[1] == parts[2] else 0]
 			Game.fight_opts = {}
 			Game.cpu = [true, true]
 			Game.mode = "training" if parts[0] == "training" else "cpu_vs_cpu"

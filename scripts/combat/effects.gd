@@ -21,6 +21,10 @@ func spark(at: Vector2, scale: float, col: Color) -> void:
 	add({"t": "ring", "p": at, "life": 10, "c": col, "r": 4.0, "grow": 2.5 * scale})
 
 
+func slash(at: Vector2, dir: int, scale: float, col: Color) -> void:
+	add({"t": "slash", "p": at, "life": 10, "c": col.lerp(Color.WHITE, 0.5), "r": 26.0 * scale, "dir": dir})
+
+
 func block_spark(at: Vector2) -> void:
 	for i in 6:
 		var a := randf() * TAU
@@ -89,6 +93,12 @@ func _draw() -> void:
 				draw_line(at - Vector2(r, -r) * 0.6, at + Vector2(r, -r) * 0.6, c, 1.0)
 			"ring":
 				draw_arc(at, p["r"], 0, TAU, 20, c, 2.0)
+			"slash":
+				var rr: float = p["r"]
+				var dd: float = float(p["dir"])
+				var start := -0.9 if dd > 0 else PI - 0.9
+				draw_arc(at, rr, start, start + 1.8 * k + 0.2, 14, c, 4.0 * k + 1.0)
+				draw_arc(at, rr - 3.0, start, start + 1.8 * k + 0.2, 14, Color(1, 1, 1, c.a), 1.5)
 			"disc":
 				if not reduce_flash:
 					draw_circle(at, p["r"], c)

@@ -12,6 +12,12 @@ const FLOOR_Y := 322.0
 const BUFFER_FRAMES := 8
 const NEUTRAL := ["idle", "walk_f", "walk_b", "crouch", "block", "block_low"]
 const MAX_JUGGLE := 5
+## The super meter is split into three bars: Amplify costs 1, Breaker 2, Super 3.
+const BAR := 1000.0 / 3.0
+const STANCES := {
+	"": ["idle", "idle2"], "heavy": ["idle_heavy", "idle_heavy2"], "speed": ["idle_speed", "idle_speed2"],
+	"fem": ["idle_fem", "idle_fem2"], "sword": ["idle_sword", "idle_sword2"], "guns": ["idle_guns", "idle_guns2"],
+}
 
 var manager: Node = null
 var def: Dictionary = {}
@@ -71,13 +77,25 @@ var afterimages: Array = []
 var show_boxes := false
 var cape_sway := 0.0
 var controlled := true
+var amplified := false
+var breaker_used := false
+var wall_bounce_ok := false
+var wall_bounced := false
+var roll_dir := 0
+## Set by receive_hit for the fight manager's feedback: "", "counter" or "punish".
+var last_hit_bonus := ""
+var stance_names: Array = ["idle", "idle2"]
+## Stage-tinted rim light that separates the silhouette from the background.
+var rim := Color(0.8, 0.85, 1.0, 0.55)
 
 
-func setup(fighter_def: Dictionary, player_index: int, use_alt: bool) -> void:
+func setup(fighter_def: Dictionary, player_index: int, costume_index: int = 0) -> void:
 	def = fighter_def
 	pid = player_index
-	look = def["alt_look"] if use_alt else def["look"]
+	var costumes: Array = def.get("costumes", [{"look": def["look"]}])
+	look = costumes[clampi(costume_index, 0, costumes.size() - 1)]["look"]
 	H = float(def.get("height", 170))
+	stance_names = STANCES.get(str(def.get("stance", "")), STANCES[""])
 	max_health = float(def.get("health", 1000))
 	health = max_health
 	z_index = 2
@@ -302,10 +320,15 @@ func pushbox() -> Rect2:
 	return Rect2(pos.x - hw, pos.y - top, hw * 2.0, top)
 
 
+func max_hits() -> int:
+	var n := int(move.get("hits", 1))
+	return n + 1 if amplified and n > 1 else n
+
+
 func active_hitbox() -> Rect2:
 	if not is_active() or not move.has("hitbox"):
 		return Rect2()
-	if hits_done >= int(move.get("hits", 1)):
+	if hits_done >= max_hits():
 		return Rect2()
 	if hits_done > 0 and sf - last_hit_frame < int(move.get("hit_interval", 99)):
 		return Rect2()
@@ -315,10 +338,15 @@ func active_hitbox() -> Rect2:
 ## The attack data for the next hit of the current move (multi-hit aware).
 func current_attack() -> Dictionary:
 	var a := move
-	var last := hits_done + 1 >= int(move.get("hits", 1))
-	if last and move.has("launch_last"):
+	var last := hits_done + 1 >= max_hits()
+	if (last and move.has("launch_last")) or amplified:
 		a = move.duplicate()
-		a["launch"] = move["launch_last"]
+		if last and move.has("launch_last"):
+			a["launch"] = move["launch_last"]
+		if amplified:
+			a["damage"] = float(move.get("damage", 0)) * 1.35
+			a["hitstun"] = int(move.get("hitstun", 15)) + 3
+			a["amp"] = true
 	return a
 
 
@@ -349,13 +377,16 @@ func start_move(id: String) -> void:
 	last_hit_frame = -100
 	counter_triggered = false
 	armor_used = 0
+	amplified = false
 	spawned = {}
 	phase_through = m.get("phase", false)
 	if m.get("super", false):
 		meter = maxf(0.0, meter - float(m.get("meter", 1000)))
 		if manager != null:
 			manager.on_super(self, m)
-	if m.has("sfx") and not m.has("hitbox"):
+	if m.get("sfx", "") == "slash":
+		Sound.play("slash", 1.0 + randf() * 0.15, -3.0)
+	elif m.has("sfx") and not m.has("hitbox"):
 		Sound.play(m["sfx"])
 	elif m.has("projectile") or m.has("teleport"):
 		pass
@@ -383,6 +414,9 @@ func to_neutral() -> void:
 	combo_damage = 0.0
 	air_juggle = 0
 	juggle_immune = false
+	wall_bounced = false
+	wall_bounce_ok = false
+	roll_dir = 0
 	set_state("idle")
 	face_opponent()
 
@@ -420,6 +454,8 @@ func step() -> void:
 		"attack":
 			_process_move()
 		"hitstun":
+			if _try_breaker():
+				return
 			_slide()
 			stun -= 1
 			if stun <= 0:
@@ -432,12 +468,24 @@ func step() -> void:
 				if not held("B"):
 					to_neutral()
 		"airhit":
+			if _try_breaker():
+				return
 			_airhit()
 		"knockdown":
 			vel = Vector2.ZERO
 			if sf >= 34:
 				set_state("getup")
+			elif sf >= 6 and controlled and health > 0 and (pressed("L") or pressed("M") or pressed("H") or pressed("S") or pressed("B")):
+				# Quick rise; hold back to roll away.
+				roll_dir = -facing if back_held() else 0
+				set_state("getup")
+				if manager != null:
+					manager.fx_text(pos + Vector2(0, -H * 0.4), "ROLL" if roll_dir != 0 else "QUICK RISE", Color(0.8, 0.9, 1.0))
 		"getup":
+			if roll_dir != 0:
+				pos.x += roll_dir * 4.0
+				if manager != null:
+					manager.clamp_fighter(self)
 			if sf >= 20:
 				invuln = 3
 				to_neutral()
@@ -571,9 +619,26 @@ func _slide() -> void:
 			pos.y = FLOOR_Y
 
 
+func _try_breaker() -> bool:
+	if breaker_used or not controlled or meter < BAR * 2.0 - 0.5 or combo_hits < 2 or health <= 0.0 or juggle_immune:
+		return false
+	if pressed("B") and fwd_held():
+		breaker_used = true
+		meter -= BAR * 2.0
+		if manager != null:
+			manager.on_breaker(self)
+		return true
+	return false
+
+
 func _airhit() -> void:
 	vel.y += m_stat("gravity", 0.8) * 0.9
 	pos += vel
+	if wall_bounce_ok and not wall_bounced and manager != null and absf(vel.x) > 3.0 and pos.y < FLOOR_Y - 20.0 and manager.at_wall(self):
+		wall_bounced = true
+		vel.x = -vel.x * 0.35
+		vel.y = minf(vel.y, -6.5)
+		manager.fx_wallbounce(self)
 	if pos.y >= FLOOR_Y and vel.y > 0:
 		pos.y = FLOOR_Y
 		vel = Vector2.ZERO
@@ -611,6 +676,17 @@ func _process_move() -> void:
 		if manager != null:
 			manager.fx_text(pos + Vector2(0, -H * 1.1), "COUNTER!", Color(0.6, 0.9, 1.0))
 		return
+	# Amplify: press Block during a special's start-up to spend one bar.
+	if not amplified and m.get("special", false) and not m.get("super", false) and not m.get("hidden", false) and f <= st and controlled and pressed("B") and meter >= BAR - 0.5:
+		amplified = true
+		meter -= BAR
+		flash = 0.7
+		if manager != null:
+			manager.on_amplify(self)
+	if m.has("heal") and f == int(m.get("heal_frame", st)):
+		health = minf(max_health, health + float(m["heal"]))
+		if manager != null:
+			manager.fx_text(pos + Vector2(0, -H * 1.1), "+%d" % int(m["heal"]), Color(0.5, 1.0, 0.5))
 	# Chains and special cancels after connecting.
 	if move_connected and f > st and controlled:
 		var ctx := "air" if not grounded() else ("crouch" if held("d") else "ground")
@@ -800,15 +876,30 @@ func receive_hit(a: Dictionary, src: Node2D, is_proj: bool) -> String:
 			slide = away * float(a.get("push", 5)) * 0.9
 			meter = minf(1000.0, meter + dmg * 0.25)
 			return "block"
-	if state == "attack" and move.has("armor") and in_move_window(move["armor"]["frames"]) and armor_used < int(move["armor"].get("hits", 1)):
+	var has_armor: bool = state == "attack" and move.has("armor") and in_move_window(move["armor"]["frames"]) and armor_used < int(move["armor"].get("hits", 1))
+	var amp_armor: bool = state == "attack" and amplified and sf <= int(move.get("startup", 1)) + int(move.get("active", 1)) and armor_used < 1
+	if has_armor or amp_armor:
 		armor_used += 1
 		health -= dmg * 0.5
 		flash = 0.6
 		return "armor"
-	# Clean hit.
+	# Clean hit. Counter hits (interrupting start-up) and punishes (hitting recovery) hurt more.
+	last_hit_bonus = ""
+	if combo_hits == 0 and state == "attack" and not move.is_empty():
+		var st2 := int(move.get("startup", 1))
+		if sf <= st2:
+			last_hit_bonus = "counter"
+		elif sf > st2 + int(move.get("active", 1)):
+			last_hit_bonus = "punish"
+	elif combo_hits == 0 and state in ["dash_b", "land"]:
+		last_hit_bonus = "punish"
 	combo_hits += 1
 	var floor_scale := 0.6 if a.get("super", false) else 0.35
 	var scale := maxf(floor_scale, 1.0 - 0.09 * float(combo_hits - 1))
+	if last_hit_bonus == "counter":
+		scale *= 1.2
+	elif last_hit_bonus == "punish":
+		scale *= 1.1
 	var d := dmg * scale
 	health -= d
 	combo_damage += d
@@ -817,7 +908,7 @@ func receive_hit(a: Dictionary, src: Node2D, is_proj: bool) -> String:
 	phase_through = false
 	move = {}
 	move_id = ""
-	var hs := maxi(6, int(a.get("hitstun", 15)) - maxi(0, combo_hits - 5))
+	var hs := maxi(6, int(a.get("hitstun", 15)) - maxi(0, combo_hits - 5) + (4 if last_hit_bonus == "counter" else 0))
 	var launch: Array = a.get("launch", [])
 	if health <= 0.0:
 		launch = [4.0, -8.0] if launch.is_empty() else launch
@@ -832,6 +923,7 @@ func receive_hit(a: Dictionary, src: Node2D, is_proj: bool) -> String:
 			lv = Vector2(5.0, -7.0)
 		vel = Vector2(lv.x * away, lv.y)
 		pos.y = minf(pos.y, FLOOR_Y - 1.0)
+		wall_bounce_ok = lv.x >= 5.0 and air_juggle <= 2
 		set_state("airhit")
 	else:
 		stun = hs
@@ -856,7 +948,7 @@ func register_hit(result: String) -> void:
 	hits_done += 1
 	last_hit_frame = sf
 	if result == "countered":
-		hits_done = int(move.get("hits", 1))
+		hits_done = max_hits()
 	var dmg := float(move.get("damage", 0))
 	meter = minf(1000.0, meter + dmg * (0.7 if result == "hit" else 0.3))
 
@@ -878,7 +970,8 @@ func _trail_update() -> void:
 func _compute_pose() -> Dictionary:
 	match state:
 		"idle":
-			return Poses.blend(Poses.get_pose("idle"), Poses.get_pose("idle2"), (sin(frame * 0.09) + 1.0) * 0.5)
+			var breathe := (sin(frame * 0.09) + 1.0) * 0.5
+			return Poses.blend(Poses.get_pose(stance_names[0]), Poses.get_pose(stance_names[1]), breathe * breathe * (3.0 - 2.0 * breathe))
 		"walk_f":
 			return Poses.cycle(["walk1", "walk2", "walk3", "walk4"], frame, 6)
 		"walk_b":
@@ -916,9 +1009,14 @@ func _compute_pose() -> Dictionary:
 			return Poses.get_pose("knockdown")
 		"getup":
 			var k2 := float(sf) / 20.0
+			var gp: Dictionary
 			if k2 < 0.5:
-				return Poses.blend(Poses.get_pose("knockdown"), Poses.get_pose("getup"), k2 * 2.0)
-			return Poses.blend(Poses.get_pose("getup"), Poses.get_pose("idle"), (k2 - 0.5) * 2.0)
+				gp = Poses.blend(Poses.get_pose("knockdown"), Poses.get_pose("getup"), k2 * 2.0)
+			else:
+				gp = Poses.blend(Poses.get_pose("getup"), Poses.get_pose(stance_names[0]), (k2 - 0.5) * 2.0)
+			if roll_dir != 0 and k2 < 0.7:
+				gp = Poses.with_rot(Poses.get_pose("jump_tuck"), -360.0 * (k2 / 0.7) * float(roll_dir * facing))
+			return gp
 		"throwing":
 			return Poses.get_pose("throw_w" if sf < 18 else "throw_s")
 		"intro":
@@ -935,7 +1033,7 @@ func _move_pose() -> Dictionary:
 	var names: Array = m.get("pose", ["idle"])
 	var w := Poses.get_pose(names[0])
 	var s := Poses.get_pose(names[names.size() - 1])
-	var base_name := "idle"
+	var base_name: String = stance_names[0]
 	if m.get("crouch", false) or m.get("crouch_start", false):
 		base_name = "crouch"
 	elif not grounded() and m.get("air", false):
@@ -946,10 +1044,13 @@ func _move_pose() -> Dictionary:
 	var rc := int(m.get("recovery", 1))
 	var f := sf
 	if f <= st:
+		# Wind-up eases in, then the strike snaps out (ease-out) for impact.
 		var k := float(f) / float(st)
 		if k < 0.6:
-			return Poses.blend(base, w, k / 0.6)
-		return Poses.blend(w, s, (k - 0.6) / 0.4)
+			var kw := k / 0.6
+			return Poses.blend(base, w, kw * kw * (3.0 - 2.0 * kw))
+		var ks := (k - 0.6) / 0.4
+		return Poses.blend(w, s, 1.0 - (1.0 - ks) * (1.0 - ks))
 	if f <= st + ac:
 		if m.has("pose_cycle"):
 			var cyc: Array = m["pose_cycle"]
@@ -962,8 +1063,8 @@ func _move_pose() -> Dictionary:
 		end_pose = Poses.get_pose("jump_tuck")
 	elif m.get("crouch", false):
 		end_pose = Poses.get_pose("crouch")
-	var kr := float(f - st - ac) / float(rc)
-	return Poses.blend(s, end_pose, clampf((kr - 0.25) / 0.75, 0.0, 1.0))
+	var kr := clampf((float(f - st - ac) / float(rc) - 0.25) / 0.75, 0.0, 1.0)
+	return Poses.blend(s, end_pose, kr * kr * (3.0 - 2.0 * kr))
 
 
 func _draw() -> void:
@@ -976,10 +1077,15 @@ func _draw() -> void:
 	for ai in afterimages:
 		var c := Color(power.r, power.g, power.b, 0.35 * float(ai["life"]))
 		Rig.draw(self, (ai["p"] as Vector2) - pos, ai["f"], ai["pose"], look, H, {"solid": c})
-	var o := {"flash": flash, "alpha": alpha, "sway": cape_sway}
+	_draw_smear(power)
+	var o := {"flash": flash, "alpha": alpha, "sway": cape_sway, "time": frame / 60.0}
+	if amplified and state == "attack":
+		o["outline"] = power.lightened(0.3)
 	if meter >= 1000.0 and state in NEUTRAL:
 		var pulse := (sin(frame * 0.2) + 1.0) * 0.5
 		o["outline"] = Rig.OUTLINE.lerp(power, 0.2 + 0.35 * pulse)
+	if alpha > 0.9:
+		Rig.draw(self, Vector2(-1.5 * facing, -1.0), facing, display_pose, look, H, {"solid": rim, "sway": cape_sway, "time": frame / 60.0})
 	Rig.draw(self, Vector2.ZERO, facing, display_pose, look, H, o)
 	if show_boxes:
 		for r in hurtboxes():
@@ -990,3 +1096,39 @@ func _draw() -> void:
 			draw_rect(Rect2(hb.position - pos, hb.size), Color(1.0, 0.15, 0.15, 0.9), false, 1.0)
 		var pb := pushbox()
 		draw_rect(Rect2(pb.position - pos, pb.size), Color(1, 1, 0.2, 0.5), false, 1.0)
+
+
+## Motion smear: a translucent arc from the wind-up to the strike position of
+## whichever hand or foot moved the most, on the first frames of a strike.
+func _draw_smear(power: Color) -> void:
+	if state != "attack" or not is_active() or move.has("pose_cycle"):
+		return
+	var st := int(move.get("startup", 1))
+	if sf > st + 2:
+		return
+	var names: Array = move.get("pose", ["idle"])
+	if names.size() < 2:
+		return
+	var jw := Rig.solve(Poses.get_pose(names[0]), H, look)
+	var js := Rig.solve(Poses.get_pose(names[names.size() - 1]), H, look)
+	var best := "hf"
+	var dist := 0.0
+	for key in ["hf", "hb", "ftf", "ftb"]:
+		var d: float = (js[key] as Vector2).distance_to(jw[key])
+		if d > dist:
+			dist = d
+			best = key
+	if dist < 0.12 * H:
+		return
+	var a: Vector2 = jw[best]
+	var b: Vector2 = js[best]
+	a.x *= facing
+	b.x *= facing
+	var mid := (a + b) * 0.5 + (b - a).normalized().rotated(-PI * 0.5 * facing) * dist * 0.25
+	var pts := PackedVector2Array()
+	for i in 7:
+		var t := i / 6.0
+		pts.append(a.lerp(mid, t).lerp(mid.lerp(b, t), t))
+	var fade := 1.0 - float(sf - st - 1) / 2.0
+	draw_polyline(pts, Color(power.r, power.g, power.b, 0.35 * fade), 0.07 * H)
+	draw_polyline(pts, Color(1, 1, 1, 0.45 * fade), 2.0)

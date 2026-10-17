@@ -75,4 +75,4 @@ func _draw() -> void:
 	var b := Data.fighter(Game.chars[1])
 	var vs := "%s  VS  %s" % [str(a.get("name", "")).to_upper(), str(b.get("name", "")).to_upper()]
 	draw_string(font, Vector2(16, 30), vs, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(1, 1, 1))
-	draw_string(font, Vector2(224, 340), "LIGHT: fight   MEDIUM: back", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.7, 0.7, 0.8))
+	draw_string(font, Vector2(224, 340), "%s: fight   %s: back" % [InputManager.prompt("accept"), InputManager.prompt("back")], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.7, 0.7, 0.8))

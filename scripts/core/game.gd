@@ -13,6 +13,7 @@ const SCENES := {
 	"story": "res://scenes/story/StoryScene.tscn",
 	"options": "res://scenes/ui/Options.tscn",
 	"credits": "res://scenes/ui/Credits.tscn",
+	"howto": "res://scenes/ui/HowToPlay.tscn",
 }
 
 var font: Font
@@ -22,9 +23,9 @@ var theme: Theme
 var mode := "versus"
 var chars := ["flash", "green_arrow"]
 var cpu := [false, true]
-var alt := [false, false]
-## Costume choice from character select (HEAVY = alternate palette).
-var alt_pref := [false, false]
+## Costume index per player (0 = default suit). See fighter JSON "costumes".
+var costume := [0, 0]
+var costume_pref := [0, 0]
 var stage_id := "star_labs"
 ## Extra per-fight options (boss, glitch, single_round, labels...). Reset per fight.
 var fight_opts := {}
@@ -44,16 +45,56 @@ var settings := {
 	"fullscreen": false, "window_scale": 2, "integer_scale": true,
 	"shake": true, "reduce_flash": false, "difficulty": 2,
 	"round_time": 99, "rounds": 2,
+	"rumble": true, "rumble_strength": 0.8, "deadzone": 0.45,
 }
 var save := {"story_done": false, "arcade_done": false, "story_progress": 0}
 
 
+var _toast_layer: CanvasLayer
+var _toast_text := ""
+var _toast_t := 0.0
+var _toast_node: Control
+
+
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_setup_theme()
 	load_settings()
 	load_save()
 	apply_settings()
 	randomize()
+	_toast_layer = CanvasLayer.new()
+	_toast_layer.layer = 100
+	add_child(_toast_layer)
+	_toast_node = Control.new()
+	_toast_node.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_toast_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_toast_node.draw.connect(_draw_toast)
+	_toast_layer.add_child(_toast_node)
+	InputManager.pad_connected.connect(func(_d, n): toast("Controller connected: %s" % n))
+	InputManager.pad_disconnected.connect(func(_d): toast("Controller disconnected"))
+
+
+## Small notification at the top of the screen (controller connected, etc.).
+func toast(text: String) -> void:
+	_toast_text = text
+	_toast_t = 3.0
+
+
+func _process(delta: float) -> void:
+	if _toast_t > 0.0:
+		_toast_t -= delta
+		_toast_node.queue_redraw()
+
+
+func _draw_toast() -> void:
+	if _toast_t <= 0.0 or font == null:
+		return
+	var a := clampf(_toast_t * 2.0, 0.0, 1.0)
+	var w := font.get_string_size(_toast_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x + 16
+	_toast_node.draw_rect(Rect2(320 - w * 0.5, 4, w, 16), Color(0, 0, 0, 0.8 * a))
+	_toast_node.draw_rect(Rect2(320 - w * 0.5, 4, w, 16), Color(1, 0.85, 0.3, a), false, 1.0)
+	_toast_node.draw_string(font, Vector2(320 - w * 0.5 + 8, 16), _toast_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(1, 1, 1, a))
 
 
 func _setup_theme() -> void:
@@ -72,6 +113,8 @@ func _setup_theme() -> void:
 
 func goto(scene_key: String) -> void:
 	get_tree().paused = false
+	# Outside two-player versus, any controller can drive Player 1.
+	InputManager.set_shared(mode != "versus")
 	var path: String = SCENES.get(scene_key, scene_key)
 	get_tree().change_scene_to_file.call_deferred(path)
 
@@ -106,6 +149,10 @@ func hero_ids() -> Array:
 	return out
 
 
+func is_villain(id: String) -> bool:
+	return str(Data.fighter(id).get("team", "")) == "Villain"
+
+
 func random_stage(include_locked := false) -> String:
 	var pool := []
 	for st in Data.stages:
@@ -130,9 +177,10 @@ func start_training() -> void:
 
 
 func begin_fight() -> void:
-	alt = alt_pref.duplicate()
-	if chars[0] == chars[1] and alt[0] == alt[1]:
-		alt[1] = not alt[0]
+	costume = costume_pref.duplicate()
+	if chars[0] == chars[1] and costume[0] == costume[1]:
+		var n: int = Data.fighter(chars[1])["costumes"].size()
+		costume[1] = (costume[0] + 1) % n
 	goto("training" if mode == "training" else "fight")
 
 
@@ -140,7 +188,7 @@ func begin_fight() -> void:
 func start_arcade(char_id: String) -> void:
 	mode = "arcade"
 	arcade = {"char": char_id, "ladder": [], "index": 0}
-	alt_pref[1] = false
+	costume_pref[1] = 0
 	var pool := hero_ids()
 	pool.erase(char_id)
 	pool.shuffle()
@@ -181,7 +229,7 @@ func arcade_retry() -> void:
 func start_survival(char_id: String) -> void:
 	mode = "survival"
 	survival = {"char": char_id, "wins": 0, "health": 1.0}
-	alt_pref[1] = false
+	costume_pref[1] = 0
 	_survival_fight()
 
 
@@ -242,7 +290,7 @@ func story_fight() -> void:
 	var ch := story_chapter()
 	mode = "story"
 	var player: String = story_champion if ch.get("choose", false) else ch["player"]
-	alt_pref = [false, false]
+	costume_pref = [costume_pref[0] if ch.get("choose", false) else 0, 0]
 	chars = [player, ch["opponent"]]
 	cpu = [false, true]
 	stage_id = ch["stage"]
@@ -306,6 +354,7 @@ func write_save() -> void:
 
 func apply_settings() -> void:
 	Sound.set_volumes(settings["music_vol"], settings["sfx_vol"], settings["voice_vol"], settings["mute"])
+	InputManager.rebuild()
 	if DisplayServer.get_name() == "headless":
 		return
 	var win := get_tree().root

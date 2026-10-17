@@ -10,17 +10,27 @@ A cinematic 2D one-on-one fighting game inspired by the live-action Arrowverse. 
 
 | Area | Status |
 |---|---|
-| **Roster** | 8 heroes: The Flash, Green Arrow, Supergirl, Black Canary (Laurel Lance), Vibe, Wild Dog, Martian Manhunter, Citizen Steel (**Nate Heywood**). Control Freak is an unlockable boss. |
+| **Roster** | 14 fighters. Heroes: The Flash, Green Arrow, Supergirl, Black Canary (Laurel Lance), Vibe, Wild Dog, Martian Manhunter, Citizen Steel (**Nate Heywood**). Villains: **Deathstroke**, **Reverse-Flash**, **Reign**, **Vandal Savage**, **Vigilante**. Control Freak is an unlockable boss. |
+| **Alternate suits** | Every fighter has 3–4 costumes, 40+ in total. Examples: Flash Season 1 / Season 5 / Jay Garrick tribute; The Hood (S1) and Spectre; Supergirl Season 5 and Overgirl; Black Siren; Reverb; Hank Henshaw; Mirakuru Slade; Harrison Wells; Purity and Pestilence; Hath-Set; Prometheus. |
 | **Arenas** | 10 launch stages plus the unlockable boss stage *Freak's Studio*. All have parallax and animated details. |
-| **Combat** | Frame-based (60 Hz). Light/medium/heavy attacks, crouching and air attacks, chains, special cancels, block (high/low), throws and throw breaks. Also dashes, 3 specials + 1 super per fighter, projectiles and clashes, armor, invulnerability, counters, teleports, juggles with limits, combo damage scaling, hitstop, screen shake and hit sparks. |
+| **Combat** | Frame-based (60 Hz). Light/medium/heavy attacks, crouching and air attacks, chains, special cancels, block (high/low), throws and throw breaks. Also dashes, 3 specials + 1 super per fighter, projectiles and clashes, armor, invulnerability, counters, teleports, juggles with limits and combo damage scaling. |
+| **Fighting systems** | 3-bar super meter. **Amplify** (Block during a special, 1 bar) powers up specials. **Breaker** (Forward + Block while being comboed, 2 bars) escapes combos once per round. **Counter hits** (+20%) and **punishes** (+10%) reward reads. Hard launchers into the corner **wall bounce**. **Quick rise** and **back roll** on wake-up. |
+| **Hit feel** | Weighted hitstop, camera zoom punches, screen shake, directional sword-slash sparks, motion smears on strikes, eased animation timing, KO slow-motion, controller vibration. |
 | **Modes** | Story (10 chapters across 3 acts plus a Control Freak finale), Arcade (7-fight ladder + ending), Survival, Versus (2 players), Versus CPU, Training. |
 | **Training** | Dummy modes (stand / crouch / jump / block / CPU), infinite meter, hitbox display, health regen, reset position, frame data readout, combo counter, move list. |
-| **CPU** | 5 difficulty levels. It blocks, anti-airs, zones with projectiles, confirms combos and uses supers. |
-| **Options** | Volume sliders (music / effects / announcer), mute, fullscreen, window scale, crisp integer scaling, screen shake toggle, reduce flashing, difficulty, round timer, rounds to win, keyboard remapping for both players, and gamepad swap. Settings persist. |
+| **CPU** | 5 difficulty levels. It blocks, anti-airs, zones with projectiles, confirms combos, punishes whiffs, amplifies specials, uses Breakers and supers. |
+| **Controllers** | Full gamepad support: hot-plug with on-screen notices, automatic assignment, any controller works for Player 1 in single-player modes, button remapping per player, vibration (with strength setting), stick deadzone setting, hold-to-repeat menu navigation, prompts that switch between keyboard and controller (Xbox / PlayStation names), and auto-pause if a player's controller disconnects mid-fight. |
+| **Options** | Audio (music / effects / announcer, mute), Video & Accessibility (fullscreen, window scale, crisp integer scaling, screen shake, reduce flashing), Gameplay (difficulty, round timer, rounds to win), Controls (keyboard and controller remapping for both players, swap controllers, vibration, deadzone). Settings persist. |
 | **Audio** | All sound effects are synthesized at startup. Music comes from a live step sequencer, with tracks for menu, select, fight (with a variation per stage), survival, boss, story and victory. |
 
-### Big, readable sprites
+### Character art
 Fighters are 158–182 px tall on a 640×360 pixel canvas, so each one is roughly **half the screen height**. That's similar in scale to a classic Mortal Kombat fighter. The canvas is upscaled with nearest-neighbor filtering (2× in a 1280×720 window, 3× at 1080p fullscreen), so pixels stay crisp.
+
+The renderer (`scripts/combat/rig.gd`) draws:
+- **Bodies:** each body part is a shaped polygon (tapered, muscled limbs, sculpted male and female torsos, profile heads with eyes, brows and jaw).
+- **Shading:** 3-tone banded pixel shading, merged outlines, and a stage-tinted rim light.
+- **Costume layers:** cowls with lightning ears, hoods, helmets (Deathstroke's split mask), visors, hockey masks, Martian brow ridges, long and short hair, beards, capes, coat tails, skirts, armor plates, belts with pouches, emblems, and gloves and boots with cuffs.
+- **Weapons:** bow and quiver, katana, dagger, pistols.
 
 ## Running the game
 
@@ -61,18 +71,23 @@ All three presets can be exported from any OS. Settings and saves go to the stan
 | Light attack | J | Numpad 1 (or `,`) | X |
 | Medium attack | K | Numpad 2 (or `.`) | Y |
 | Heavy attack | L | Numpad 3 (or `/`) | B |
-| Special | U | Numpad 4 (or `;`) | A / RB / RT |
-| Block (hold; add Down for a low block) | I | Numpad 5 (or `'`) | LB / LT |
-| Throw (when close) | K + L | Num2 + Num3 (or `.` + `/`) | Y + B |
+| Special | U | Numpad 4 (or `;`) | A / RB |
+| Block (hold; add Down for a low block). Also Amplify / Breaker | I | Numpad 5 (or `'`) | LB / LT |
+| Throw (when close; or Medium + Heavy) | O | Numpad 6 (or `]`) | RT (or Y + B) |
 | Pause | Esc / P | Esc / P | Start |
 
-On keyboards without a numpad (laptops, Mac keyboards), Player 2 uses the backup keys shown in brackets. Gamepad 1 controls Player 1 and gamepad 2 controls Player 2. You can swap them in Options. Keyboard keys can be remapped in **Options → Player 1/2 Controls**.
+On keyboards without a numpad (laptops, Mac keyboards), Player 2 uses the backup keys shown in brackets.
 
-**Menus:** move with the arrows or WASD. Confirm with J, Enter or gamepad X. Go back with K, Esc or gamepad Y. On the character select screen, confirm with **Heavy** to pick the alternate costume.
+**Controllers** are detected automatically, including when you plug them in mid-game. In single-player modes (Story, Arcade, Survival, Versus CPU, Training) *any* connected controller controls Player 1. In 2-player Versus, the first controller is Player 1 and the second is Player 2. You can swap them in **Options → Controls & Controllers**, and remap keyboard keys and controller buttons for each player there too.
+
+**Menus:** D-pad, left stick, arrows or WASD to move (hold to scroll). Confirm with **A** / Enter / J. Go back with **B** / Esc / K. On character select, press **Y** (or U on the keyboard) to cycle through a fighter's suits. The main menu has a **How to Play** page.
 
 ### Command list (all fighters)
 - **Special:** neutral, toward the opponent, or away from the opponent + Special gives three different special moves.
-- **Super:** Down + Special when the meter is full. The meter fills when you deal and take damage.
+- **Super:** Down + Special with all 3 meter bars. The meter fills when you deal and take damage.
+- **Amplify (1 bar):** press Block during a special's start-up. It does more damage, adds an extra hit and faster projectiles, and gives one hit of armor.
+- **Breaker (2 bars):** while being comboed, hold toward the opponent and press Block to knock them away. Once per round.
+- **Quick rise / roll:** press any button while knocked down. Hold back to roll away.
 - **Dash:** double-tap forward or back. The back-dash briefly avoids attacks.
 - **Chains:** Light → Medium → Heavy, and Down+Light → Down+Medium → Down+Heavy (the uppercut launches).
 - **Cancels:** a normal attack that hits or is blocked can be cancelled into any special. A special can be cancelled into a super.
@@ -85,7 +100,7 @@ The full move list with frame data is in [`docs/MOVES.md`](docs/MOVES.md), and i
 ```
 project.godot
 scenes/
-  ui/        MainMenu, CharacterSelect, StageSelect, Options, Credits
+  ui/        MainMenu, CharacterSelect, StageSelect, Options, HowToPlay, Credits
   fight/     FightStage, TrainingRoom, Fighter, HUD
   story/     StoryScene
 scripts/
@@ -99,9 +114,9 @@ scripts/
   audio/     sound_manager.gd (SFX synthesis + music sequencer)
 data/
   roster.json, stages.json, story.json
-  fighters/*.json   one file per fighter: stats, costume colours, moves, quotes, ending
+  fighters/*.json   one file per fighter: stats, look, alternate costumes, moves, quotes, ending
   moves/base_normals.json   shared normal moves that fighters override
-tests/       TestRunner (automated), Screenshot (dev helper)
+tests/       TestRunner + FlowTest (automated), RenderCheck (art validation), Screenshot (dev helper)
 tools/       gen_move_list.py
 docs/        MOVES.md, TEST_CHECKLIST.md
 ```
@@ -111,7 +126,7 @@ Each fighter is one JSON file. Stats, costume colours and every move live there:
 
 To add a fighter:
 1. Copy `data/fighters/vibe.json` and give it a new `id`.
-2. Change the `look` (colours, `head`, `face`, `emblem`, `cape`, `prop`) and the `moves`.
+2. Change the `look` (colours, `build`, `head`, `face`, `emblem`, `cape`, `coat`, `skirt`, `plates`, `weapon`, `prop`), the `costumes` (each one overrides fields of `look`; `"none"` removes a field), the `stance` and the `moves`.
 3. Add the id to `data/roster.json`.
 4. Run the tests. `Data.validate()` catches missing moves, unknown poses and broken references.
 
@@ -119,12 +134,12 @@ Poses are listed in `scripts/combat/poses.gd`. The `pose` field of each move nam
 
 ## Testing
 
-Automated tests run all nine fighters against each other (81 CPU-vs-CPU matches, every stage, every scene):
+Automated tests run all 14 fighters against each other (196 CPU-vs-CPU matches, every stage, every scene):
 
 ```
 godot --headless --path . --import          # first time only
-godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn            # full run (~4-5 min)
-godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn -- quick   # 12 matchups (~40 s)
+godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn            # full run (~20 min)
+godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn -- quick   # 28 matchups (~3 min)
 godot --headless --path . --fixed-fps 60 res://tests/FlowTest.tscn              # end-to-end mode flows (~1 min)
 ```
 
@@ -141,6 +156,11 @@ The runner checks for:
 
 It also loads and runs every menu, story and training scene.
 
+`RenderCheck` draws every fighter × costume × pose (rotated, mirrored, with cloth sway) and reports the draw time. Godot prints "Invalid polygon" errors if any shape is broken. It needs a display (or `xvfb-run`):
+```
+godot --path . --rendering-driver opengl3 res://tests/RenderCheck.tscn
+```
+
 To take screenshots for visual review (needs a display, or `xvfb-run` on Linux):
 ```
 godot --path . res://tests/Screenshot.tscn -- /tmp/shots menu select fight:flash:green_arrow:star_labs:400
@@ -149,7 +169,8 @@ godot --path . res://tests/Screenshot.tscn -- /tmp/shots menu select fight:flash
 There's a manual checklist in [`docs/TEST_CHECKLIST.md`](docs/TEST_CHECKLIST.md).
 
 ## Known limitations
-- The art is procedural pixel art. Characters are recognizable from silhouette and costume colours, but they aren't hand-animated sprite sheets yet. The renderer (`rig.gd`) is the single place to improve that. Hand-drawn PNG sprite sheets could later replace it per fighter.
+- The art is procedural pixel art drawn from poses, not hand-animated sprite sheets. It's show-inspired, but it can't match the detail of hand-drawn frames. Hand-drawn PNG sprite sheets could later replace the renderer per fighter.
+- Villains are playable in Versus, Arcade, Survival and Training (each with an Arcade ending). Story Mode still follows the heroes.
 - There are no voice clips. The announcer uses synthesized musical stingers on the Voice bus.
 - Online play isn't implemented (a stretch goal in the bible). Local two-player works.
 - The optional stylized finishers from the bible aren't implemented.

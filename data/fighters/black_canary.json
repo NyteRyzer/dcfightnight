@@ -1,31 +1,249 @@
 {
-  "id": "black_canary", "name": "Black Canary", "short": "CANARY", "real_name": "Laurel Lance", "team": "Team Arrow",
-  "archetype": "Close-range pressure & counters", "bio": "Street-trained fighter with a sonic cry. Thrives up close and turns attacks back.",
-  "height": 158, "health": 950, "walk": 3.7, "back_walk": 3.2, "dash": 8.5, "jump": [4.6, -16.6], "gravity": 0.8,
-  "flip_jump": true, "victory_pose": "victory_hips",
-  "look": {
-    "skin": "#eec1a0", "suit": "#1a1a1e", "arms": "#1e1e22", "legs": "#18181c", "boots": "#0e0e10", "gloves": "#101012",
-    "hair": "#f0d27a", "head": "long", "face": "domino", "mask": "#08080a", "emblem": "zip", "belt": "#3a3a40",
-    "power": "#a8e8ff", "bulk": 0.9
+ "id": "black_canary",
+ "name": "Black Canary",
+ "short": "CANARY",
+ "real_name": "Laurel Lance",
+ "team": "Team Arrow",
+ "archetype": "Close-range pressure & counters",
+ "bio": "Street-trained fighter with a sonic cry. Thrives up close and turns attacks back.",
+ "height": 158,
+ "health": 1000,
+ "walk": 3.7,
+ "back_walk": 3.2,
+ "dash": 8.5,
+ "jump": [
+  4.6,
+  -16.6
+ ],
+ "gravity": 0.8,
+ "flip_jump": true,
+ "victory_pose": "victory_hips",
+ "look": {
+  "build": "female",
+  "skin": "#eec1a0",
+  "suit": "#1a1a1e",
+  "arms": "#1c1c20",
+  "legs": "#18181c",
+  "boots": "#0e0e10",
+  "boot_len": 0.72,
+  "gloves": "#101012",
+  "glove_len": 0.35,
+  "hair": "#f0d27a",
+  "head": "wavy",
+  "face": "domino",
+  "mask": "#08080a",
+  "emblem": "zip",
+  "choker": "#c8c8d0",
+  "belt": "#2a2a30",
+  "lips": "#b8505a",
+  "seams": "#2c2c32",
+  "power": "#a8e8ff",
+  "bulk": 0.92
+ },
+ "moves": {
+  "L": {
+   "name": "Quick Jab",
+   "startup": 3
   },
-  "alt_look": {"suit": "#e8e8ec", "arms": "#e0e0e6", "legs": "#d8d8e0", "boots": "#c8c8d0", "gloves": "#d0d0d8", "hair": "#f6f0e0", "power": "#ffffff"},
-  "moves": {
-    "L": {"name": "Quick Jab", "startup": 3},
-    "M": {"name": "Snap Kick", "startup": 6},
-    "H": {"name": "Spinning Kick", "pose": ["highkick_w", "highkick_s"], "startup": 10, "damage": 92, "hitbox": [0.16, -1.0, 0.34, 0.3]},
-    "S": {"name": "Canary Cry", "input": "SP", "pose": ["breath_s", "scream_s"], "startup": 12, "active": 2, "recovery": 24, "sfx": "sonic",
-          "projectile": {"kind": "sonic", "frame": 12, "offset": [0.3, -0.84], "speed": 6, "damage": 24, "hits": 3, "interval": 6, "hitstun": 15, "blockstun": 10, "size": [28, 44], "life": 62, "level": "mid", "push": 6, "single": true}},
-    "fS": {"name": "Aerial Kick", "input": "FWD + SP", "pose": ["jump_tuck", "flip_kick"], "startup": 7, "active": 14, "recovery": 12,
-           "impulse": [6.5, -8.5], "impulse_frame": 7, "land_cancel": true, "hitbox": [0.1, -0.95, 0.4, 0.5], "damage": 90, "hitstun": 20, "blockstun": 14,
-           "level": "overhead", "knockdown": true, "push": 6, "sfx": "hit_h"},
-    "bS": {"name": "Counter-Elbow", "input": "BACK + SP", "pose": ["counter_stance", "counter_stance"], "startup": 3, "active": 22, "recovery": 16, "utility": true,
-           "counter": {"window": [3, 25], "move": "counter_hit"}},
-    "counter_hit": {"name": "Counter-Elbow Strike", "hidden": true, "pose": ["counter_stance", "elbow_s"], "startup": 2, "active": 4, "recovery": 16,
-           "hitbox": [0.05, -0.98, 0.42, 0.42], "damage": 110, "hitstun": 24, "level": "mid", "knockdown": true, "invuln": {"frames": [1, 8], "type": "all"}, "sfx": "hit_h"},
-    "dS": {"name": "Sonic Break", "input": "DOWN + SP (full meter)", "super": true, "pose": ["breath_s", "scream_s"], "startup": 16, "active": 40, "recovery": 24, "sfx": "sonic",
-           "invuln": {"frames": [1, 18], "type": "all"}, "hitbox": [0.2, -1.05, 3.6, 0.62], "hits": 8, "hit_interval": 5, "damage": 34, "hitstun": 14, "blockstun": 6,
-           "level": "mid", "launch_last": [7, -9], "fx": "sonic_beam"}
+  "M": {
+   "name": "Snap Kick",
+   "startup": 6
   },
-  "quotes": ["Canary's got a bite.", "That's for every bad night in Star City.", "Lesson one: never corner a Lance."],
-  "ending": "Laurel's final cry shatters Control Freak's sound stage and every speaker in the simulation. When the heroes wake, she's already on the phone with her dad, promising him that yes, she's fine, and no, she will not be explaining what a 'crossover ratings war' is."
+  "H": {
+   "name": "Spinning Kick",
+   "pose": [
+    "highkick_w",
+    "highkick_s"
+   ],
+   "startup": 10,
+   "damage": 92,
+   "hitbox": [
+    0.16,
+    -1.0,
+    0.34,
+    0.3
+   ]
+  },
+  "S": {
+   "name": "Canary Cry",
+   "input": "SP",
+   "pose": [
+    "breath_s",
+    "scream_s"
+   ],
+   "startup": 12,
+   "active": 2,
+   "recovery": 24,
+   "sfx": "sonic",
+   "projectile": {
+    "kind": "sonic",
+    "frame": 12,
+    "offset": [
+     0.3,
+     -0.84
+    ],
+    "speed": 6,
+    "damage": 28,
+    "hits": 3,
+    "interval": 6,
+    "hitstun": 15,
+    "blockstun": 10,
+    "size": [
+     28,
+     44
+    ],
+    "life": 62,
+    "level": "mid",
+    "push": 6,
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Aerial Kick",
+   "input": "FWD + SP",
+   "pose": [
+    "jump_tuck",
+    "flip_kick"
+   ],
+   "startup": 7,
+   "active": 14,
+   "recovery": 12,
+   "impulse": [
+    6.5,
+    -8.5
+   ],
+   "impulse_frame": 7,
+   "land_cancel": true,
+   "hitbox": [
+    0.1,
+    -0.95,
+    0.4,
+    0.5
+   ],
+   "damage": 98,
+   "hitstun": 20,
+   "blockstun": 14,
+   "level": "overhead",
+   "knockdown": true,
+   "push": 6,
+   "sfx": "hit_h"
+  },
+  "bS": {
+   "name": "Counter-Elbow",
+   "input": "BACK + SP",
+   "pose": [
+    "counter_stance",
+    "counter_stance"
+   ],
+   "startup": 3,
+   "active": 22,
+   "recovery": 16,
+   "utility": true,
+   "counter": {
+    "window": [
+     3,
+     25
+    ],
+    "move": "counter_hit"
+   }
+  },
+  "counter_hit": {
+   "name": "Counter-Elbow Strike",
+   "hidden": true,
+   "pose": [
+    "counter_stance",
+    "elbow_s"
+   ],
+   "startup": 2,
+   "active": 4,
+   "recovery": 16,
+   "hitbox": [
+    0.05,
+    -0.98,
+    0.42,
+    0.42
+   ],
+   "damage": 110,
+   "hitstun": 24,
+   "level": "mid",
+   "knockdown": true,
+   "invuln": {
+    "frames": [
+     1,
+     8
+    ],
+    "type": "all"
+   },
+   "sfx": "hit_h"
+  },
+  "dS": {
+   "name": "Sonic Break",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "breath_s",
+    "scream_s"
+   ],
+   "startup": 16,
+   "active": 40,
+   "recovery": 24,
+   "sfx": "sonic",
+   "invuln": {
+    "frames": [
+     1,
+     18
+    ],
+    "type": "all"
+   },
+   "hitbox": [
+    0.2,
+    -1.05,
+    3.6,
+    0.62
+   ],
+   "hits": 8,
+   "hit_interval": 5,
+   "damage": 34,
+   "hitstun": 14,
+   "blockstun": 6,
+   "level": "mid",
+   "launch_last": [
+    7,
+    -9
+   ],
+   "fx": "sonic_beam"
+  }
+ },
+ "quotes": [
+  "Canary's got a bite.",
+  "That's for every bad night in Star City.",
+  "Lesson one: never corner a Lance."
+ ],
+ "ending": "Laurel's final cry shatters Control Freak's sound stage and every speaker in the simulation. When the heroes wake, she's already on the phone with her dad, promising him that yes, she's fine, and no, she will not be explaining what a 'crossover ratings war' is.",
+ "look_name": "Black Canary (S4)",
+ "costumes": [
+  {
+   "name": "Black Siren (Earth-2)",
+   "look": {
+    "face": "none",
+    "hair": "#f6e6b0",
+    "choker": "#e0e0e8",
+    "suit": "#121214",
+    "seams": "none",
+    "power": "#ff6080"
+   }
+  },
+  {
+   "name": "Season 3 Suit",
+   "look": {
+    "suit": "#2a1e1a",
+    "arms": "#2a1e1a",
+    "forearm": "#2a1e1a",
+    "legs": "#161414",
+    "shirt": "#121212",
+    "seams": "none"
+   }
+  }
+ ],
+ "stance": "fem"
 }

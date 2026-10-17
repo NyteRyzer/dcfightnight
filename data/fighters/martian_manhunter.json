@@ -1,28 +1,259 @@
 {
-  "id": "martian_manhunter", "name": "Martian Manhunter", "short": "MARTIAN", "real_name": "J'onn J'onzz", "team": "Team Supergirl",
-  "archetype": "Adaptive control & reach", "bio": "Last son of Mars. Phases through attacks, stretches his reach, and snares minds.",
-  "height": 182, "health": 1050, "walk": 3.1, "back_walk": 2.8, "dash": 7.0, "jump": [4.0, -15.6], "gravity": 0.76,
-  "victory_pose": "victory_arms",
-  "look": {
-    "skin": "#3e8a3a", "suit": "#2a5a2a", "arms": "#3e8a3a", "forearm": "#3a8236", "legs": "#2f6a2e", "boots": "#1c3a8a", "gloves": "#3a8236",
-    "head": "bald", "face": "martian", "emblem": "xstraps", "accent": "#c0161e", "belt": "#1c3a8a", "cape": "#1c3a8a",
-    "power": "#ff6a40", "bulk": 1.2
+ "id": "martian_manhunter",
+ "name": "Martian Manhunter",
+ "short": "MARTIAN",
+ "real_name": "J'onn J'onzz",
+ "team": "Team Supergirl",
+ "archetype": "Adaptive control & reach",
+ "bio": "Last son of Mars. Phases through attacks, stretches his reach, and snares minds.",
+ "height": 182,
+ "health": 1020,
+ "walk": 3.1,
+ "back_walk": 2.8,
+ "dash": 7.0,
+ "jump": [
+  4.0,
+  -15.6
+ ],
+ "gravity": 0.76,
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#3e8a3a",
+  "suit": "#24302a",
+  "arms": "#3e8a3a",
+  "forearm": "#3e8a3a",
+  "gloves": "#3a8236",
+  "legs": "#24302a",
+  "boots": "#1c3a8a",
+  "boot_len": 0.5,
+  "head": "bald",
+  "face": "martian",
+  "emblem": "xstraps",
+  "accent": "#c0161e",
+  "belt": "#1c3a8a",
+  "cape": "#1c3a8a",
+  "cape_len": 0.5,
+  "muscles": true,
+  "power": "#ff6a40",
+  "bulk": 1.2
+ },
+ "moves": {
+  "L": {
+   "name": "Martian Jab",
+   "hitbox": [
+    0.16,
+    -0.86,
+    0.32,
+    0.15
+   ]
   },
-  "alt_look": {"skin": "#5a4a8a", "arms": "#5a4a8a", "forearm": "#544484", "gloves": "#544484", "suit": "#3a2e60", "legs": "#3e3466", "cape": "#7a1414", "boots": "#7a1414", "belt": "#7a1414", "power": "#c080ff"},
-  "moves": {
-    "L": {"name": "Martian Jab", "hitbox": [0.16, -0.86, 0.32, 0.15]},
-    "M": {"name": "Martian Kick", "hitbox": [0.18, -0.45, 0.35, 0.17]},
-    "H": {"name": "Mars Hammer", "pose": ["slam_w", "haymaker_s"], "startup": 12, "damage": 105},
-    "S": {"name": "Telepathic Snare", "input": "SP", "pose": ["telepath_s", "telepath_s"], "startup": 14, "active": 2, "recovery": 22, "sfx": "psi",
-          "projectile": {"kind": "psi", "frame": 14, "offset": [0.42, -0.84], "speed": 6, "damage": 50, "hitstun": 36, "blockstun": 12, "size": [36, 30], "level": "mid", "pull": 70, "single": true}},
-    "fS": {"name": "Martian Strike", "input": "FWD + SP", "pose": ["cast_w", "stretch_s"], "startup": 13, "active": 4, "recovery": 22, "sfx": "hit_h",
-           "hitbox": [0.3, -0.87, 0.66, 0.17], "damage": 90, "hitstun": 24, "blockstun": 14, "level": "mid", "push": 16},
-    "bS": {"name": "Phase Through", "input": "BACK + SP", "pose": ["dash", "dash"], "startup": 4, "active": 14, "recovery": 12, "utility": true, "phase": true,
-           "vel": [11, 0], "vel_frames": [4, 18], "invuln": {"frames": [1, 20], "type": "all"}, "alpha": {"frames": [1, 22], "value": 0.35}, "sfx": "teleport"},
-    "dS": {"name": "Martian Onslaught", "input": "DOWN + SP (full meter)", "super": true, "pose": ["super", "rush_s"], "pose_cycle": ["rush_s", "haymaker_s", "rush_s2", "uppercut_s"],
-           "startup": 12, "active": 46, "recovery": 20, "vel": [12, 0], "vel_frames": [12, 26], "stop_on_hit": true, "hits": 8, "hit_interval": 5, "damage": 40,
-           "hitstun": 16, "blockstun": 6, "hitbox": [0.0, -1.0, 0.5, 1.0], "level": "mid", "launch_last": [3, -14], "invuln": {"frames": [1, 14], "type": "all"}, "trail": true, "sfx": "hit_m"}
+  "M": {
+   "name": "Martian Kick",
+   "hitbox": [
+    0.18,
+    -0.45,
+    0.35,
+    0.17
+   ]
   },
-  "quotes": ["I have seen your mind. It was not difficult.", "On Mars, this would be a warm-up.", "Rest now, friend."],
-  "ending": "J'onn reaches into Control Freak's mind and finds a lonely fan who simply wanted heroes to notice him. He doesn't punish him. He gives him a choice. In the D.E.O., a new 'consultant' badge hangs on the wall. Nobody is thrilled. J'onn is patient."
+  "H": {
+   "name": "Mars Hammer",
+   "pose": [
+    "slam_w",
+    "haymaker_s"
+   ],
+   "startup": 12,
+   "damage": 105
+  },
+  "S": {
+   "name": "Telepathic Snare",
+   "input": "SP",
+   "pose": [
+    "telepath_s",
+    "telepath_s"
+   ],
+   "startup": 14,
+   "active": 2,
+   "recovery": 22,
+   "sfx": "psi",
+   "projectile": {
+    "kind": "psi",
+    "frame": 14,
+    "offset": [
+     0.42,
+     -0.84
+    ],
+    "speed": 6,
+    "damage": 50,
+    "hitstun": 36,
+    "blockstun": 12,
+    "size": [
+     36,
+     30
+    ],
+    "level": "mid",
+    "pull": 70,
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Martian Strike",
+   "input": "FWD + SP",
+   "pose": [
+    "cast_w",
+    "stretch_s"
+   ],
+   "startup": 13,
+   "active": 4,
+   "recovery": 22,
+   "sfx": "hit_h",
+   "hitbox": [
+    0.3,
+    -0.87,
+    0.66,
+    0.17
+   ],
+   "damage": 90,
+   "hitstun": 24,
+   "blockstun": 14,
+   "level": "mid",
+   "push": 16
+  },
+  "bS": {
+   "name": "Phase Through",
+   "input": "BACK + SP",
+   "pose": [
+    "dash",
+    "dash"
+   ],
+   "startup": 4,
+   "active": 14,
+   "recovery": 12,
+   "utility": true,
+   "phase": true,
+   "vel": [
+    11,
+    0
+   ],
+   "vel_frames": [
+    4,
+    18
+   ],
+   "invuln": {
+    "frames": [
+     1,
+     20
+    ],
+    "type": "all"
+   },
+   "alpha": {
+    "frames": [
+     1,
+     22
+    ],
+    "value": 0.35
+   },
+   "sfx": "teleport"
+  },
+  "dS": {
+   "name": "Martian Onslaught",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "rush_s"
+   ],
+   "pose_cycle": [
+    "rush_s",
+    "haymaker_s",
+    "rush_s2",
+    "uppercut_s"
+   ],
+   "startup": 12,
+   "active": 46,
+   "recovery": 20,
+   "vel": [
+    12,
+    0
+   ],
+   "vel_frames": [
+    12,
+    26
+   ],
+   "stop_on_hit": true,
+   "hits": 8,
+   "hit_interval": 5,
+   "damage": 40,
+   "hitstun": 16,
+   "blockstun": 6,
+   "hitbox": [
+    0.0,
+    -1.0,
+    0.5,
+    1.0
+   ],
+   "level": "mid",
+   "launch_last": [
+    3,
+    -14
+   ],
+   "invuln": {
+    "frames": [
+     1,
+     14
+    ],
+    "type": "all"
+   },
+   "trail": true,
+   "sfx": "hit_m"
+  }
+ },
+ "quotes": [
+  "I have seen your mind. It was not difficult.",
+  "On Mars, this would be a warm-up.",
+  "Rest now, friend."
+ ],
+ "ending": "J'onn reaches into Control Freak's mind and finds a lonely fan who simply wanted heroes to notice him. He doesn't punish him. He gives him a choice. In the D.E.O., a new 'consultant' badge hangs on the wall. Nobody is thrilled. J'onn is patient.",
+ "look_name": "Martian Form",
+ "costumes": [
+  {
+   "name": "Hank Henshaw",
+   "look": {
+    "skin": "#6a4430",
+    "hair": "#c8c8c8",
+    "head": "short",
+    "face": "none",
+    "suit": "#1c1c22",
+    "emblem": "tie",
+    "accent": "#6a1018",
+    "arms": "#1c1c22",
+    "forearm": "#1c1c22",
+    "gloves": "#6a4430",
+    "legs": "#1c1c22",
+    "boots": "#0e0e10",
+    "boot_len": 0.3,
+    "cape": "none",
+    "belt": "none",
+    "muscles": false
+   }
+  },
+  {
+   "name": "White Martian",
+   "look": {
+    "skin": "#d8d8d0",
+    "arms": "#d8d8d0",
+    "forearm": "#d8d8d0",
+    "gloves": "#d0d0c8",
+    "suit": "#8a8a84",
+    "legs": "#8a8a84",
+    "cape": "#3a3a3a",
+    "accent": "#3a3a3a",
+    "belt": "#3a3a3a",
+    "boots": "#3a3a3a",
+    "power": "#e0e0ff"
+   }
+  }
+ ],
+ "stance": "heavy"
 }

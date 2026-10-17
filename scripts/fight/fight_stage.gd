@@ -49,6 +49,9 @@ var last_move := ["", ""]
 var total_frames := 0
 var hit_count := [0, 0]
 var pause_lock := 0
+var zoom_punch := 0.0
+var first_strike := false
+var ko_freeze := 0
 
 
 func _ready() -> void:
@@ -62,8 +65,11 @@ func _ready() -> void:
 	world.add_child(arena)
 	for i in 2:
 		var f: Node2D = FighterScene.instantiate()
-		f.setup(Data.fighter(Game.chars[i]), i, Game.alt[i])
+		f.setup(Data.fighter(Game.chars[i]), i, Game.costume[i])
 		f.manager = self
+		var rc := Color.html(str(Data.stage(Game.stage_id).get("rim", "#c8d8ff")))
+		rc.a = 0.6
+		f.rim = rc
 		world.add_child(f)
 		fighters.append(f)
 	fighters[0].opponent = fighters[1]
@@ -105,6 +111,7 @@ func _ready() -> void:
 				brain.mode = Game.training.get("dummy", "stand")
 			ai[i] = brain
 	_play_music()
+	InputManager.pad_disconnected.connect(_on_pad_lost)
 	if training:
 		_reset_positions()
 		phase = "fight"
@@ -162,8 +169,10 @@ func _reset_positions() -> void:
 func start_round() -> void:
 	_reset_positions()
 	hud.vs_t = 0
+	first_strike = false
 	for i in 2:
 		var f: Node2D = fighters[i]
+		f.breaker_used = false
 		f.health = f.max_health
 		if i == 0 and Game.fight_opts.has("start_health") and round_num == 1:
 			f.health = f.max_health * float(Game.fight_opts["start_health"])
@@ -295,6 +304,9 @@ func _on_ko(d0: bool, d1: bool) -> void:
 				f.set_state("airhit")
 	hud.announce("K.O.", "", 90, Color(1, 0.2, 0.15))
 	hud.flash_t = 10
+	zoom_punch = 0.12
+	for i in 2:
+		_rumble(i, 0.8, 0.5)
 	Sound.play("ko")
 	Sound.announce("ko_voice")
 	shake(8.0)
@@ -437,7 +449,23 @@ func _feedback(a: Node2D, d: Node2D, res: String, atk: Dictionary, at: Vector2, 
 	match res:
 		"hit":
 			var power: Color = a.look.get("power", Color.WHITE)
+			if atk.get("fx_hit", "") == "slash":
+				fx.slash(at, a.facing, clampf(dmg / 50.0, 0.8, 1.8), power)
 			fx.spark(at, clampf(dmg / 55.0, 0.6, 1.8), power.lerp(Color.WHITE, 0.4))
+			if atk.get("amp", false):
+				fx.shockring(at, power, 6.0, 3.0, 14)
+			var bonus: String = d.last_hit_bonus
+			if bonus == "counter":
+				fx.text(d.pos + Vector2(0, -d.H * 1.15), "COUNTER HIT", Color(1, 0.5, 0.3))
+			elif bonus == "punish":
+				fx.text(d.pos + Vector2(0, -d.H * 1.15), "PUNISH", Color(1, 0.8, 0.3))
+			d.last_hit_bonus = ""
+			if not first_strike and not training:
+				first_strike = true
+				hud.announce("FIRST STRIKE", "", 45, Color(1, 0.6, 0.2))
+			_rumble(d.pid, 0.25 + minf(0.5, dmg / 200.0), 0.12 + dmg / 1200.0)
+			_rumble(a.pid, 0.15, 0.06)
+			zoom_punch = maxf(zoom_punch, clampf(dmg / 2500.0, 0.0, 0.045))
 			var snd := "hit_l" if dmg < 45 else ("hit_m" if dmg < 80 else "hit_h")
 			var sfx: String = atk.get("sfx", snd)
 			Sound.play(sfx if sfx.begins_with("hit") else snd)
@@ -455,6 +483,7 @@ func _feedback(a: Node2D, d: Node2D, res: String, atk: Dictionary, at: Vector2, 
 		"block":
 			fx.block_spark(at)
 			Sound.play("block")
+			_rumble(d.pid, 0.15, 0.05)
 			d.hitstop = 5
 			if not is_proj:
 				a.hitstop = 5
@@ -552,8 +581,16 @@ func spawn_projectile(src: Node2D, d: Dictionary, index: int = 0) -> void:
 			projectiles.append(p)
 		return
 	var start := Vector2(owner_f.pos.x + float(off[0]) * owner_f.H * owner_f.facing, owner_f.pos.y + float(off[1]) * owner_f.H)
+	if owner_f.amplified:
+		d = d.duplicate()
+		d["damage"] = float(d.get("damage", 0)) * 1.35
+		d["speed"] = float(d.get("speed", 8)) * 1.25
+		d["hits"] = int(d.get("hits", 1)) + 1
+		d["amp"] = true
 	var pr := Projectile.new()
 	pr.setup(owner_f, d, start, owner_f.facing, power)
+	if owner_f.amplified:
+		pr.size *= 1.2
 	world.add_child(pr)
 	projectiles.append(pr)
 	if pr.kind == "bullet":
@@ -633,6 +670,55 @@ func on_super(f: Node2D, m: Dictionary) -> void:
 	Sound.play("super")
 	Sound.announce("super_voice")
 	fx.shockring(f.pos + Vector2(0, -f.H * 0.5), power, 10.0, 4.0, 24)
+	zoom_punch = 0.08
+	_rumble(f.pid, 0.4, 0.3)
+
+
+func on_amplify(f: Node2D) -> void:
+	var power: Color = f.look.get("power", Color.WHITE)
+	fx.text(f.pos + Vector2(0, -f.H * 1.15), "AMPLIFIED", power.lightened(0.3))
+	fx.shockring(f.pos + Vector2(0, -f.H * 0.5), power, 8.0, 3.0, 16)
+	Sound.play("super", 1.6, -6.0)
+	_rumble(f.pid, 0.3, 0.12)
+
+
+func on_breaker(f: Node2D) -> void:
+	var o: Node2D = f.opponent
+	var power: Color = f.look.get("power", Color.WHITE)
+	f.to_neutral()
+	f.vel = Vector2.ZERO
+	f.pos.y = FLOOR_Y
+	f.invuln = 24
+	f.stun = 0
+	f.slide = 0.0
+	if o.state != "ko":
+		var away := 1.0 if o.pos.x > f.pos.x else -1.0
+		o.move = {}
+		o.move_id = ""
+		o.vel = Vector2(7.0 * away, -7.0)
+		o.pos.y = minf(o.pos.y, FLOOR_Y - 1.0)
+		o.set_state("airhit")
+		o.juggle_immune = true
+	fx.text(f.pos + Vector2(0, -f.H * 1.2), "BREAKER!", Color(1, 1, 1))
+	fx.shockring(f.pos + Vector2(0, -f.H * 0.5), power, 12.0, 6.0, 22)
+	hud.flash_t = 6
+	Sound.play("explode", 1.4, -4.0)
+	shake(6.0)
+	_rumble(f.pid, 0.6, 0.25)
+
+
+func fx_wallbounce(f: Node2D) -> void:
+	fx.dust(f.pos + Vector2(0, -f.H * 0.5), 1.4)
+	fx.shockring(f.pos + Vector2(0, -f.H * 0.5), Color(1, 1, 1), 6.0, 3.0, 12)
+	fx.text(f.pos + Vector2(0, -f.H * 1.1), "WALL BOUNCE", Color(1, 0.85, 0.4))
+	Sound.play("slam", 1.3, -4.0)
+	shake(5.0)
+
+
+func _rumble(pid: int, strength: float, duration: float) -> void:
+	if autoplay or ai[pid] != null:
+		return
+	InputManager.rumble(pid, strength, duration)
 
 
 func fx_dust(at: Vector2, scale: float) -> void:
@@ -671,6 +757,9 @@ func fx_move(f: Node2D, kind: String) -> void:
 				fx.shockring(head + Vector2(i * 70.0 * f.facing, 10), power, 8.0, 2.0, 30 + i * 2)
 		"breach":
 			fx.breach(f.pos + Vector2(0, -f.H * 0.5), power)
+		"heal":
+			for i in 10:
+				fx.add({"t": "puff", "p": f.pos + Vector2(randf_range(-30, 30), randf_range(-f.H, -10)), "v": Vector2(0, -1.2), "life": 30, "c": Color(power.r, power.g, power.b, 0.6), "r": 3.0})
 
 
 func shake(amount: float) -> void:
@@ -688,6 +777,9 @@ func _update_camera() -> void:
 	else:
 		shake_amt = 0.0
 	cam.position = Vector2(round(cam_x), 180) + off.round()
+	zoom_punch *= 0.86
+	var z := 1.0 + zoom_punch
+	cam.zoom = Vector2(z, z)
 	arena.cam_left = round(cam_x) - HALF_VIEW
 
 
@@ -742,6 +834,14 @@ func _close_menu() -> void:
 	if menu != null:
 		menu.queue_free()
 		menu = null
+
+
+func _on_pad_lost(device: int) -> void:
+	if autoplay or phase not in ["fight", "intro"] or get_tree().paused:
+		return
+	var pid := InputManager.player_for_device(device)
+	if pid >= 0 and ai[pid] == null:
+		open_pause()
 
 
 func open_pause() -> void:
@@ -818,11 +918,15 @@ func _show_move_list() -> void:
 			continue
 		var m: Dictionary = f.def["moves"][k]
 		items.append({"id": "back", "label": str(m.get("name", k)), "value": str(m.get("input", labels.get(k, k))).to_upper()})
-	var ml := _make_menu(str(f.def.get("name", "")).to_upper() + " - MOVE LIST", items, 360.0)
-	ml.font_size = 10
-	ml.item_h = 14.0
+	items.append({"id": "back", "label": "-- SYSTEM --", "value": ""})
+	items.append({"id": "back", "label": "Amplify (1 bar)", "value": "BLOCK during a special"})
+	items.append({"id": "back", "label": "Breaker (2 bars)", "value": "FWD + BLOCK while hit"})
+	items.append({"id": "back", "label": "Quick Rise / Roll", "value": "ANY BUTTON (+BACK) when down"})
+	var ml := _make_menu(str(f.def.get("name", "")).to_upper() + " - MOVE LIST", items, 380.0)
+	ml.font_size = 9
+	ml.item_h = 13.0
 	ml.set_items(items)
-	ml.position = Vector2(140, 34)
+	ml.position = Vector2(130, 22)
 	ml.chosen.connect(func(_id): open_pause())
 	ml.cancelled.connect(open_pause)
 

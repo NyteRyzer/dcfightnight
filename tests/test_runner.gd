@@ -26,6 +26,8 @@ var results: Array = []
 var quick := false
 var scene_queue: Array = []
 var t0 := 0
+var wins := {}
+var games := {}
 
 
 func _ready() -> void:
@@ -100,7 +102,7 @@ func _next() -> void:
 		elif s == "training":
 			Game.chars = ["flash", "citizen_steel"]
 			Game.cpu = [false, true]
-			Game.alt = [false, false]
+			Game.costume = [0, 0]
 			Game.stage_id = "star_labs"
 			Game.fight_opts = {}
 			Game.mode = "training"
@@ -116,7 +118,7 @@ func _next() -> void:
 	var m: Dictionary = queue.pop_front()
 	label = "%s vs %s @ %s" % [m["a"], m["b"], m["stage"]]
 	Game.chars = [m["a"], m["b"]]
-	Game.alt = [false, m["a"] == m["b"]]
+	Game.costume = [0, 1 if m["a"] == m["b"] else 0]
 	Game.cpu = [true, true]
 	Game.mode = "cpu_vs_cpu"
 	Game.stage_id = m["stage"]
@@ -172,6 +174,12 @@ func _check_fight() -> void:
 		_fail("%s: runaway combo of %d hits" % [label, max_combo])
 		max_combo = -1000
 	if current.phase == "done":
+		var ids: Array = Game.chars
+		if ids[0] != ids[1]:
+			for k in 2:
+				games[ids[k]] = games.get(ids[k], 0) + 1
+			var wid: String = ids[current.match_winner]
+			wins[wid] = wins.get(wid, 0) + 1
 		results.append("%s -> winner P%d in %d frames (max combo %d, hp left %d%% / %d%%, hits %d/%d)" % [label, current.match_winner + 1, frames, maxi(0, max_combo),
 			int(100.0 * fs[0].health / fs[0].max_health), int(100.0 * fs[1].health / fs[1].max_health), current.hit_count[0], current.hit_count[1]])
 		_finish_scene()
@@ -183,6 +191,12 @@ func _check_fight() -> void:
 func _report() -> void:
 	for r in results:
 		print(r)
+	print("--------------------------------------------------")
+	print("CPU vs CPU win rates (rough balance signal):")
+	var order: Array = games.keys()
+	order.sort_custom(func(x, y): return float(wins.get(x, 0)) / games[x] > float(wins.get(y, 0)) / games[y])
+	for id in order:
+		print("  %-20s %5.1f%%  (%d games)" % [id, 100.0 * wins.get(id, 0) / games[id], games[id]])
 	print("--------------------------------------------------")
 	print("Matchups run: %d   Time: %.1fs" % [results.size(), (Time.get_ticks_msec() - t0) / 1000.0])
 	if failures.is_empty():

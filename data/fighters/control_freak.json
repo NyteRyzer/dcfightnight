@@ -1,27 +1,233 @@
 {
-  "id": "control_freak", "name": "Control Freak", "short": "C. FREAK", "real_name": "Unknown", "team": "Villain",
-  "archetype": "Boss: reality remote", "bio": "A pop-culture obsessive with a reality-warping remote. He wrote the rules of this tournament.",
-  "height": 160, "health": 1100, "boss_health": 1500, "walk": 3.0, "back_walk": 2.8, "dash": 7.5, "jump": [4.0, -15.5], "gravity": 0.8,
-  "victory_pose": "victory_arms",
-  "look": {
-    "skin": "#f0c09a", "suit": "#5c3a96", "arms": "#64409e", "forearm": "#f0c09a", "gloves": "#f0c09a", "legs": "#2a3e7a", "boots": "#5a3a20",
-    "hair": "#6a4020", "head": "shaggy", "face": "glasses", "emblem": "tv", "prop": "remote", "belly": 0.55, "power": "#40ffb0", "bulk": 1.25
+ "id": "control_freak",
+ "name": "Control Freak",
+ "short": "C. FREAK",
+ "real_name": "Unknown",
+ "team": "Villain",
+ "archetype": "Boss: reality remote",
+ "bio": "A pop-culture obsessive with a reality-warping remote. He wrote the rules of this tournament.",
+ "height": 160,
+ "health": 1100,
+ "boss_health": 1500,
+ "walk": 3.0,
+ "back_walk": 2.8,
+ "dash": 7.5,
+ "jump": [
+  4.0,
+  -15.5
+ ],
+ "gravity": 0.8,
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#f0c09a",
+  "suit": "#5c3a96",
+  "arms": "#64409e",
+  "forearm": "#f0c09a",
+  "gloves": "#f0c09a",
+  "legs": "#2a3e7a",
+  "boots": "#5a3a20",
+  "boot_len": 0.35,
+  "hair": "#6a4020",
+  "head": "shaggy",
+  "face": "glasses",
+  "emblem": "tv",
+  "prop": "remote",
+  "belly": 0.55,
+  "power": "#40ffb0",
+  "bulk": 1.25
+ },
+ "moves": {
+  "L": {
+   "name": "Remote Bonk"
   },
-  "alt_look": {"suit": "#9a2a2a", "arms": "#a03030", "legs": "#303030", "power": "#ff6060"},
-  "moves": {
-    "L": {"name": "Remote Bonk"},
-    "H": {"name": "Plot Twist", "damage": 95},
-    "S": {"name": "Channel Surf", "input": "SP", "pose": ["point_s", "point_s"], "startup": 10, "active": 2, "recovery": 20, "sfx": "static",
-          "projectile": {"kind": "static", "frame": 10, "offset": [0.5, -0.82], "speed": 8.5, "damage": 55, "hitstun": 18, "blockstun": 12, "size": [34, 28], "level": "mid", "single": true}},
-    "fS": {"name": "Fast Forward", "input": "FWD + SP", "pose": ["dash", "rush_s"], "pose_cycle": ["rush_s", "rush_s2"], "startup": 8, "active": 14, "recovery": 18,
-           "vel": [12, 0], "vel_frames": [6, 16], "stop_on_hit": true, "hits": 3, "hit_interval": 4, "damage": 30, "hitstun": 16, "blockstun": 8,
-           "hitbox": [0.1, -0.95, 0.42, 0.6], "level": "mid", "launch_last": [4, -8], "trail": true, "sfx": "hit_m"},
-    "bS": {"name": "Pause Button", "input": "BACK + SP", "pose": ["point_s", "point_s"], "startup": 14, "active": 2, "recovery": 22, "sfx": "static",
-           "projectile": {"kind": "pause", "frame": 14, "offset": [0.5, -0.82], "speed": 6.5, "damage": 20, "hitstun": 52, "blockstun": 10, "size": [30, 30], "level": "mid", "single": true}},
-    "dS": {"name": "Season Finale", "input": "DOWN + SP (full meter)", "super": true, "pose": ["point_s", "victory_arms"], "startup": 14, "active": 4, "recovery": 50, "sfx": "static",
-           "invuln": {"frames": [1, 16], "type": "all"},
-           "projectile": {"kind": "tv", "frame": 16, "count": 8, "every": 5, "rain": {"spread": [-50, 40, -10, 60, -40, 20, -60, 0], "height": -40, "delay": 8}, "speed": 0, "vy": 10, "damage": 42, "hitstun": 22, "blockstun": 8, "size": [26, 22], "level": "mid", "launch_last": [4, -10]}}
+  "H": {
+   "name": "Plot Twist",
+   "damage": 95
   },
-  "quotes": ["And that's a wrap! Cancel the heroes!", "Ratings don't lie!", "Did you really think you could change the channel on ME?"],
-  "ending": "With the heroes defeated, Control Freak crowns himself showrunner of the multiverse. Then the ratings come in. Nobody watches a show without heroes. He sits alone in his studio, flipping channels forever, waiting for someone to tune in."
+  "S": {
+   "name": "Channel Surf",
+   "input": "SP",
+   "pose": [
+    "point_s",
+    "point_s"
+   ],
+   "startup": 10,
+   "active": 2,
+   "recovery": 20,
+   "sfx": "static",
+   "projectile": {
+    "kind": "static",
+    "frame": 10,
+    "offset": [
+     0.5,
+     -0.82
+    ],
+    "speed": 8.5,
+    "damage": 55,
+    "hitstun": 18,
+    "blockstun": 12,
+    "size": [
+     34,
+     28
+    ],
+    "level": "mid",
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Fast Forward",
+   "input": "FWD + SP",
+   "pose": [
+    "dash",
+    "rush_s"
+   ],
+   "pose_cycle": [
+    "rush_s",
+    "rush_s2"
+   ],
+   "startup": 8,
+   "active": 14,
+   "recovery": 18,
+   "vel": [
+    12,
+    0
+   ],
+   "vel_frames": [
+    6,
+    16
+   ],
+   "stop_on_hit": true,
+   "hits": 3,
+   "hit_interval": 4,
+   "damage": 30,
+   "hitstun": 16,
+   "blockstun": 8,
+   "hitbox": [
+    0.1,
+    -0.95,
+    0.42,
+    0.6
+   ],
+   "level": "mid",
+   "launch_last": [
+    4,
+    -8
+   ],
+   "trail": true,
+   "sfx": "hit_m"
+  },
+  "bS": {
+   "name": "Pause Button",
+   "input": "BACK + SP",
+   "pose": [
+    "point_s",
+    "point_s"
+   ],
+   "startup": 14,
+   "active": 2,
+   "recovery": 22,
+   "sfx": "static",
+   "projectile": {
+    "kind": "pause",
+    "frame": 14,
+    "offset": [
+     0.5,
+     -0.82
+    ],
+    "speed": 6.5,
+    "damage": 20,
+    "hitstun": 52,
+    "blockstun": 10,
+    "size": [
+     30,
+     30
+    ],
+    "level": "mid",
+    "single": true
+   }
+  },
+  "dS": {
+   "name": "Season Finale",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "point_s",
+    "victory_arms"
+   ],
+   "startup": 14,
+   "active": 4,
+   "recovery": 50,
+   "sfx": "static",
+   "invuln": {
+    "frames": [
+     1,
+     16
+    ],
+    "type": "all"
+   },
+   "projectile": {
+    "kind": "tv",
+    "frame": 16,
+    "count": 8,
+    "every": 5,
+    "rain": {
+     "spread": [
+      -50,
+      40,
+      -10,
+      60,
+      -40,
+      20,
+      -60,
+      0
+     ],
+     "height": -40,
+     "delay": 8
+    },
+    "speed": 0,
+    "vy": 10,
+    "damage": 42,
+    "hitstun": 22,
+    "blockstun": 8,
+    "size": [
+     26,
+     22
+    ],
+    "level": "mid",
+    "launch_last": [
+     4,
+     -10
+    ]
+   }
+  }
+ },
+ "quotes": [
+  "And that's a wrap! Cancel the heroes!",
+  "Ratings don't lie!",
+  "Did you really think you could change the channel on ME?"
+ ],
+ "ending": "With the heroes defeated, Control Freak crowns himself showrunner of the multiverse. Then the ratings come in. Nobody watches a show without heroes. He sits alone in his studio, flipping channels forever, waiting for someone to tune in.",
+ "look_name": "Showrunner",
+ "costumes": [
+  {
+   "name": "Director's Cut",
+   "look": {
+    "suit": "#9a2a2a",
+    "arms": "#a03030",
+    "legs": "#303030",
+    "power": "#ff6060"
+   }
+  },
+  {
+   "name": "Season Finale Cape",
+   "look": {
+    "cape": "#40c090",
+    "cape_len": 0.45,
+    "suit": "#1e1e2a",
+    "arms": "#24243a",
+    "power": "#40ffb0"
+   }
+  }
+ ]
 }

@@ -1,30 +1,282 @@
 {
-  "id": "flash", "name": "The Flash", "short": "FLASH", "real_name": "Barry Allen", "team": "Team Flash",
-  "archetype": "Fast rushdown", "bio": "The fastest man alive. Low damage per hit, unmatched mobility and pressure.",
-  "height": 168, "health": 950, "walk": 4.2, "back_walk": 3.6, "dash": 10.0, "jump": [4.8, -16.5], "gravity": 0.8,
-  "flip_jump": true, "trail": true, "victory_pose": "victory",
-  "look": {
-    "skin": "#e8b48f", "suit": "#b8141c", "arms": "#c0161e", "legs": "#b0121a", "boots": "#8e0e14",
-    "gloves": "#a8121a", "belt": "#f2c230", "accent": "#f2c230", "mask": "#c0161e", "head": "cowl",
-    "emblem": "bolt", "power": "#ffd23a", "bulk": 1.0
+ "id": "flash",
+ "name": "The Flash",
+ "short": "FLASH",
+ "real_name": "Barry Allen",
+ "team": "Team Flash",
+ "archetype": "Fast rushdown",
+ "bio": "The fastest man alive. Low damage per hit, unmatched mobility and pressure.",
+ "height": 168,
+ "health": 990,
+ "walk": 4.2,
+ "back_walk": 3.6,
+ "dash": 10.0,
+ "jump": [
+  4.8,
+  -16.5
+ ],
+ "gravity": 0.8,
+ "flip_jump": true,
+ "trail": true,
+ "victory_pose": "victory",
+ "look": {
+  "build": "male",
+  "skin": "#e8b48f",
+  "suit": "#c4141c",
+  "suit2": "#7e0a10",
+  "arms": "#c4141c",
+  "legs": "#b81219",
+  "boots": "#9a0e14",
+  "boot_len": 0.55,
+  "gloves": "#a8121a",
+  "glove_len": 0.28,
+  "belt": "#e8b020",
+  "buckle": "#f8d860",
+  "accent": "#f2c230",
+  "mask": "#c4141c",
+  "head": "cowl",
+  "lens": "#fff6e0",
+  "emblem": "bolt",
+  "emblem_bg": "#f8f4ea",
+  "emblem_ring": "#e0a818",
+  "emblem_fg": "#f2c230",
+  "seams": "#7e0a10",
+  "muscles": true,
+  "power": "#ffd23a",
+  "bulk": 1.0
+ },
+ "moves": {
+  "L": {
+   "name": "Lightning Jab",
+   "startup": 3,
+   "recovery": 7,
+   "damage": 30
   },
-  "alt_look": {"suit": "#d8b020", "arms": "#e0b822", "legs": "#d0a81c", "boots": "#a88012", "gloves": "#c09818", "mask": "#e0b822", "accent": "#c0161e", "belt": "#c0161e", "power": "#ff3030"},
-  "moves": {
-    "L": {"name": "Lightning Jab", "startup": 3, "recovery": 7, "damage": 30},
-    "M": {"startup": 6, "damage": 52},
-    "H": {"name": "Speed Hook", "startup": 10, "damage": 85},
-    "S": {"name": "Lightning Throw", "input": "SP", "pose": ["cast_w", "cast_s"], "startup": 12, "active": 2, "recovery": 20, "sfx": "zap",
-          "projectile": {"kind": "bolt", "frame": 12, "offset": [0.42, -0.79], "speed": 11, "damage": 55, "hitstun": 18, "blockstun": 12, "size": [44, 12], "level": "mid", "single": true}},
-    "fS": {"name": "Speed-Force Barrage", "input": "FWD + SP", "pose": ["dash", "rush_s"], "pose_cycle": ["rush_s", "rush_s2"], "startup": 8, "active": 24, "recovery": 18,
-           "vel": [10, 0], "vel_frames": [6, 16], "stop_on_hit": true, "hits": 6, "hit_interval": 4, "damage": 22, "hitstun": 14, "blockstun": 8,
-           "hitbox": [0.1, -0.95, 0.42, 0.6], "level": "mid", "push": 2, "launch_last": [4, -8], "trail": true, "sfx": "hit_l"},
-    "bS": {"name": "Phase Step", "input": "BACK + SP", "pose": ["dash", "dash"], "startup": 6, "active": 4, "recovery": 12, "utility": true,
-           "teleport": {"frame": 8, "to": "behind", "dist": 0.45}, "invuln": {"frames": [1, 14], "type": "all"}, "alpha": {"frames": [4, 10], "value": 0.25}, "trail": true, "sfx": "teleport"},
-    "dS": {"name": "Time-Slice Combo", "input": "DOWN + SP (full meter)", "super": true, "pose": ["super", "rush_s"], "pose_cycle": ["rush_s", "rush_s2", "haymaker_s", "jab_s"],
-           "startup": 10, "active": 52, "recovery": 20, "vel": [14, 0], "vel_frames": [10, 24], "stop_on_hit": true,
-           "hits": 10, "hit_interval": 5, "damage": 34, "hitstun": 16, "blockstun": 6, "hitbox": [0.0, -1.0, 0.5, 1.0], "level": "mid",
-           "launch_last": [6, -10], "invuln": {"frames": [1, 14], "type": "all"}, "trail": true, "sfx": "hit_m"}
+  "M": {
+   "startup": 6,
+   "damage": 52
   },
-  "quotes": ["My name is Barry Allen... and I just won.", "You were fast. I was faster.", "Run, Barry, run. Done."],
-  "ending": "Barry races back through the collapsing simulation, Speed Force crackling, and drags every last hero out before the doors slam shut. Back at S.T.A.R. Labs, Cisco names the whole thing 'The Crisis of Bad Television.' Barry insists on a different name. Nobody listens."
+  "H": {
+   "name": "Speed Hook",
+   "startup": 10,
+   "damage": 85
+  },
+  "S": {
+   "name": "Lightning Throw",
+   "input": "SP",
+   "pose": [
+    "cast_w",
+    "cast_s"
+   ],
+   "startup": 12,
+   "active": 2,
+   "recovery": 20,
+   "sfx": "zap",
+   "projectile": {
+    "kind": "bolt",
+    "frame": 12,
+    "offset": [
+     0.42,
+     -0.79
+    ],
+    "speed": 11,
+    "damage": 55,
+    "hitstun": 18,
+    "blockstun": 12,
+    "size": [
+     44,
+     12
+    ],
+    "level": "mid",
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Speed-Force Barrage",
+   "input": "FWD + SP",
+   "pose": [
+    "dash",
+    "rush_s"
+   ],
+   "pose_cycle": [
+    "rush_s",
+    "rush_s2"
+   ],
+   "startup": 8,
+   "active": 24,
+   "recovery": 18,
+   "vel": [
+    10,
+    0
+   ],
+   "vel_frames": [
+    6,
+    16
+   ],
+   "stop_on_hit": true,
+   "hits": 6,
+   "hit_interval": 4,
+   "damage": 24,
+   "hitstun": 14,
+   "blockstun": 8,
+   "hitbox": [
+    0.1,
+    -0.95,
+    0.42,
+    0.6
+   ],
+   "level": "mid",
+   "push": 2,
+   "launch_last": [
+    4,
+    -8
+   ],
+   "trail": true,
+   "sfx": "hit_l"
+  },
+  "bS": {
+   "name": "Phase Step",
+   "input": "BACK + SP",
+   "pose": [
+    "dash",
+    "dash"
+   ],
+   "startup": 6,
+   "active": 4,
+   "recovery": 12,
+   "utility": true,
+   "teleport": {
+    "frame": 8,
+    "to": "behind",
+    "dist": 0.45
+   },
+   "invuln": {
+    "frames": [
+     1,
+     14
+    ],
+    "type": "all"
+   },
+   "alpha": {
+    "frames": [
+     4,
+     10
+    ],
+    "value": 0.25
+   },
+   "trail": true,
+   "sfx": "teleport"
+  },
+  "dS": {
+   "name": "Time-Slice Combo",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "rush_s"
+   ],
+   "pose_cycle": [
+    "rush_s",
+    "rush_s2",
+    "haymaker_s",
+    "jab_s"
+   ],
+   "startup": 10,
+   "active": 52,
+   "recovery": 20,
+   "vel": [
+    14,
+    0
+   ],
+   "vel_frames": [
+    10,
+    24
+   ],
+   "stop_on_hit": true,
+   "hits": 10,
+   "hit_interval": 5,
+   "damage": 34,
+   "hitstun": 16,
+   "blockstun": 6,
+   "hitbox": [
+    0.0,
+    -1.0,
+    0.5,
+    1.0
+   ],
+   "level": "mid",
+   "launch_last": [
+    6,
+    -10
+   ],
+   "invuln": {
+    "frames": [
+     1,
+     14
+    ],
+    "type": "all"
+   },
+   "trail": true,
+   "sfx": "hit_m"
+  }
+ },
+ "quotes": [
+  "My name is Barry Allen... and I just won.",
+  "You were fast. I was faster.",
+  "Run, Barry, run. Done."
+ ],
+ "ending": "Barry races back through the collapsing simulation, Speed Force crackling, and drags every last hero out before the doors slam shut. Back at S.T.A.R. Labs, Cisco names the whole thing 'The Crisis of Bad Television.' Barry insists on a different name. Nobody listens.",
+ "look_name": "Season 4 Suit",
+ "costumes": [
+  {
+   "name": "Season 1 Suit",
+   "look": {
+    "suit": "#7c0c12",
+    "suit2": "#4a060a",
+    "arms": "#7c0c12",
+    "legs": "#720a10",
+    "boots": "#600810",
+    "gloves": "#6a0a10",
+    "mask": "#7c0c12",
+    "seams": "#4a060a",
+    "emblem_fg": "#d8a020",
+    "emblem_ring": "#c08818",
+    "accent": "#d8a020",
+    "belt": "#c08818"
+   }
+  },
+  {
+   "name": "Season 5 Suit",
+   "look": {
+    "suit": "#d81e22",
+    "suit2": "#a01418",
+    "arms": "#d81e22",
+    "legs": "#cc1a1e",
+    "emblem_bg": "#ffffff",
+    "emblem_ring": "#f8f8f8",
+    "seams": "#8a1014"
+   }
+  },
+  {
+   "name": "Jay Garrick Tribute",
+   "look": {
+    "head": "jay",
+    "hair": "#4a3a2a",
+    "suit": "#c0181c",
+    "suit2": "none",
+    "arms": "#c0181c",
+    "gloves": "#e8b48f",
+    "glove_len": 0.15,
+    "legs": "#1e3a8a",
+    "boots": "#6a4628",
+    "emblem": "bolt_plain",
+    "belt": "#2a2a2a",
+    "buckle": "#b0b0b0",
+    "seams": "none",
+    "muscles": false,
+    "mask": "none"
+   }
+  }
+ ],
+ "stance": "speed"
 }

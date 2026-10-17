@@ -154,9 +154,10 @@ func _draw() -> void:
 			draw_rect(Rect2(mxb, 340, mw * m, 8), mc)
 		else:
 			draw_rect(Rect2(mxb + mw * (1.0 - m), 340, mw * m, 8), mc)
-		for k in range(1, 4):
-			draw_line(Vector2(mxb + mw * k / 4.0, 340), Vector2(mxb + mw * k / 4.0, 348), Color(0, 0, 0, 0.6), 1.0)
-		var lab := "SUPER READY!" if full else "SUPER"
+		for k in range(1, 3):
+			draw_line(Vector2(mxb + mw * k / 3.0, 338), Vector2(mxb + mw * k / 3.0, 350), Color(0, 0, 0, 0.9), 2.0)
+		var bars := int(floor(f.meter / (1000.0 / 3.0) + 0.001))
+		var lab := "SUPER READY!" if full else ("%d BAR%s" % [bars, "" if bars == 1 else "S"] if bars > 0 else "METER")
 		if i == 0:
 			_text(Vector2(mxb + mw + 6, 349), lab, 9, Color(1, 1, 0.6) if full else Color(0.8, 0.8, 0.9))
 		else:

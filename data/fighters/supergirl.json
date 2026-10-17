@@ -1,29 +1,266 @@
 {
-  "id": "supergirl", "name": "Supergirl", "short": "SUPERGIRL", "real_name": "Kara Danvers", "team": "Team Supergirl",
-  "archetype": "Powerful all-rounder", "bio": "Kryptonian strength, flight and heat vision. Strong air control and ranged pressure.",
-  "height": 160, "health": 1000, "walk": 3.7, "back_walk": 3.2, "dash": 8.5, "jump": [4.6, -17.2], "gravity": 0.78,
-  "victory_pose": "victory_hips",
-  "look": {
-    "skin": "#f0c4a2", "suit": "#1f4fb4", "arms": "#2154b8", "legs": "#1c48a6", "boots": "#b8141c", "gloves": "#2154b8",
-    "hair": "#f0d070", "head": "long", "emblem": "shield", "accent": "#f2c230", "belt": "#f2c230", "cape": "#c0161e",
-    "power": "#ff5a2a", "bulk": 0.92
+ "id": "supergirl",
+ "name": "Supergirl",
+ "short": "SUPERGIRL",
+ "real_name": "Kara Danvers",
+ "team": "Team Supergirl",
+ "archetype": "Powerful all-rounder",
+ "bio": "Kryptonian strength, flight and heat vision. Strong air control and ranged pressure.",
+ "height": 160,
+ "health": 1000,
+ "walk": 3.7,
+ "back_walk": 3.2,
+ "dash": 8.5,
+ "jump": [
+  4.6,
+  -17.2
+ ],
+ "gravity": 0.78,
+ "victory_pose": "victory_hips",
+ "look": {
+  "build": "female",
+  "skin": "#f0c4a2",
+  "suit": "#1f4fb4",
+  "arms": "#2154b8",
+  "legs": "#1c48a6",
+  "boots": "#b8141c",
+  "boot_len": 0.62,
+  "skirt": "#c0161e",
+  "cape": "#c0161e",
+  "hair": "#f0d070",
+  "head": "wavy",
+  "emblem": "shield",
+  "emblem_bg": "#f2c230",
+  "emblem_fg": "#c0161e",
+  "belt": "#f2c230",
+  "lips": "#c8606a",
+  "power": "#ff5a2a",
+  "bulk": 0.95
+ },
+ "moves": {
+  "H": {
+   "name": "Kryptonian Haymaker",
+   "damage": 100
   },
-  "alt_look": {"suit": "#202024", "arms": "#26262a", "legs": "#1c1c22", "boots": "#202024", "cape": "#1a1a1e", "accent": "#c8c8d0", "belt": "#c8c8d0", "hair": "#e8e0d0", "power": "#80a0ff"},
-  "moves": {
-    "H": {"name": "Kryptonian Haymaker", "damage": 100},
-    "S": {"name": "Heat Vision", "input": "SP", "pose": ["beam_s", "beam_s"], "startup": 10, "active": 16, "recovery": 16, "sfx": "beam",
-          "projectile": {"kind": "beam", "frame": 10, "offset": [0.32, -0.88], "speed": 16, "damage": 30, "hits": 2, "interval": 3, "hitstun": 16, "blockstun": 10, "size": [46, 6], "level": "high", "single": true}},
-    "jS": {"name": "Air Heat Vision", "input": "SP (air)", "pose": ["jump_tuck", "beam_s"], "startup": 8, "active": 10, "recovery": 14, "air": true, "sfx": "beam",
-           "projectile": {"kind": "beam", "frame": 8, "offset": [0.3, -0.85], "speed": 14, "vy": 7, "damage": 28, "hits": 2, "interval": 3, "hitstun": 16, "blockstun": 10, "size": [40, 6], "level": "overhead", "single": true}},
-    "fS": {"name": "Flight Dash", "input": "FWD + SP", "pose": ["fly_s", "fly_s"], "startup": 6, "active": 16, "recovery": 14, "fly": true,
-           "vel": [11, 0], "vel_frames": [6, 22], "stop_on_hit": true, "hitbox": [0.1, -0.75, 0.48, 0.35], "damage": 80, "hitstun": 22, "blockstun": 14,
-           "level": "mid", "launch": [5, -10], "push": 6, "trail": true, "sfx": "hit_h"},
-    "bS": {"name": "Super-Breath", "input": "BACK + SP", "pose": ["breath_s", "breath_s"], "startup": 12, "active": 20, "recovery": 16, "sfx": "wind",
-           "hitbox": [0.2, -0.95, 0.9, 0.9], "hits": 4, "hit_interval": 5, "damage": 13, "hitstun": 13, "blockstun": 10, "push": 14, "level": "mid", "chip": 0.2, "fx": "breath"},
-    "dS": {"name": "Solar Flare", "input": "DOWN + SP (full meter)", "super": true, "pose": ["super", "victory_arms"], "startup": 20, "active": 12, "recovery": 28, "sfx": "explode",
-           "invuln": {"frames": [1, 24], "type": "all"}, "hitbox": [-0.9, -1.4, 1.8, 1.45], "hits": 3, "hit_interval": 4, "damage": 100, "hitstun": 26, "blockstun": 12,
-           "level": "mid", "launch_last": [6, -12], "fx": "flare"}
+  "S": {
+   "name": "Heat Vision",
+   "input": "SP",
+   "pose": [
+    "beam_s",
+    "beam_s"
+   ],
+   "startup": 10,
+   "active": 16,
+   "recovery": 16,
+   "sfx": "beam",
+   "projectile": {
+    "kind": "beam",
+    "frame": 10,
+    "offset": [
+     0.32,
+     -0.88
+    ],
+    "speed": 16,
+    "damage": 30,
+    "hits": 2,
+    "interval": 3,
+    "hitstun": 16,
+    "blockstun": 10,
+    "size": [
+     46,
+     6
+    ],
+    "level": "high",
+    "single": true
+   }
   },
-  "quotes": ["I'm stronger than I look.", "Hope wins. Every time.", "Sorry! Are you okay? ...You're okay."],
-  "ending": "Kara flies straight through the simulation's sky and finds the edge of the world: a wall of static. She punches it. Twice. On the other side, National City is waiting, and Alex is already asking if she remembered to grab potstickers."
+  "jS": {
+   "name": "Air Heat Vision",
+   "input": "SP (air)",
+   "pose": [
+    "jump_tuck",
+    "beam_s"
+   ],
+   "startup": 8,
+   "active": 10,
+   "recovery": 14,
+   "air": true,
+   "sfx": "beam",
+   "projectile": {
+    "kind": "beam",
+    "frame": 8,
+    "offset": [
+     0.3,
+     -0.85
+    ],
+    "speed": 14,
+    "vy": 7,
+    "damage": 28,
+    "hits": 2,
+    "interval": 3,
+    "hitstun": 16,
+    "blockstun": 10,
+    "size": [
+     40,
+     6
+    ],
+    "level": "overhead",
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Flight Dash",
+   "input": "FWD + SP",
+   "pose": [
+    "fly_s",
+    "fly_s"
+   ],
+   "startup": 6,
+   "active": 16,
+   "recovery": 14,
+   "fly": true,
+   "vel": [
+    11,
+    0
+   ],
+   "vel_frames": [
+    6,
+    22
+   ],
+   "stop_on_hit": true,
+   "hitbox": [
+    0.1,
+    -0.75,
+    0.48,
+    0.35
+   ],
+   "damage": 80,
+   "hitstun": 22,
+   "blockstun": 14,
+   "level": "mid",
+   "launch": [
+    5,
+    -10
+   ],
+   "push": 6,
+   "trail": true,
+   "sfx": "hit_h"
+  },
+  "bS": {
+   "name": "Super-Breath",
+   "input": "BACK + SP",
+   "pose": [
+    "breath_s",
+    "breath_s"
+   ],
+   "startup": 12,
+   "active": 20,
+   "recovery": 16,
+   "sfx": "wind",
+   "hitbox": [
+    0.2,
+    -0.95,
+    0.9,
+    0.9
+   ],
+   "hits": 4,
+   "hit_interval": 5,
+   "damage": 13,
+   "hitstun": 13,
+   "blockstun": 10,
+   "push": 14,
+   "level": "mid",
+   "chip": 0.2,
+   "fx": "breath"
+  },
+  "dS": {
+   "name": "Solar Flare",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "victory_arms"
+   ],
+   "startup": 20,
+   "active": 12,
+   "recovery": 28,
+   "sfx": "explode",
+   "invuln": {
+    "frames": [
+     1,
+     24
+    ],
+    "type": "all"
+   },
+   "hitbox": [
+    -0.9,
+    -1.4,
+    1.8,
+    1.45
+   ],
+   "hits": 3,
+   "hit_interval": 4,
+   "damage": 100,
+   "hitstun": 26,
+   "blockstun": 12,
+   "level": "mid",
+   "launch_last": [
+    6,
+    -12
+   ],
+   "fx": "flare"
+  }
+ },
+ "quotes": [
+  "I'm stronger than I look.",
+  "Hope wins. Every time.",
+  "Sorry! Are you okay? ...You're okay."
+ ],
+ "ending": "Kara flies straight through the simulation's sky and finds the edge of the world: a wall of static. She punches it. Twice. On the other side, National City is waiting, and Alex is already asking if she remembered to grab potstickers.",
+ "look_name": "Supergirl (S1-S4)",
+ "costumes": [
+  {
+   "name": "Season 5 Suit",
+   "look": {
+    "suit": "#1a2c6a",
+    "arms": "#1c306e",
+    "legs": "#182a64",
+    "skirt": "none",
+    "belt": "#c0161e",
+    "seams": "#101c48"
+   }
+  },
+  {
+   "name": "Overgirl (Earth-X)",
+   "look": {
+    "suit": "#141418",
+    "arms": "#18181c",
+    "legs": "#141418",
+    "skirt": "none",
+    "boots": "#18181c",
+    "cape": "#8a0c10",
+    "emblem_bg": "#c0161e",
+    "emblem_fg": "#141418",
+    "belt": "#8a0c10",
+    "hair": "#f6e8b0",
+    "power": "#ff3020"
+   }
+  },
+  {
+   "name": "Kara Danvers",
+   "look": {
+    "suit": "#c8b088",
+    "shirt": "#3a6ab0",
+    "arms": "#c8b088",
+    "legs": "#2a3040",
+    "boots": "#3a2a20",
+    "skirt": "none",
+    "cape": "none",
+    "emblem": "none",
+    "face": "glasses",
+    "belt": "none"
+   }
+  }
+ ],
+ "stance": "fem"
 }

@@ -68,7 +68,7 @@ func _start_next() -> void:
 			Game.mode = "versus"
 			Game.chars = ["vibe", "black_canary"]
 			Game.cpu = [false, false]
-			Game.alt_pref = [false, true]
+			Game.costume_pref = [0, 1]
 			Game.stage_id = "national_city"
 			Game.fight_opts = {}
 			Game.begin_fight()
@@ -85,7 +85,7 @@ func _process(_d: float) -> void:
 	frames += 1
 	flow_frames += 1
 	if pulse_held:
-		Input.action_release("p1_light")
+		Input.action_release("p1_m_accept")
 		pulse_held = false
 	var name_s := _scene_name()
 	if name_s != last_scene:
@@ -109,7 +109,7 @@ func _process(_d: float) -> void:
 				Game.goto("menu")
 			return
 	if flow_frames % 12 == 0:
-		Input.action_press("p1_light")
+		Input.action_press("p1_m_accept")
 		pulse_held = true
 
 
@@ -142,7 +142,7 @@ func _drive_fight(f: Node) -> void:
 					Game.goto("menu")
 				return
 			if flow in ["story", "arcade"] and f.pt > 40 and f.pt % 12 == 0:
-				Input.action_press("p1_light")
+				Input.action_press("p1_m_accept")
 				pulse_held = true
 
 

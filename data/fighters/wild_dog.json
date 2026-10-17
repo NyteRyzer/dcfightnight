@@ -1,28 +1,235 @@
 {
-  "id": "wild_dog", "name": "Wild Dog", "short": "WILD DOG", "real_name": "Rene Ramirez", "team": "Team Arrow",
-  "archetype": "Gadget mid-range & armored approach", "bio": "Ex-Marine street vigilante. Traps, flashbangs and armored charges.",
-  "height": 168, "health": 1000, "walk": 3.3, "back_walk": 2.9, "dash": 7.5, "jump": [4.2, -15.8], "gravity": 0.8,
-  "victory_pose": "victory",
-  "look": {
-    "skin": "#c08a66", "suit": "#33363c", "arms": "#2c2e34", "forearm": "#3a3c42", "legs": "#3b3a34", "boots": "#141414", "gloves": "#121214",
-    "hair": "#120e0c", "head": "short", "hat": "cap", "hat_color": "#18181c", "face": "bandana", "mask": "#26272c", "emblem": "vest",
-    "belt": "#2a2a24", "pads": true, "power": "#ffffff", "bulk": 1.1
+ "id": "wild_dog",
+ "name": "Wild Dog",
+ "short": "WILD DOG",
+ "real_name": "Rene Ramirez",
+ "team": "Team Arrow",
+ "archetype": "Gadget mid-range & armored approach",
+ "bio": "Ex-Marine street vigilante. Traps, flashbangs and armored charges.",
+ "height": 168,
+ "health": 1060,
+ "walk": 3.3,
+ "back_walk": 2.9,
+ "dash": 7.5,
+ "jump": [
+  4.2,
+  -15.8
+ ],
+ "gravity": 0.8,
+ "victory_pose": "victory",
+ "look": {
+  "build": "male",
+  "skin": "#c08a66",
+  "suit": "#2e3036",
+  "arms": "#2a2c32",
+  "forearm": "#34363c",
+  "gloves": "#121214",
+  "glove_len": 0.45,
+  "legs": "#3a3a34",
+  "boots": "#141414",
+  "boot_len": 0.66,
+  "kneepads": "#2a2a2e",
+  "hair": "#120e0c",
+  "head": "short",
+  "face": "hockey",
+  "mask": "#e8e8e4",
+  "accent": "#b01818",
+  "emblem": "vest",
+  "vest": "#1e2024",
+  "belt": "#24241e",
+  "pouches": true,
+  "pads": true,
+  "pad_color": "#36383e",
+  "power": "#ffffff",
+  "bulk": 1.1
+ },
+ "moves": {
+  "M": {
+   "name": "Combat Kick"
   },
-  "alt_look": {"suit": "#4a3c2a", "arms": "#44382a", "legs": "#4a4434", "hat_color": "#5a1818", "mask": "#5a1818", "power": "#ffd080"},
-  "moves": {
-    "M": {"name": "Combat Kick"},
-    "H": {"name": "Stock Strike", "damage": 98},
-    "S": {"name": "Tactical Shot", "input": "SP", "pose": ["shoot_w", "shoot_s"], "startup": 9, "active": 2, "recovery": 18, "sfx": "shot",
-          "projectile": {"kind": "bullet", "frame": 9, "count": 2, "every": 6, "offset": [0.5, -0.78], "speed": 16, "damage": 24, "hitstun": 14, "blockstun": 9, "size": [12, 4], "level": "high"}},
-    "fS": {"name": "Shoulder Check", "input": "FWD + SP", "pose": ["charge_s", "charge_s"], "startup": 10, "active": 12, "recovery": 18,
-           "vel": [8, 0], "vel_frames": [8, 22], "stop_on_hit": true, "armor": {"frames": [1, 20], "hits": 1}, "hitbox": [0.1, -0.92, 0.36, 0.6],
-           "damage": 85, "hitstun": 22, "blockstun": 14, "level": "mid", "knockdown": true, "push": 8, "sfx": "hit_h"},
-    "bS": {"name": "Flashbang", "input": "BACK + SP", "pose": ["toss_w", "toss_s"], "startup": 12, "active": 2, "recovery": 18, "sfx": "whoosh",
-           "projectile": {"kind": "flashbang", "frame": 12, "offset": [0.25, -0.95], "speed": 5.2, "vy": -7.5, "gravity": 0.45, "damage": 50, "hitstun": 42, "blockstun": 14, "size": [10, 10], "explode": 52, "life": 120, "level": "mid", "single": true}},
-    "dS": {"name": "Tactical Barrage", "input": "DOWN + SP (full meter)", "super": true, "pose": ["shoot_w", "shoot_s"], "startup": 14, "active": 4, "recovery": 46, "sfx": "shot",
-           "invuln": {"frames": [1, 16], "type": "all"},
-           "projectile": {"kind": "bullet", "frame": 14, "count": 10, "every": 4, "offset": [0.5, -0.78], "speed": 17, "damage": 28, "hitstun": 18, "blockstun": 6, "size": [12, 4], "level": "mid", "launch_last": [5, -9]}}
+  "H": {
+   "name": "Stock Strike",
+   "damage": 104
   },
-  "quotes": ["Wild Dog don't play nice.", "Should've stayed home, hermano.", "That's how we do it in the Glades."],
-  "ending": "Rene walks out of the simulation and straight to Zoe's school play, still covered in pixel dust. He tells her it was a long day at work. She tells him he missed his line cue. He says he'll take that over a flashbang any day."
+  "S": {
+   "name": "Tactical Shot",
+   "input": "SP",
+   "pose": [
+    "shoot_w",
+    "shoot_s"
+   ],
+   "startup": 9,
+   "active": 2,
+   "recovery": 18,
+   "sfx": "shot",
+   "projectile": {
+    "kind": "bullet",
+    "frame": 9,
+    "count": 2,
+    "every": 6,
+    "offset": [
+     0.5,
+     -0.78
+    ],
+    "speed": 16,
+    "damage": 30,
+    "hitstun": 14,
+    "blockstun": 9,
+    "size": [
+     12,
+     4
+    ],
+    "level": "high"
+   }
+  },
+  "fS": {
+   "name": "Shoulder Check",
+   "input": "FWD + SP",
+   "pose": [
+    "charge_s",
+    "charge_s"
+   ],
+   "startup": 10,
+   "active": 12,
+   "recovery": 18,
+   "vel": [
+    8,
+    0
+   ],
+   "vel_frames": [
+    8,
+    22
+   ],
+   "stop_on_hit": true,
+   "armor": {
+    "frames": [
+     1,
+     20
+    ],
+    "hits": 1
+   },
+   "hitbox": [
+    0.1,
+    -0.92,
+    0.36,
+    0.6
+   ],
+   "damage": 95,
+   "hitstun": 22,
+   "blockstun": 14,
+   "level": "mid",
+   "knockdown": true,
+   "push": 8,
+   "sfx": "hit_h"
+  },
+  "bS": {
+   "name": "Flashbang",
+   "input": "BACK + SP",
+   "pose": [
+    "toss_w",
+    "toss_s"
+   ],
+   "startup": 12,
+   "active": 2,
+   "recovery": 18,
+   "sfx": "whoosh",
+   "projectile": {
+    "kind": "flashbang",
+    "frame": 12,
+    "offset": [
+     0.25,
+     -0.95
+    ],
+    "speed": 5.2,
+    "vy": -7.5,
+    "gravity": 0.45,
+    "damage": 50,
+    "hitstun": 42,
+    "blockstun": 14,
+    "size": [
+     10,
+     10
+    ],
+    "explode": 52,
+    "life": 120,
+    "level": "mid",
+    "single": true
+   }
+  },
+  "dS": {
+   "name": "Tactical Barrage",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "shoot_w",
+    "shoot_s"
+   ],
+   "startup": 14,
+   "active": 4,
+   "recovery": 46,
+   "sfx": "shot",
+   "invuln": {
+    "frames": [
+     1,
+     16
+    ],
+    "type": "all"
+   },
+   "projectile": {
+    "kind": "bullet",
+    "frame": 14,
+    "count": 10,
+    "every": 4,
+    "offset": [
+     0.5,
+     -0.78
+    ],
+    "speed": 17,
+    "damage": 28,
+    "hitstun": 18,
+    "blockstun": 6,
+    "size": [
+     12,
+     4
+    ],
+    "level": "mid",
+    "launch_last": [
+     5,
+     -9
+    ]
+   }
+  }
+ },
+ "quotes": [
+  "Wild Dog don't play nice.",
+  "Should've stayed home, hermano.",
+  "That's how we do it in the Glades."
+ ],
+ "ending": "Rene walks out of the simulation and straight to Zoe's school play, still covered in pixel dust. He tells her it was a long day at work. She tells him he missed his line cue. He says he'll take that over a flashbang any day.",
+ "look_name": "Wild Dog (S6)",
+ "costumes": [
+  {
+   "name": "Season 5 Hoodie",
+   "look": {
+    "suit": "#3c3c40",
+    "arms": "#3c3c40",
+    "forearm": "#3c3c40",
+    "pads": false,
+    "kneepads": "none",
+    "legs": "#2a3040",
+    "emblem": "none"
+   }
+  },
+  {
+   "name": "Season 7 Suit",
+   "look": {
+    "suit": "#20283a",
+    "arms": "#222a3c",
+    "forearm": "#2a3244",
+    "legs": "#1e2434",
+    "face": "none",
+    "pad_color": "#2a3244"
+   }
+  }
+ ]
 }

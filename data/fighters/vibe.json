@@ -1,30 +1,270 @@
 {
-  "id": "vibe", "name": "Vibe", "short": "VIBE", "real_name": "Cisco Ramon", "team": "Team Flash",
-  "archetype": "Teleport mix-ups & ranged energy", "bio": "Breacher and engineer. Opens dimensional rifts to appear anywhere.",
-  "height": 162, "health": 950, "walk": 3.4, "back_walk": 3.0, "dash": 8.0, "jump": [4.3, -16.2], "gravity": 0.8,
-  "victory_pose": "victory_arms",
-  "look": {
-    "skin": "#c99470", "suit": "#24262e", "arms": "#2a2c36", "forearm": "#1c1e26", "legs": "#1e2028", "boots": "#14151a", "gloves": "#101118",
-    "hair": "#1a120c", "head": "long", "face": "goggles", "accent": "#4ea8ff", "emblem": "piping", "stripe": "#4ea8ff",
-    "power": "#4ea8ff", "bulk": 0.95
+ "id": "vibe",
+ "name": "Vibe",
+ "short": "VIBE",
+ "real_name": "Cisco Ramon",
+ "team": "Team Flash",
+ "archetype": "Teleport mix-ups & ranged energy",
+ "bio": "Breacher and engineer. Opens dimensional rifts to appear anywhere.",
+ "height": 162,
+ "health": 950,
+ "walk": 3.4,
+ "back_walk": 3.0,
+ "dash": 8.0,
+ "jump": [
+  4.3,
+  -16.2
+ ],
+ "gravity": 0.8,
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#c99470",
+  "suit": "#1e2028",
+  "arms": "#23252e",
+  "forearm": "#1a1c24",
+  "gloves": "#2a2c38",
+  "glove_len": 0.55,
+  "legs": "#1c1e26",
+  "boots": "#121318",
+  "boot_len": 0.5,
+  "hair": "#1a120c",
+  "head": "long",
+  "face": "goggles",
+  "mask": "#0c0c10",
+  "lens": "#4ea8ff",
+  "emblem": "piping",
+  "accent": "#4ea8ff",
+  "stripe": "#4ea8ff",
+  "seams": "#30323c",
+  "power": "#4ea8ff",
+  "bulk": 0.95
+ },
+ "moves": {
+  "L": {
+   "name": "Vibe Jab"
   },
-  "alt_look": {"suit": "#3a1e44", "arms": "#40224a", "legs": "#301a38", "accent": "#d060ff", "stripe": "#d060ff", "power": "#d060ff"},
-  "moves": {
-    "L": {"name": "Vibe Jab"},
-    "H": {"name": "Resonance Punch", "pose": ["cast_w", "cast_s"], "damage": 90, "hitbox": [0.18, -0.9, 0.32, 0.2]},
-    "S": {"name": "Vibro-Blast", "input": "SP", "pose": ["cast_w", "cast_s"], "startup": 11, "active": 2, "recovery": 20, "sfx": "vibe",
-          "projectile": {"kind": "vibe", "frame": 11, "offset": [0.45, -0.8], "speed": 8, "damage": 65, "hitstun": 20, "blockstun": 13, "size": [34, 34], "level": "mid", "single": true}},
-    "fS": {"name": "Breach Step", "input": "FWD + SP", "pose": ["cast_w", "rush_s"], "startup": 14, "active": 4, "recovery": 16,
-           "teleport": {"frame": 10, "to": "behind", "dist": 0.42}, "invuln": {"frames": [6, 14], "type": "all"}, "alpha": {"frames": [7, 11], "value": 0.2},
-           "hitbox": [0.1, -0.92, 0.36, 0.42], "damage": 70, "hitstun": 22, "blockstun": 12, "level": "mid", "push": 8, "fx": "breach", "sfx": "teleport"},
-    "bS": {"name": "Portal Feint", "input": "BACK + SP", "pose": ["cast_w", "dive_s"], "startup": 12, "active": 30, "recovery": 12,
-           "teleport": {"frame": 10, "to": "above", "dist": 0.0}, "invuln": {"frames": [4, 12], "type": "all"}, "alpha": {"frames": [6, 11], "value": 0.2},
-           "vel": [1.5, 9], "vel_frames": [13, 60], "land_cancel": true, "hitbox": [0.0, -0.42, 0.36, 0.46], "damage": 75, "hitstun": 20, "blockstun": 14,
-           "level": "overhead", "knockdown": true, "fx": "breach", "sfx": "teleport"},
-    "dS": {"name": "Dimensional Shockwave", "input": "DOWN + SP (full meter)", "super": true, "pose": ["super", "cast_s"], "startup": 18, "active": 2, "recovery": 30, "sfx": "vibe",
-           "invuln": {"frames": [1, 20], "type": "all"},
-           "projectile": {"kind": "vibe_big", "frame": 18, "offset": [0.45, -0.62], "speed": 7, "damage": 46, "hits": 6, "interval": 4, "hitstun": 16, "blockstun": 6, "size": [70, 120], "level": "mid", "launch_last": [6, -11]}}
+  "H": {
+   "name": "Resonance Punch",
+   "pose": [
+    "cast_w",
+    "cast_s"
+   ],
+   "damage": 90,
+   "hitbox": [
+    0.18,
+    -0.9,
+    0.32,
+    0.2
+   ]
   },
-  "quotes": ["Vibe check: passed.", "I'd make a pun, but you'd need a breach to get it.", "That was dimensionally embarrassing. For you."],
-  "ending": "Cisco reverse-engineers Control Freak's remote and opens a breach home. Before stepping through, he pockets the device 'for science.' Caitlin confiscates it in under four minutes. Cisco names the remote anyway: the Channel Changer."
+  "S": {
+   "name": "Vibro-Blast",
+   "input": "SP",
+   "pose": [
+    "cast_w",
+    "cast_s"
+   ],
+   "startup": 11,
+   "active": 2,
+   "recovery": 20,
+   "sfx": "vibe",
+   "projectile": {
+    "kind": "vibe",
+    "frame": 11,
+    "offset": [
+     0.45,
+     -0.8
+    ],
+    "speed": 8,
+    "damage": 65,
+    "hitstun": 20,
+    "blockstun": 13,
+    "size": [
+     34,
+     34
+    ],
+    "level": "mid",
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Breach Step",
+   "input": "FWD + SP",
+   "pose": [
+    "cast_w",
+    "rush_s"
+   ],
+   "startup": 14,
+   "active": 4,
+   "recovery": 16,
+   "teleport": {
+    "frame": 10,
+    "to": "behind",
+    "dist": 0.42
+   },
+   "invuln": {
+    "frames": [
+     6,
+     14
+    ],
+    "type": "all"
+   },
+   "alpha": {
+    "frames": [
+     7,
+     11
+    ],
+    "value": 0.2
+   },
+   "hitbox": [
+    0.1,
+    -0.92,
+    0.36,
+    0.42
+   ],
+   "damage": 70,
+   "hitstun": 22,
+   "blockstun": 12,
+   "level": "mid",
+   "push": 8,
+   "fx": "breach",
+   "sfx": "teleport"
+  },
+  "bS": {
+   "name": "Portal Feint",
+   "input": "BACK + SP",
+   "pose": [
+    "cast_w",
+    "dive_s"
+   ],
+   "startup": 12,
+   "active": 30,
+   "recovery": 12,
+   "teleport": {
+    "frame": 10,
+    "to": "above",
+    "dist": 0.0
+   },
+   "invuln": {
+    "frames": [
+     4,
+     12
+    ],
+    "type": "all"
+   },
+   "alpha": {
+    "frames": [
+     6,
+     11
+    ],
+    "value": 0.2
+   },
+   "vel": [
+    1.5,
+    9
+   ],
+   "vel_frames": [
+    13,
+    60
+   ],
+   "land_cancel": true,
+   "hitbox": [
+    0.0,
+    -0.42,
+    0.36,
+    0.46
+   ],
+   "damage": 75,
+   "hitstun": 20,
+   "blockstun": 14,
+   "level": "overhead",
+   "knockdown": true,
+   "fx": "breach",
+   "sfx": "teleport"
+  },
+  "dS": {
+   "name": "Dimensional Shockwave",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "cast_s"
+   ],
+   "startup": 18,
+   "active": 2,
+   "recovery": 30,
+   "sfx": "vibe",
+   "invuln": {
+    "frames": [
+     1,
+     20
+    ],
+    "type": "all"
+   },
+   "projectile": {
+    "kind": "vibe_big",
+    "frame": 18,
+    "offset": [
+     0.45,
+     -0.62
+    ],
+    "speed": 7,
+    "damage": 46,
+    "hits": 6,
+    "interval": 4,
+    "hitstun": 16,
+    "blockstun": 6,
+    "size": [
+     70,
+     120
+    ],
+    "level": "mid",
+    "launch_last": [
+     6,
+     -11
+    ]
+   }
+  }
+ },
+ "quotes": [
+  "Vibe check: passed.",
+  "I'd make a pun, but you'd need a breach to get it.",
+  "That was dimensionally embarrassing. For you."
+ ],
+ "ending": "Cisco reverse-engineers Control Freak's remote and opens a breach home. Before stepping through, he pockets the device 'for science.' Caitlin confiscates it in under four minutes. Cisco names the remote anyway: the Channel Changer.",
+ "look_name": "Vibe (S3)",
+ "costumes": [
+  {
+   "name": "Season 2 Cisco",
+   "look": {
+    "suit": "#e0b030",
+    "arms": "#e0b030",
+    "forearm": "#c99470",
+    "gloves": "#c99470",
+    "glove_len": 0.0,
+    "legs": "#3a4a6a",
+    "boots": "#4a3020",
+    "face": "none",
+    "emblem": "tv",
+    "stripe": "none",
+    "seams": "none"
+   }
+  },
+  {
+   "name": "Reverb (Earth-2)",
+   "look": {
+    "coat": "#141418",
+    "coat_len": 0.42,
+    "suit": "#18181c",
+    "arms": "#18181c",
+    "hair": "#0a0808",
+    "head": "slick",
+    "lens": "#602080",
+    "accent": "#a040ff",
+    "stripe": "#a040ff",
+    "power": "#c060ff"
+   }
+  }
+ ]
 }

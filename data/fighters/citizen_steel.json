@@ -1,33 +1,297 @@
 {
-  "id": "citizen_steel", "name": "Citizen Steel", "short": "STEEL", "real_name": "Nate Heywood", "team": "Legends of Tomorrow",
-  "archetype": "Heavy armored bruiser", "bio": "Historian turned Legend. Nate turns his body to living steel: huge damage, strong throws, slower recovery.",
-  "height": 180, "health": 1150, "walk": 2.6, "back_walk": 2.2, "dash": 6.0, "jump": [3.6, -15.0], "gravity": 0.82,
-  "victory_pose": "victory_arms",
-  "look": {
-    "skin": "#9ea8b6", "suit": "#2a3448", "arms": "#9ea8b6", "forearm": "#98a2b0", "gloves": "#a8b2c0", "legs": "#2a2e3a", "boots": "#16181e",
-    "hair": "#707a88", "head": "short", "emblem": "", "belt": "#5a4630", "metal": true, "power": "#c8e0ff", "bulk": 1.38
+ "id": "citizen_steel",
+ "name": "Citizen Steel",
+ "short": "STEEL",
+ "real_name": "Nate Heywood",
+ "team": "Legends of Tomorrow",
+ "archetype": "Heavy armored bruiser",
+ "bio": "Historian turned Legend. Nate turns his body to living steel: huge damage, strong throws, slower recovery.",
+ "height": 180,
+ "health": 1060,
+ "walk": 2.45,
+ "back_walk": 2.2,
+ "dash": 6.0,
+ "jump": [
+  3.6,
+  -15.0
+ ],
+ "gravity": 0.82,
+ "victory_pose": "victory_arms",
+ "look": {
+  "build": "male",
+  "skin": "#9ea8b6",
+  "metal": true,
+  "suit": "#2a3448",
+  "arms": "#9ea8b6",
+  "forearm": "#98a2b0",
+  "gloves": "#a8b2c0",
+  "legs": "#2a2e3a",
+  "boots": "#16181e",
+  "boot_len": 0.5,
+  "hair": "#707a88",
+  "head": "short",
+  "belt": "#5a4630",
+  "muscles": true,
+  "power": "#c8e0ff",
+  "bulk": 1.38
+ },
+ "moves": {
+  "L": {
+   "name": "Steel Jab",
+   "startup": 5,
+   "damage": 42,
+   "hitbox": [
+    0.16,
+    -0.86,
+    0.3,
+    0.15
+   ]
   },
-  "alt_look": {"skin": "#b89a5a", "arms": "#b89a5a", "forearm": "#b09252", "gloves": "#c0a262", "hair": "#8a703a", "suit": "#4a1818", "power": "#ffd080"},
-  "moves": {
-    "L": {"name": "Steel Jab", "startup": 5, "damage": 42, "hitbox": [0.16, -0.86, 0.3, 0.15]},
-    "M": {"name": "Steel Kick", "startup": 8, "damage": 70},
-    "H": {"name": "Wrecking Fist", "startup": 13, "recovery": 22, "damage": 120, "armor": {"frames": [3, 13], "hits": 1}},
-    "cH": {"name": "Steel Uppercut", "damage": 110},
-    "throw": {"name": "Steel Suplex", "damage": 150},
-    "S": {"name": "Ground Slam", "input": "SP", "pose": ["slam_w", "slam_s"], "startup": 16, "active": 3, "recovery": 24, "sfx": "slam",
-          "hitbox": [0.1, -0.42, 0.42, 0.42], "damage": 60, "hitstun": 20, "blockstun": 12, "level": "mid", "push": 8,
-          "projectile": {"kind": "shockwave", "frame": 18, "offset": [0.45, -0.08], "speed": 7, "damage": 60, "hitstun": 22, "blockstun": 12, "size": [40, 26], "level": "low", "knockdown": true, "ground": true, "single": true}},
-    "fS": {"name": "Steel Charge", "input": "FWD + SP", "pose": ["charge_s", "charge_s"], "startup": 12, "active": 18, "recovery": 20,
-           "vel": [7.5, 0], "vel_frames": [10, 30], "stop_on_hit": true, "armor": {"frames": [1, 28], "hits": 2}, "hitbox": [0.1, -0.95, 0.38, 0.65],
-           "damage": 100, "hitstun": 24, "blockstun": 16, "level": "mid", "launch": [5, -8], "push": 10, "sfx": "hit_h"},
-    "bS": {"name": "Shoulder Ram", "input": "BACK + SP", "pose": ["prejump", "ram_up_s"], "startup": 6, "active": 10, "recovery": 24,
-           "impulse": [3, -10.5], "impulse_frame": 6, "land_cancel": true, "armor": {"frames": [1, 10], "hits": 1}, "hitbox": [0.0, -1.18, 0.36, 0.62],
-           "damage": 95, "hitstun": 26, "blockstun": 14, "level": "mid", "launch": [3, -12], "sfx": "hit_h"},
-    "dS": {"name": "Steelbreaker Impact", "input": "DOWN + SP (full meter)", "super": true, "pose": ["slam_w", "slam_s"], "startup": 14, "active": 40, "recovery": 26, "sfx": "slam",
-           "invuln": {"frames": [1, 18], "type": "all"}, "impulse": [6, -14], "impulse_frame": 10, "land_cancel": true,
-           "hitbox": [-0.2, -0.7, 0.8, 0.8], "damage": 140, "hitstun": 30, "blockstun": 10, "level": "overhead", "launch": [5, -12],
-           "on_land_projectile": {"kind": "shockwave_big", "offset": [0.3, -0.1], "speed": 8, "damage": 130, "hits": 1, "hitstun": 30, "blockstun": 12, "size": [64, 44], "level": "low", "launch": [5, -13], "ground": true}}
+  "M": {
+   "name": "Steel Kick",
+   "startup": 8,
+   "damage": 70
   },
-  "quotes": ["History says I win this one.", "Steel yourself. ...Sorry. Couldn't resist.", "Legends never die. They just reload."],
-  "ending": "Nate pounds the simulation's floor until the code itself cracks, then holds the collapsing ceiling up long enough for everyone to escape. Back on the Waverider, he writes the whole adventure up as a history paper. Gideon gives it a B-minus for 'excessive self-insertion.'"
+  "H": {
+   "name": "Wrecking Fist",
+   "startup": 13,
+   "recovery": 22,
+   "damage": 108,
+   "armor": {
+    "frames": [
+     3,
+     10
+    ],
+    "hits": 1
+   }
+  },
+  "cH": {
+   "name": "Steel Uppercut",
+   "damage": 110
+  },
+  "throw": {
+   "name": "Steel Suplex",
+   "damage": 150
+  },
+  "S": {
+   "name": "Ground Slam",
+   "input": "SP",
+   "pose": [
+    "slam_w",
+    "slam_s"
+   ],
+   "startup": 16,
+   "active": 3,
+   "recovery": 24,
+   "sfx": "slam",
+   "hitbox": [
+    0.1,
+    -0.42,
+    0.42,
+    0.42
+   ],
+   "damage": 60,
+   "hitstun": 20,
+   "blockstun": 12,
+   "level": "mid",
+   "push": 8,
+   "projectile": {
+    "kind": "shockwave",
+    "frame": 18,
+    "offset": [
+     0.45,
+     -0.08
+    ],
+    "speed": 7,
+    "damage": 52,
+    "hitstun": 22,
+    "blockstun": 12,
+    "size": [
+     40,
+     26
+    ],
+    "level": "low",
+    "knockdown": true,
+    "ground": true,
+    "single": true
+   }
+  },
+  "fS": {
+   "name": "Steel Charge",
+   "input": "FWD + SP",
+   "pose": [
+    "charge_s",
+    "charge_s"
+   ],
+   "startup": 12,
+   "active": 18,
+   "recovery": 20,
+   "vel": [
+    7.5,
+    0
+   ],
+   "vel_frames": [
+    10,
+    30
+   ],
+   "stop_on_hit": true,
+   "armor": {
+    "frames": [
+     1,
+     28
+    ],
+    "hits": 1
+   },
+   "hitbox": [
+    0.1,
+    -0.95,
+    0.38,
+    0.65
+   ],
+   "damage": 92,
+   "hitstun": 24,
+   "blockstun": 16,
+   "level": "mid",
+   "launch": [
+    5,
+    -8
+   ],
+   "push": 10,
+   "sfx": "hit_h"
+  },
+  "bS": {
+   "name": "Shoulder Ram",
+   "input": "BACK + SP",
+   "pose": [
+    "prejump",
+    "ram_up_s"
+   ],
+   "startup": 6,
+   "active": 10,
+   "recovery": 24,
+   "impulse": [
+    3,
+    -10.5
+   ],
+   "impulse_frame": 6,
+   "land_cancel": true,
+   "armor": {
+    "frames": [
+     1,
+     10
+    ],
+    "hits": 1
+   },
+   "hitbox": [
+    0.0,
+    -1.18,
+    0.36,
+    0.62
+   ],
+   "damage": 95,
+   "hitstun": 26,
+   "blockstun": 14,
+   "level": "mid",
+   "launch": [
+    3,
+    -12
+   ],
+   "sfx": "hit_h"
+  },
+  "dS": {
+   "name": "Steelbreaker Impact",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "slam_w",
+    "slam_s"
+   ],
+   "startup": 14,
+   "active": 40,
+   "recovery": 26,
+   "sfx": "slam",
+   "invuln": {
+    "frames": [
+     1,
+     18
+    ],
+    "type": "all"
+   },
+   "impulse": [
+    6,
+    -14
+   ],
+   "impulse_frame": 10,
+   "land_cancel": true,
+   "hitbox": [
+    -0.2,
+    -0.7,
+    0.8,
+    0.8
+   ],
+   "damage": 140,
+   "hitstun": 30,
+   "blockstun": 10,
+   "level": "overhead",
+   "launch": [
+    5,
+    -12
+   ],
+   "on_land_projectile": {
+    "kind": "shockwave_big",
+    "offset": [
+     0.3,
+     -0.1
+    ],
+    "speed": 8,
+    "damage": 130,
+    "hits": 1,
+    "hitstun": 30,
+    "blockstun": 12,
+    "size": [
+     64,
+     44
+    ],
+    "level": "low",
+    "launch": [
+     5,
+     -13
+    ],
+    "ground": true
+   }
+  }
+ },
+ "quotes": [
+  "History says I win this one.",
+  "Steel yourself. ...Sorry. Couldn't resist.",
+  "Legends never die. They just reload."
+ ],
+ "ending": "Nate pounds the simulation's floor until the code itself cracks, then holds the collapsing ceiling up long enough for everyone to escape. Back on the Waverider, he writes the whole adventure up as a history paper. Gideon gives it a B-minus for 'excessive self-insertion.'",
+ "look_name": "Steel Form",
+ "costumes": [
+  {
+   "name": "Nate Heywood",
+   "look": {
+    "skin": "#e0b090",
+    "metal": false,
+    "arms": "#6a4a30",
+    "forearm": "#6a4a30",
+    "gloves": "#e0b090",
+    "suit": "#6a4a30",
+    "shirt": "#3a4a5a",
+    "hair": "#6a4a2a",
+    "muscles": false
+   }
+  },
+  {
+   "name": "Legends Team Suit",
+   "look": {
+    "suit": "#1c2230",
+    "legs": "#1c2230",
+    "belt": "#c8a050",
+    "seams": "#2c3448"
+   }
+  }
+ ],
+ "stance": "heavy"
 }

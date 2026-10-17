@@ -8,7 +8,7 @@ const MenuList = preload("res://scripts/ui/menu_list.gd")
 var menu: Control
 var t := 0.0
 var pair := 0
-var pairs := [["flash", "green_arrow"], ["supergirl", "martian_manhunter"], ["black_canary", "wild_dog"], ["vibe", "citizen_steel"]]
+var pairs := [["flash", "reverse_flash"], ["green_arrow", "deathstroke"], ["supergirl", "reign"], ["black_canary", "vigilante"], ["citizen_steel", "vandal_savage"], ["vibe", "martian_manhunter"]]
 var bolts: Array = []
 
 
@@ -30,12 +30,13 @@ func _ready() -> void:
 		{"id": "versus", "label": "Versus (2 Players)"},
 		{"id": "versus_cpu", "label": "Versus CPU"},
 		{"id": "training", "label": "Training"},
+		{"id": "howto", "label": "How to Play"},
 		{"id": "options", "label": "Options"},
 		{"id": "credits", "label": "Credits"},
 		{"id": "quit", "label": "Quit"},
 	]
 	menu.set_items(items)
-	menu.position = Vector2(220, 122)
+	menu.position = Vector2(220, 112)
 	add_child(menu)
 	menu.chosen.connect(_on_choice)
 	pair = randi() % pairs.size()
@@ -63,6 +64,8 @@ func _on_choice(id: String) -> void:
 			Game.start_versus(true)
 		"training":
 			Game.start_training()
+		"howto":
+			Game.goto("howto")
 		"options":
 			Game.goto("options")
 		"credits":
@@ -125,6 +128,6 @@ func _draw() -> void:
 	var foot := "Personal noncommercial fan project  -  all art & audio generated in code"
 	var wf := font.get_string_size(foot, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
 	draw_string(font, Vector2(320 - wf * 0.5, 354), foot, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.6, 0.6, 0.7))
-	var hint := "W/S + J to select   |   Gamepad: D-pad + X"
+	var hint := "%s: select   %s: back" % [InputManager.prompt("accept"), InputManager.prompt("back")]
 	var wh := font.get_string_size(hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
 	draw_string(font, Vector2(320 - wh * 0.5, 342), hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.75, 0.75, 0.85))

@@ -1,0 +1,311 @@
+{
+ "id": "reign",
+ "name": "Reign",
+ "short": "REIGN",
+ "real_name": "Samantha Arias",
+ "team": "Villain",
+ "archetype": "Kryptonian powerhouse",
+ "bio": "A Worldkiller bred on Krypton. Red heat vision, armored flight charges and earth-shaking stomps.",
+ "height": 166,
+ "health": 1040,
+ "walk": 3.4,
+ "back_walk": 3.0,
+ "dash": 8.5,
+ "jump": [
+  4.4,
+  -16.8
+ ],
+ "gravity": 0.78,
+ "stance": "fem",
+ "victory_pose": "victory_hips",
+ "look": {
+  "build": "female",
+  "skin": "#e8c0a0",
+  "suit": "#141216",
+  "suit2": "#3a0a0e",
+  "arms": "#18161a",
+  "legs": "#141216",
+  "boots": "#0e0c0e",
+  "boot_len": 0.72,
+  "gloves": "#0e0c0e",
+  "glove_len": 0.5,
+  "hair": "#120c0a",
+  "head": "long",
+  "face": "reign",
+  "mask": "#0c0a0c",
+  "glow_eyes": "#ff2010",
+  "emblem": "glyph",
+  "accent": "#c01018",
+  "cape": "#100c10",
+  "cape_len": 0.5,
+  "belt": "#3a0a0e",
+  "plates": "#24202a",
+  "lips": "#8a3a40",
+  "power": "#ff2a2a",
+  "bulk": 1.0
+ },
+ "look_name": "Reign (S3)",
+ "costumes": [
+  {
+   "name": "Purity",
+   "look": {
+    "suit": "#e8e4ec",
+    "suit2": "#b8b0c8",
+    "arms": "#e0dce6",
+    "legs": "#e0dce6",
+    "boots": "#c8c0d0",
+    "gloves": "#c8c0d0",
+    "plates": "#b8b0c8",
+    "cape": "#e8e4ec",
+    "mask": "#e8e4ec",
+    "accent": "#6a30a0",
+    "glow_eyes": "#c080ff",
+    "hair": "#e8d8b8",
+    "power": "#c080ff"
+   }
+  },
+  {
+   "name": "Pestilence",
+   "look": {
+    "suit": "#2a3a2a",
+    "suit2": "#1a241a",
+    "arms": "#2a3a2a",
+    "legs": "#2a3a2a",
+    "plates": "#4a5a3a",
+    "cape": "#1e2a1e",
+    "accent": "#8ab040",
+    "glow_eyes": "#a0ff40",
+    "hair": "#3a2a1a",
+    "power": "#a0ff40"
+   }
+  }
+ ],
+ "moves": {
+  "L": {
+   "name": "Worldkiller Jab"
+  },
+  "M": {
+   "name": "Crushing Kick",
+   "damage": 62
+  },
+  "H": {
+   "name": "Doom Fist",
+   "startup": 12,
+   "damage": 105
+  },
+  "S": {
+   "name": "Heat Vision",
+   "input": "SP",
+   "pose": [
+    "beam_s",
+    "beam_s"
+   ],
+   "startup": 10,
+   "active": 16,
+   "recovery": 16,
+   "sfx": "beam",
+   "projectile": {
+    "kind": "beam",
+    "frame": 10,
+    "offset": [
+     0.32,
+     -0.88
+    ],
+    "speed": 16,
+    "damage": 32,
+    "hits": 2,
+    "interval": 3,
+    "hitstun": 16,
+    "blockstun": 10,
+    "size": [
+     46,
+     6
+    ],
+    "level": "high",
+    "single": true,
+    "color": "#ff2010"
+   }
+  },
+  "jS": {
+   "name": "Air Heat Vision",
+   "input": "SP (air)",
+   "pose": [
+    "jump_tuck",
+    "beam_s"
+   ],
+   "startup": 8,
+   "active": 10,
+   "recovery": 14,
+   "air": true,
+   "sfx": "beam",
+   "projectile": {
+    "kind": "beam",
+    "frame": 8,
+    "offset": [
+     0.3,
+     -0.85
+    ],
+    "speed": 14,
+    "vy": 7,
+    "damage": 28,
+    "hits": 2,
+    "interval": 3,
+    "hitstun": 16,
+    "blockstun": 10,
+    "size": [
+     40,
+     6
+    ],
+    "level": "overhead",
+    "single": true,
+    "color": "#ff2010"
+   }
+  },
+  "fS": {
+   "name": "Worldkiller Charge",
+   "input": "FWD + SP",
+   "pose": [
+    "fly_s",
+    "fly_s"
+   ],
+   "startup": 7,
+   "active": 16,
+   "recovery": 16,
+   "fly": true,
+   "vel": [
+    11,
+    0
+   ],
+   "vel_frames": [
+    7,
+    23
+   ],
+   "stop_on_hit": true,
+   "armor": {
+    "frames": [
+     1,
+     20
+    ],
+    "hits": 1
+   },
+   "hitbox": [
+    0.1,
+    -0.75,
+    0.48,
+    0.35
+   ],
+   "damage": 85,
+   "hitstun": 22,
+   "blockstun": 14,
+   "level": "mid",
+   "launch": [
+    5,
+    -10
+   ],
+   "push": 6,
+   "trail": true,
+   "sfx": "hit_h"
+  },
+  "bS": {
+   "name": "Dark Shockwave",
+   "input": "BACK + SP",
+   "pose": [
+    "stomp_w",
+    "stomp_s"
+   ],
+   "startup": 14,
+   "active": 3,
+   "recovery": 22,
+   "sfx": "slam",
+   "hitbox": [
+    -0.3,
+    -0.35,
+    0.9,
+    0.35
+   ],
+   "damage": 50,
+   "hitstun": 20,
+   "blockstun": 12,
+   "level": "low",
+   "push": 10,
+   "projectile": {
+    "kind": "shockwave",
+    "frame": 16,
+    "offset": [
+     0.45,
+     -0.08
+    ],
+    "speed": 7.5,
+    "damage": 50,
+    "hitstun": 20,
+    "blockstun": 12,
+    "size": [
+     40,
+     26
+    ],
+    "level": "low",
+    "knockdown": true,
+    "ground": true,
+    "single": true
+   }
+  },
+  "dS": {
+   "name": "Judgment",
+   "input": "DOWN + SP (full meter)",
+   "super": true,
+   "pose": [
+    "super",
+    "rush_s"
+   ],
+   "pose_cycle": [
+    "rush_s",
+    "haymaker_s",
+    "rush_s2",
+    "uppercut_s"
+   ],
+   "startup": 12,
+   "active": 46,
+   "recovery": 20,
+   "vel": [
+    12,
+    0
+   ],
+   "vel_frames": [
+    12,
+    26
+   ],
+   "stop_on_hit": true,
+   "hits": 8,
+   "hit_interval": 5,
+   "damage": 41,
+   "hitstun": 16,
+   "blockstun": 6,
+   "hitbox": [
+    0.0,
+    -1.0,
+    0.5,
+    1.0
+   ],
+   "level": "mid",
+   "launch_last": [
+    4,
+    -13
+   ],
+   "invuln": {
+    "frames": [
+     1,
+     14
+    ],
+    "type": "all"
+   },
+   "trail": true,
+   "sfx": "hit_m"
+  }
+ },
+ "quotes": [
+  "I am Reign. Kneel.",
+  "Your world is already judged.",
+  "Hope is a weakness."
+ ],
+ "ending": "Reign tears through the edge of the simulation and finds an empty, endless world of static waiting to be ruled. For a moment Samantha's voice surfaces, begging her to go home to Ruby. Reign hesitates. That single hesitation is the most dangerous thing in the multiverse."
+}

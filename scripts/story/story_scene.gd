@@ -178,4 +178,4 @@ func _draw() -> void:
 		draw_string(font, Vector2(tx, 280 + i * 13), wrapped[i], HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(1, 1, 1) if speaker != "" else Color(0.85, 0.9, 1.0))
 	if int(t * 3) % 2 == 0 and shown >= text.length():
 		draw_string(font, Vector2(598, 344), ">", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(1, 0.85, 0.3))
-	draw_string(font, Vector2(470, 358), "LIGHT: next   ESC: skip", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.7, 0.7, 0.8))
+	draw_string(font, Vector2(470, 358), "%s: next   %s: skip" % [InputManager.prompt("accept"), InputManager.prompt("pause")], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.7, 0.7, 0.8))
