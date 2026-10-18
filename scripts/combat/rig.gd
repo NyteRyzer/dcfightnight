@@ -23,6 +23,11 @@ const UA := [0.088, 0.086, 0.072, 0.058]
 const FA := [0.062, 0.068, 0.057, 0.044]
 const TH := [0.118, 0.112, 0.094, 0.07]
 const SN := [0.07, 0.078, 0.062, 0.046]
+# Loose clothing (beat 'em up civilians): sleeves and trouser legs barely taper.
+const UA_LOOSE := [0.1, 0.1, 0.092, 0.084]
+const FA_LOOSE := [0.084, 0.08, 0.076, 0.074]
+const TH_LOOSE := [0.122, 0.116, 0.104, 0.094]
+const SN_LOOSE := [0.096, 0.09, 0.088, 0.092]
 
 # --- Unit shapes (facing right, y down, in head radii) ------------------------------------
 const HEAD := [Vector2(-0.62, 0.55), Vector2(-0.9, 0.1), Vector2(-0.95, -0.35), Vector2(-0.7, -0.82), Vector2(-0.25, -1.02),
@@ -463,6 +468,9 @@ static func draw(ci: CanvasItem, origin: Vector2, facing: int, pose: Dictionary,
 
 	# 5. Front leg, then skirt / front coat panel over it.
 	_leg(cx, j["hpf"], j["kf"], j["ftf"], legs, shins, boots, boot_len, leg_s, look, false)
+	var top := str(look.get("top", ""))
+	if top in ["hoodie", "jacket", "tee"]:
+		_hem(cx, j, look, H, suit)
 	if look.get("skirt") is Color:
 		_skirt(cx, j, look, H)
 	if look.get("coat") is Color:
@@ -478,6 +486,8 @@ static func draw(ci: CanvasItem, origin: Vector2, facing: int, pose: Dictionary,
 	var r := 0.062 * H * float(look.get("head_scale", 1.0))
 	var neck_end := _hp(j["head"], r, j["ha"], Vector2(-0.18, 0.55))
 	_limb(cx, j["sh"] + tdir * 0.01 * H, neck_end, _scale([0.07, 0.062], H * sqrt(bulk)), neck_col)
+	if top == "hoodie":
+		_hood_bunch(cx, j, look, H, suit)
 	_head(cx, j, look, r, pose)
 
 	# 7. Front arm and held props.
@@ -493,6 +503,9 @@ static func _arm(cx: Dictionary, s: Vector2, e: Vector2, h: Vector2, upper: Colo
 	var fa := _scale(FA, sc * (0.9 if stretch > 1.2 else 1.0))
 	var hs := 0.062 * sc
 	var open: bool = pose["open"] > 0.5
+	if str(look.get("fit", "")) == "loose":
+		_arm_loose(cx, s, e, h, upper, fore, glove, sc, hs, open, front, look)
+		return
 	_sil(cx, [_profile(s, e, ua), _profile(e, h, fa), _hand_poly(h, e, hs, open)])
 	_limb(cx, s, e, ua, upper, 0.0, 1.0, 0.0, false)
 	if look.get("pads", false) and front:
@@ -518,9 +531,91 @@ static func _arm(cx: Dictionary, s: Vector2, e: Vector2, h: Vector2, upper: Colo
 	_hand(cx, h, e, glove, hs, open, false)
 
 
+## Arm in loose clothing: a wide sleeve that ends at the wrist (or a short
+## T-shirt sleeve over a bare arm when `sleeve_len` < 1), with fabric creases
+## inside the elbow and a cuff line.
+static func _arm_loose(cx: Dictionary, s: Vector2, e: Vector2, h: Vector2, upper: Color, fore: Color, hand_c: Color, sc: float, hs: float, open: bool, front: bool, look: Dictionary) -> void:
+	var skin := _col(look, "skin", Color(0.9, 0.7, 0.55))
+	if not front:
+		skin = skin.darkened(0.24)
+	var ua := _scale(UA_LOOSE, sc)
+	var fa := _scale(FA_LOOSE, sc)
+	var sleeve: float = look.get("sleeve_len", 1.0)
+	var hand := _hand_poly(h, e, hs, open)
+	# Bare hands unless the look sets gloves.
+	if not look.has("gloves"):
+		hand_c = skin
+	if sleeve < 1.0:
+		# Bare arm with a short sleeve over the shoulder.
+		var ua_bare := _scale(UA, sc)
+		var fa_bare := _scale(FA, sc)
+		var cut := clampf(sleeve * 1.6, 0.2, 1.0)
+		_sil(cx, [_profile(s, e, ua, 0.0, cut), _profile(s, e, ua_bare), _profile(e, h, fa_bare), hand])
+		_limb(cx, s, e, ua_bare, skin, 0.0, 1.0, 0.0, false)
+		_limb(cx, e, h, fa_bare, skin, 0.0, 1.0, 0.0, false)
+		_limb(cx, s, e, ua, upper, 0.0, cut, 0.0, false)
+		var d := (e - s).normalized()
+		var n := Vector2(-d.y, d.x)
+		var hem := s.lerp(e, cut)
+		var w := _wat(ua, cut) * 0.5
+		_line(cx, hem + n * w, hem - n * w, _shadow(upper).darkened(0.2), 1.0)
+		_line(cx, s.lerp(e, cut * 0.55) + n * w * 0.2, hem + n * w * 0.5, _shadow(upper), 1.0)
+		var tat = look.get("tattoo")
+		if tat is Color and front:
+			var fd := (h - e).normalized()
+			var fn := Vector2(-fd.y, fd.x)
+			for k in 3:
+				var t0 := 0.25 + k * 0.16
+				_line(cx, e.lerp(h, t0) + fn * 2.0, e.lerp(h, t0 + 0.1) - fn * 2.0, tat, 1.0)
+		_hand(cx, h, e, hand_c, hs, open, false)
+		return
+	# Full sleeve to the wrist; the wrist and hand show below the cuff.
+	var wrist := _profile(e, h, _scale(FA, sc), 0.82, 1.0)
+	_sil(cx, [_profile(s, e, ua), _profile(e, h, fa, 0.0, 0.9), wrist, hand])
+	_flat(cx, wrist, skin)
+	_limb(cx, s, e, ua, upper, 0.0, 1.0, 0.0, false)
+	_limb(cx, e, h, fa, fore, 0.0, 0.9, 0.0, false)
+	if cx["o"].has("solid"):
+		_hand(cx, h, e, hand_c, hs, open, false)
+		return
+	var crease := _shadow(fore).darkened(0.25)
+	crease.a = 0.9
+	# Cuff.
+	var fd2 := (h - e).normalized()
+	var fn2 := Vector2(-fd2.y, fd2.x)
+	var cuff := e.lerp(h, 0.84)
+	var cw := _wat(fa, 0.84) * 0.5
+	_line(cx, cuff + fn2 * cw, cuff - fn2 * cw, crease, 1.0)
+	_crease(cx, s, e, h, _wat(ua, 1.0) * 0.5, crease)
+	# Shoulder drape fold.
+	var ud := (e - s).normalized()
+	var un := Vector2(-ud.y, ud.x)
+	_line(cx, s.lerp(e, 0.3) + un * _wat(ua, 0.3) * 0.25, s.lerp(e, 0.55) - un * _wat(ua, 0.55) * 0.1, crease, 1.0)
+	var stripe = look.get("stripe")
+	if stripe is Color:
+		_line(cx, e.lerp(h, 0.08) + fn2 * cw * 0.7, e.lerp(h, 0.8) + fn2 * cw * 0.7, stripe, 1.5)
+		_line(cx, s.lerp(e, 0.12) + un * 2.4, s.lerp(e, 0.9) + un * 2.4, stripe, 1.5)
+	_hand(cx, h, e, hand_c, hs, open, false)
+
+
+## Fabric creases on the inside of a bent joint (elbow or knee).
+static func _crease(cx: Dictionary, a: Vector2, joint: Vector2, b: Vector2, w: float, col: Color) -> void:
+	var inner := ((a + b) * 0.5 - joint)
+	if inner.length() < 0.5:
+		return
+	inner = inner.normalized()
+	var da := (a - joint).normalized()
+	var db := (b - joint).normalized()
+	var p := joint + inner * w * 0.55
+	_line(cx, p + da * w * 1.3, p + inner * w * 0.25, col, 1.0)
+	_line(cx, p + db * w * 1.2, p + inner * w * 0.2, col, 1.0)
+	_line(cx, p + da * w * 0.6 - inner * w * 0.3, p + db * w * 0.5 - inner * w * 0.3, col, 1.0)
+
+
 static func _leg(cx: Dictionary, hp: Vector2, k: Vector2, ft: Vector2, thigh_c: Color, shin_c: Color, boot_c: Color, boot_len: float, sc: float, look: Dictionary, back: bool) -> void:
-	var th := _scale(TH, sc)
-	var sn := _scale(SN, sc)
+	var loose := str(look.get("fit", "")) == "loose"
+	var th := _scale(TH_LOOSE if loose else TH, sc)
+	var sn := _scale(SN_LOOSE if loose else SN, sc)
 	var bs := sc * (0.95 if _build(look) == "female" else 1.0)
 	_sil(cx, [_profile(hp, k, th), _profile(k, ft, sn), _boot_poly(ft, k, bs)])
 	_limb(cx, hp, k, th, thigh_c, 0.0, 1.0, 0.0, false)
@@ -537,7 +632,67 @@ static func _leg(cx: Dictionary, hp: Vector2, k: Vector2, ft: Vector2, thigh_c: 
 		if back:
 			kc = kc.darkened(0.24)
 		_part(cx, _circle(k + (k - ft).normalized().rotated(-PI * 0.5) * sc * 0.012, sc * 0.04, 7), kc, cx["light"], k, sc * 0.04)
+	if loose and not cx["o"].has("solid"):
+		_trouser_detail(cx, hp, k, ft, th, sn, thigh_c, shin_c, sc, look, back)
 	_boot(cx, ft, k, boot_c, bs, false)
+	_shoe_detail(cx, ft, k, boot_c, bs, look)
+
+
+## Seams, pockets, knee wear and creases for jeans / cargo / track trousers.
+static func _trouser_detail(cx: Dictionary, hp: Vector2, k: Vector2, ft: Vector2, th: Array, sn: Array, thigh_c: Color, shin_c: Color, sc: float, look: Dictionary, back: bool) -> void:
+	var crease := _shadow(shin_c).darkened(0.25)
+	var td := (k - hp).normalized()
+	var tn := Vector2(-td.y, td.x)
+	var sd := (ft - k).normalized()
+	var snn := Vector2(-sd.y, sd.x)
+	var style := str(look.get("pants", ""))
+	# Knee crease and bunching at the hem.
+	_crease(cx, hp, k, ft, _wat(th, 1.0) * 0.5, crease)
+	for t in [0.8, 0.9]:
+		var c := k.lerp(ft, t)
+		var w := _wat(sn, t) * 0.45
+		_line(cx, c + snn * w, c + sd * 2.0, crease, 1.0)
+		_line(cx, c + sd * 2.0, c - snn * w + sd * 0.5, crease, 1.0)
+	match style:
+		"jeans":
+			var seam := _hilite(thigh_c)
+			seam.a = 0.55
+			_line(cx, hp.lerp(k, 0.08) - tn * _wat(th, 0.08) * 0.42, k - tn * _wat(th, 1.0) * 0.42, seam, 1.0)
+			_line(cx, k - snn * _wat(sn, 0.0) * 0.42, ft.lerp(k, 0.08) - snn * _wat(sn, 1.0) * 0.42, seam, 1.0)
+			if not back:
+				# Faded denim on the front of the thigh and knee.
+				var fade := _hilite(thigh_c)
+				fade.a = 0.28
+				_flat(cx, _profile(hp.lerp(k, 0.35), k.lerp(ft, 0.15), [_wat(th, 0.5) * 0.45, _wat(sn, 0.1) * 0.4]), fade)
+				_line(cx, hp + tn * _wat(th, 0.0) * 0.1, hp.lerp(k, 0.18) + tn * _wat(th, 0.18) * 0.45, crease, 1.0)
+		"cargo":
+			var pc := thigh_c.darkened(0.12)
+			var c2 := hp.lerp(k, 0.55) - tn * _wat(th, 0.55) * 0.1
+			var pocket := _frame(c2, td, tn, [Vector2(-0.045, -0.035), Vector2(0.045, -0.04), Vector2(0.05, 0.035), Vector2(-0.045, 0.04)], sc)
+			_part(cx, pocket, pc, cx["light"], c2, sc * 0.04)
+			_line(cx, c2 + td * -0.045 * sc + tn * -0.035 * sc, c2 + td * -0.02 * sc + tn * 0.04 * sc, crease, 1.0)
+		"track":
+			var st := _col(look, "stripe", Color(0.92, 0.92, 0.95))
+			_line(cx, hp.lerp(k, 0.05) - tn * _wat(th, 0.05) * 0.4, k - tn * _wat(th, 1.0) * 0.4, st, 1.5)
+			_line(cx, k - snn * _wat(sn, 0.0) * 0.4, ft.lerp(k, 0.1) - snn * _wat(sn, 1.0) * 0.4, st, 1.5)
+
+
+## Sneakers get a contrasting sole and laces; boots get a heavy sole and laces.
+static func _shoe_detail(cx: Dictionary, ft: Vector2, k: Vector2, col: Color, s: float, look: Dictionary) -> void:
+	var kind := str(look.get("shoes", ""))
+	if kind == "" or cx["o"].has("solid"):
+		return
+	var v := (ft - k).normalized()
+	var u := Vector2(v.y, -v.x)
+	var sole := _col(look, "sole", Color(0.95, 0.95, 0.93) if kind == "sneaker" else Color(0.08, 0.07, 0.07))
+	_line(cx, ft + u * (-0.038 * s) + v * (0.036 * s), ft + u * (0.1 * s) + v * (0.038 * s), sole, 2.0)
+	var lace := Color(0.95, 0.95, 0.95) if kind == "sneaker" else col.lightened(0.25)
+	for i in 3:
+		var p := ft + u * ((0.012 + i * 0.018) * s) + v * ((-0.012 + i * 0.006) * s)
+		_line(cx, p - v * 1.0, p + u * 1.5, lace, 1.0)
+	if kind == "sneaker":
+		var swoosh := _col(look, "shoe_accent", col.darkened(0.3))
+		_line(cx, ft + v * (0.024 * s), ft + u * (0.07 * s) + v * (0.018 * s), swoosh, 1.0)
 
 
 static func _tq(j: Dictionary, H: float, bw: float, x: float, y: float) -> Vector2:
@@ -558,8 +713,13 @@ static func _torso_pts(j: Dictionary, look: Dictionary, H: float) -> PackedVecto
 			Vector2(-0.07, 0.27), Vector2(-0.082, 0.22), Vector2(-0.07, 0.15), Vector2(-0.055, 0.09), Vector2(-0.072, 0.01),
 			Vector2(-0.03, -0.05)]
 	var out := PackedVector2Array()
+	# Loose everyday tops hang straight instead of following a superhero V-taper.
+	var boxy: bool = look.has("top")
 	for p in raw:
-		out.append(_tq(j, H, bw, p.x, p.y))
+		var x: float = p.x
+		if boxy and p.y < 0.19:
+			x *= lerpf(1.3, 1.0, clampf((p.y + 0.05) / 0.24, 0.0, 1.0))
+		out.append(_tq(j, H, bw, x, p.y))
 	return out
 
 
@@ -613,7 +773,102 @@ static func _torso(cx: Dictionary, j: Dictionary, look: Dictionary, H: float, su
 			for k in 2:
 				var x0 := -0.06 + k * 0.045
 				_part(cx, PackedVector2Array([_tq(j, H, bw, x0, 0.03), _tq(j, H, bw, x0 + 0.035, 0.03), _tq(j, H, bw, x0 + 0.035, -0.02), _tq(j, H, bw, x0, -0.02)]), bc.darkened(0.15), cx["light"], _tq(j, H, bw, x0 + 0.017, 0.005), 0.02 * H)
+	_top_detail(cx, j, look, H, bw, poly, suit)
 	_emblem(cx, j, look, H, bw, poly)
+
+
+## Everyday clothing on the torso: hoodies, open jackets, T-shirts, prison
+## jumpsuits and tactical vests, plus the folds loose fabric makes.
+static func _top_detail(cx: Dictionary, j: Dictionary, look: Dictionary, H: float, bw: float, poly: PackedVector2Array, suit: Color) -> void:
+	var top := str(look.get("top", ""))
+	if top == "":
+		return
+	var crease := _shadow(suit).darkened(0.25)
+	# Loose fabric: folds from the armpit toward the waist and above the waistband.
+	_line(cx, _tq(j, H, bw, 0.07, 0.215), _tq(j, H, bw, 0.04, 0.13), crease, 1.0)
+	_line(cx, _tq(j, H, bw, -0.06, 0.2), _tq(j, H, bw, -0.035, 0.1), crease, 1.0)
+	_line(cx, _tq(j, H, bw, 0.0, 0.05), _tq(j, H, bw, 0.03, 0.075), crease, 1.0)
+	_line(cx, _tq(j, H, bw, 0.045, 0.045), _tq(j, H, bw, 0.07, 0.07), crease, 1.0)
+	match top:
+		"hoodie":
+			# Kangaroo pocket, drawstrings and the ribbed hem.
+			var pocket := PackedVector2Array([_tq(j, H, bw, -0.01, 0.12), _tq(j, H, bw, 0.06, 0.12), _tq(j, H, bw, 0.08, 0.06), _tq(j, H, bw, 0.075, 0.03), _tq(j, H, bw, -0.02, 0.03)])
+			for p in Geometry2D.intersect_polygons(pocket, poly):
+				_part(cx, p, suit.darkened(0.06), cx["light"], _tq(j, H, bw, 0.03, 0.07), 0.03 * H)
+			var dc := _col(look, "accent", suit.lightened(0.45))
+			_line(cx, _tq(j, H, bw, 0.035, 0.282), _tq(j, H, bw, 0.04, 0.215), dc, 1.0)
+			_line(cx, _tq(j, H, bw, 0.06, 0.272), _tq(j, H, bw, 0.066, 0.21), dc, 1.0)
+		"jacket":
+			# Collar / lapel and a side pocket.
+			_part(cx, PackedVector2Array([_tq(j, H, bw, 0.0, 0.3), _tq(j, H, bw, 0.045, 0.27), _tq(j, H, bw, 0.03, 0.21), _tq(j, H, bw, -0.01, 0.27)]), suit.lightened(0.1), cx["light"], _tq(j, H, bw, 0.02, 0.26), 0.02 * H)
+			_line(cx, _tq(j, H, bw, 0.045, 0.27), _tq(j, H, bw, 0.03, 0.21), _hilite(suit), 1.0)
+			_line(cx, _tq(j, H, bw, 0.02, 0.1), _tq(j, H, bw, 0.06, 0.075), crease.darkened(0.2), 1.0)
+			if look.get("zip_color") is Color:
+				_line(cx, _tq(j, H, bw, 0.03, 0.27), _tq(j, H, bw, 0.03, 0.02), look["zip_color"], 1.0)
+		"tee":
+			_line(cx, _tq(j, H, bw, -0.015, 0.29), _tq(j, H, bw, 0.04, 0.285), crease.darkened(0.2), 1.0)
+			_line(cx, _tq(j, H, bw, 0.04, 0.285), _tq(j, H, bw, 0.06, 0.268), crease.darkened(0.2), 1.0)
+			var print_c = look.get("print")
+			if print_c is Color:
+				_flat(cx, PackedVector2Array([_tq(j, H, bw, 0.02, 0.23), _tq(j, H, bw, 0.07, 0.225), _tq(j, H, bw, 0.07, 0.17), _tq(j, H, bw, 0.02, 0.175)]), print_c)
+		"jumpsuit":
+			_line(cx, _tq(j, H, bw, 0.035, 0.282), _tq(j, H, bw, 0.04, 0.02), crease.darkened(0.25), 1.0)
+			var pk := PackedVector2Array([_tq(j, H, bw, 0.045, 0.235), _tq(j, H, bw, 0.08, 0.232), _tq(j, H, bw, 0.08, 0.195), _tq(j, H, bw, 0.045, 0.198)])
+			_part(cx, pk, suit.darkened(0.05), cx["light"], _tq(j, H, bw, 0.06, 0.215), 0.02 * H)
+			var tag := PackedVector2Array([_tq(j, H, bw, -0.045, 0.235), _tq(j, H, bw, -0.005, 0.235), _tq(j, H, bw, -0.005, 0.205), _tq(j, H, bw, -0.045, 0.205)])
+			for p in Geometry2D.intersect_polygons(tag, poly):
+				_flat(cx, p, Color(0.93, 0.93, 0.9))
+			_line(cx, _tq(j, H, bw, -0.04, 0.222), _tq(j, H, bw, -0.01, 0.222), Color(0.15, 0.15, 0.18), 1.0)
+			_line(cx, _tq(j, H, bw, -0.04, 0.214), _tq(j, H, bw, -0.02, 0.214), Color(0.15, 0.15, 0.18), 1.0)
+		"tactical":
+			var vc := _col(look, "vest", suit.darkened(0.2))
+			var vest := PackedVector2Array([_tq(j, H, bw, -0.07, 0.25), _tq(j, H, bw, 0.0, 0.27), _tq(j, H, bw, 0.07, 0.255), _tq(j, H, bw, 0.09, 0.2), _tq(j, H, bw, 0.08, 0.05), _tq(j, H, bw, -0.075, 0.05)])
+			for p in Geometry2D.intersect_polygons(vest, poly):
+				_part(cx, p, vc, cx["light"], _tq(j, H, bw, 0.0, 0.16), 0.08 * H)
+			var web := _shadow(vc).darkened(0.2)
+			for k in 4:
+				var y := 0.2 - k * 0.04
+				_line(cx, _tq(j, H, bw, -0.06, y), _tq(j, H, bw, 0.085, y), web, 1.0)
+			for k in 3:
+				var x := -0.03 + k * 0.04
+				var mag := PackedVector2Array([_tq(j, H, bw, x, 0.13), _tq(j, H, bw, x + 0.032, 0.13), _tq(j, H, bw, x + 0.032, 0.075), _tq(j, H, bw, x, 0.075)])
+				_part(cx, mag, vc.lightened(0.08), cx["light"], _tq(j, H, bw, x + 0.016, 0.1), 0.02 * H)
+			# Radio on the shoulder strap.
+			_part(cx, PackedVector2Array([_tq(j, H, bw, 0.045, 0.265), _tq(j, H, bw, 0.065, 0.262), _tq(j, H, bw, 0.064, 0.225), _tq(j, H, bw, 0.044, 0.228)]), Color(0.1, 0.1, 0.11), cx["light"], _tq(j, H, bw, 0.055, 0.245), 0.01 * H)
+			_line(cx, _tq(j, H, bw, 0.05, 0.265), _tq(j, H, bw, 0.048, 0.295), Color(0.1, 0.1, 0.11), 1.0)
+
+
+## Untucked shirt / jacket hem drawn over the top of the front thigh.
+static func _hem(cx: Dictionary, j: Dictionary, look: Dictionary, H: float, suit: Color) -> void:
+	var bw: float = look.get("bulk", 1.0)
+	var drop: float = look.get("hem_drop", 0.035)
+	var poly := PackedVector2Array([_tq(j, H, bw, -0.056, 0.08), _tq(j, H, bw, 0.064, 0.08), _tq(j, H, bw, 0.07, 0.02), _tq(j, H, bw, 0.072, -drop),
+		_tq(j, H, bw, 0.02, -drop - 0.005), _tq(j, H, bw, -0.04, -drop + 0.004), _tq(j, H, bw, -0.066, 0.01)])
+	# Flat fill blends into the torso; only the lower edge gets an outline.
+	_part(cx, poly, suit, cx["light"], _tq(j, H, bw, 0.0, 0.02), 0.08 * H, false, false)
+	if cx["o"].has("solid"):
+		return
+	var edge := PackedVector2Array()
+	for i in range(1, poly.size()):
+		edge.append(_tv(cx, poly[i]))
+	(cx["ci"] as CanvasItem).draw_polyline(edge, _c(cx["oc"], cx["o"]), 1.0)
+	var crease := _shadow(suit).darkened(0.25)
+	_line(cx, _tq(j, H, bw, 0.03, 0.045), _tq(j, H, bw, 0.05, -drop + 0.004), crease, 1.0)
+	_line(cx, _tq(j, H, bw, -0.03, 0.04), _tq(j, H, bw, -0.02, -drop + 0.006), crease, 1.0)
+	var top := str(look.get("top", ""))
+	if top == "hoodie":
+		_line(cx, _tq(j, H, bw, -0.05, -drop + 0.012), _tq(j, H, bw, 0.07, -drop + 0.009), crease, 1.0)
+	if look.get("shirt") is Color and top == "jacket":
+		var strip := PackedVector2Array([_tq(j, H, bw, 0.03, 0.07), _tq(j, H, bw, 0.062, 0.07), _tq(j, H, bw, 0.07, -drop + 0.004), _tq(j, H, bw, 0.035, -drop + 0.002)])
+		_part(cx, strip, look["shirt"], cx["light"], _tq(j, H, bw, 0.05, 0.02), 0.02 * H, false)
+
+
+## Hood bunched behind the neck of a hoodie.
+static func _hood_bunch(cx: Dictionary, j: Dictionary, look: Dictionary, H: float, suit: Color) -> void:
+	var bw: float = look.get("bulk", 1.0)
+	var poly := PackedVector2Array([_tq(j, H, bw, -0.065, 0.255), _tq(j, H, bw, -0.085, 0.295), _tq(j, H, bw, -0.06, 0.33),
+		_tq(j, H, bw, -0.015, 0.335), _tq(j, H, bw, 0.01, 0.3), _tq(j, H, bw, -0.01, 0.27)])
+	_part(cx, poly, suit.darkened(0.1), cx["light"], _tq(j, H, bw, -0.04, 0.3), 0.03 * H)
 
 
 static func _emblem(cx: Dictionary, j: Dictionary, look: Dictionary, H: float, bw: float, torso: PackedVector2Array) -> void:
@@ -871,6 +1126,8 @@ static func _head(cx: Dictionary, j: Dictionary, look: Dictionary, r: float, pos
 		_flat(cx, _hpoly(c, r, a, [Vector2(0.15, 0.08), Vector2(0.42, 0.06), Vector2(0.38, 0.2), Vector2(0.15, 0.3)]), cheek)
 		if look.get("lips") is Color:
 			_line(cx, _hp(c, r, a, Vector2(0.66, 0.42)), _hp(c, r, a, Vector2(0.83, 0.39)), look["lips"], 1.5)
+	if look.get("realistic", false) and face not in ["visor", "helmet", "hockey"]:
+		_face_detail(cx, c, r, a, look, skin, hair, style)
 	if look.get("beard") is Color:
 		_part(cx, _hpoly(c, r, a, BEARD), look["beard"], ld, _hp(c, r, a, Vector2(0.3, 0.55)), r * 0.5)
 		_line(cx, _hp(c, r, a, Vector2(0.64, 0.44)), _hp(c, r, a, Vector2(0.84, 0.42)), skin.darkened(0.5), 1.0)
@@ -1001,6 +1258,38 @@ static func _head(cx: Dictionary, j: Dictionary, look: Dictionary, r: float, pos
 		halo.a = 0.35
 		_flat(cx, _circle(gp, 3.6, 7), halo)
 		_flat(cx, _circle(gp, 1.7, 6), gc.lightened(0.4))
+
+
+## Extra facial modelling for realistic (non-costumed) characters: nose and
+## jaw shadows, cheekbone, smile line, heavier brows, stubble and scars.
+static func _face_detail(cx: Dictionary, c: Vector2, r: float, a: float, look: Dictionary, skin: Color, hair: Color, style: String) -> void:
+	var sh := skin.darkened(0.3)
+	sh.a = 0.4
+	# Jaw / under-chin shadow.
+	_flat(cx, _hpoly(c, r, a, [Vector2(-0.45, 0.42), Vector2(0.15, 0.62), Vector2(0.55, 0.74), Vector2(0.6, 0.86), Vector2(0.1, 0.82), Vector2(-0.5, 0.58)]), sh)
+	# Nose: shadow under the tip and along the bridge.
+	_flat(cx, _hpoly(c, r, a, [Vector2(0.8, 0.1), Vector2(0.95, 0.14), Vector2(0.9, 0.2), Vector2(0.76, 0.2)]), sh)
+	_line(cx, _hp(c, r, a, Vector2(0.78, -0.12)), _hp(c, r, a, Vector2(0.82, 0.06)), sh, 1.0)
+	# Smile line and cheekbone.
+	_line(cx, _hp(c, r, a, Vector2(0.72, 0.22)), _hp(c, r, a, Vector2(0.62, 0.4)), sh, 1.0)
+	var hl := _hilite(skin)
+	hl.a = 0.5
+	_line(cx, _hp(c, r, a, Vector2(0.36, -0.02)), _hp(c, r, a, Vector2(0.6, 0.02)), hl, 1.0)
+	# Under-eye line.
+	_line(cx, _hp(c, r, a, Vector2(0.5, 0.0)), _hp(c, r, a, Vector2(0.72, 0.0)), sh, 1.0)
+	# Heavy, scowling brow.
+	if look.get("scowl", true):
+		var bc := hair.darkened(0.25) if style not in ["bald", "shaved"] else skin.darkened(0.5)
+		_line(cx, _hp(c, r, a, Vector2(0.36, -0.42)), _hp(c, r, a, Vector2(0.84, -0.26)), bc, 2.0)
+	var stub = look.get("stubble")
+	if stub is Color:
+		var sc: Color = stub
+		sc.a = 0.2
+		_flat(cx, _hpoly(c, r, a, [Vector2(-0.3, 0.12), Vector2(0.15, 0.2), Vector2(0.6, 0.3), Vector2(0.88, 0.3), Vector2(0.86, 0.55),
+			Vector2(0.66, 0.84), Vector2(0.2, 0.8), Vector2(-0.35, 0.5)]), sc)
+	var scar = look.get("scar")
+	if scar is Color:
+		_line(cx, _hp(c, r, a, Vector2(0.42, -0.5)), _hp(c, r, a, Vector2(0.58, 0.18)), scar, 1.0)
 
 
 static func _tv_head(cx: Dictionary, c: Vector2, r: float, a: float, look: Dictionary) -> void:

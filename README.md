@@ -18,14 +18,14 @@ A cinematic 2D one-on-one fighting game inspired by the live-action Arrowverse. 
 | **Hit feel** | Weighted hitstop, camera zoom punches, screen shake, directional sword-slash sparks, motion smears on strikes, eased animation timing, KO slow-motion, controller vibration. |
 | **Modes** | Story (10 chapters across 3 acts plus a Control Freak finale), Arcade (7-fight ladder + ending), Survival, **Beat 'em Up** (1 player or 2-player co-op), Versus (2 players), Versus CPU, Training. |
 | **Beat 'em Up** | Side-scrolling brawler with depth lanes. 5 levels (Star City streets, Iron Heights breakout, D.E.O. siege, the Savage future, the Earth-X finale), 2–3 areas each with enemy waves, a Deathstroke mini-boss, and a roster boss at the end of every level (Vigilante, Reverse-Flash, Reign, Vandal Savage, Control Freak). Includes 3 lives per player, continues, pickups (Big Belly Burgers, medkits, Speed Force cells), scoring, a best-score save, and enemies that take turns attacking instead of all piling on. |
-| **Enemies** | 11 enemy types with their own AI styles, each in 2–4 variants: street thugs, knife punks, Bratva enforcers, H.I.V.E. gunners, Iron Heights convicts, rogue metahumans, League assassins, A.R.G.U.S. troopers, Worldkiller cultists, Earth-X soldiers and Control Freak's TV-head minions. |
+| **Enemies** | 11 enemy types with their own AI styles, each in 2–4 variants with different skin tones, hair and outfits: street thugs, knife punks, Bratva enforcers, H.I.V.E. gunners, Iron Heights convicts, rogue metahumans, League assassins, A.R.G.U.S. troopers, Worldkiller cultists, Earth-X soldiers and Control Freak's TV-head minions. |
 | **Training** | Dummy modes (stand / crouch / jump / block / CPU), infinite meter, hitbox display, health regen, reset position, frame data readout, combo counter, move list. |
 | **CPU** | 5 difficulty levels. It blocks, anti-airs, zones with projectiles, confirms combos, punishes whiffs, amplifies specials, uses Breakers and supers. |
 | **Controllers** | Full gamepad support: hot-plug with on-screen notices, automatic assignment, any controller works for Player 1 in single-player modes, button remapping per player, vibration (with strength setting), stick deadzone setting, hold-to-repeat menu navigation, prompts that switch between keyboard and controller (Xbox / PlayStation names), and auto-pause if a player's controller disconnects mid-fight. |
 | **Options** | Audio (music / effects / announcer, mute), Video & Accessibility (fullscreen, window scale, crisp integer scaling, screen shake, reduce flashing), Gameplay (difficulty, round timer, rounds to win), Controls (keyboard and controller remapping for both players, swap controllers, vibration, deadzone). Settings persist. |
 | **Audio** | All sound effects are synthesized at startup. Music comes from a live step sequencer, with tracks for menu, select, fight (with a variation per stage), survival, boss, story and victory. |
 
-![Beat 'em Up mode: The Flash fighting street thugs in Star City](docs/screenshot_brawl.png)
+![Beat 'em Up mode: Green Arrow against street thugs and an Iron Heights convict](docs/screenshot_brawl.png)
 
 ![The 11 beat 'em up enemy types](docs/screenshot_enemies.png)
 
@@ -37,6 +37,7 @@ The renderer (`scripts/combat/rig.gd`) draws:
 - **Shading:** 3-tone banded pixel shading, merged outlines, and a stage-tinted rim light.
 - **Costume layers:** cowls with lightning ears, hoods, helmets (Deathstroke's split mask), visors, hockey masks, Martian brow ridges, long and short hair, beards, capes, coat tails, skirts, armor plates, belts with pouches, emblems, and gloves and boots with cuffs.
 - **Weapons:** bow and quiver, katana, dagger, pistols.
+- **Everyday clothing (beat 'em up enemies):** loose sleeves and trouser legs with creases at the elbows and knees, hoodies (pocket, drawstrings, bunched hood), open jackets, T-shirts with bare tattooed arms, prison jumpsuits, tactical vests with magazine pouches and radios, jeans with seams and worn knees, cargo and track pants, sneakers and boots with soles and laces. Faces get nose and jaw shading, cheekbones, scowling brows, stubble and scars. Enemies stand in a looser, lower street-fighting guard.
 
 ## Running the game
 

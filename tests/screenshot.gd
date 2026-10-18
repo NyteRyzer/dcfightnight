@@ -42,6 +42,22 @@ class BigSheet extends Node2D:
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
+class FaceSheet extends Node2D:
+	const Rig = preload("res://scripts/combat/rig.gd")
+	var ids: Array = []
+
+	func _draw() -> void:
+		draw_rect(Rect2(0, 0, 640, 360), Color(0.3, 0.32, 0.38))
+		var w := 640.0 / ids.size()
+		for i in ids.size():
+			var parts: PackedStringArray = str(ids[i]).split("@")
+			var f: Dictionary = Data.npcs[parts[0]] if Data.npcs.has(parts[0]) else Data.fighter(parts[0])
+			var look: Dictionary = f["look"]
+			if parts.size() > 1 and f.has("variants"):
+				look = f["variants"][int(parts[1])]
+			Rig.draw_portrait(self, Rect2(i * w + 4, 60, w - 8, w - 8), look, float(f["height"]))
+
+
 class PoseSheet extends Node2D:
 	const Rig = preload("res://scripts/combat/rig.gd")
 	const Poses = preload("res://scripts/combat/poses.gd")
@@ -102,6 +118,10 @@ func _start(s: String) -> void:
 			current = BigSheet.new()
 			current.ids = parts.slice(2)
 			current.zoom = float(parts[1])
+			wait = 4
+		"faces":
+			current = FaceSheet.new()
+			current.ids = parts.slice(1)
 			wait = 4
 		"menu":
 			current = load("res://scenes/ui/MainMenu.tscn").instantiate()

@@ -17,6 +17,7 @@ const BAR := 1000.0 / 3.0
 const STANCES := {
 	"": ["idle", "idle2"], "heavy": ["idle_heavy", "idle_heavy2"], "speed": ["idle_speed", "idle_speed2"],
 	"fem": ["idle_fem", "idle_fem2"], "sword": ["idle_sword", "idle_sword2"], "guns": ["idle_guns", "idle_guns2"],
+	"street": ["idle_street", "idle_street2"],
 }
 
 var manager: Node = null

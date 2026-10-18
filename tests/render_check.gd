@@ -16,6 +16,10 @@ func _ready() -> void:
 	for id in Data.roster:
 		for ci in Data.fighter(id)["costumes"].size():
 			combos.append([id, ci])
+	# Beat 'em up NPC variants.
+	for nid in Data.npcs:
+		for vi in Data.npcs[nid]["variants"].size():
+			combos.append(["~" + nid, vi])
 
 
 func _process(_d: float) -> void:
@@ -30,8 +34,14 @@ func _draw() -> void:
 	if idx >= combos.size():
 		return
 	var id: String = combos[idx][0]
-	var f: Dictionary = Data.fighter(id)
-	var look: Dictionary = f["costumes"][combos[idx][1]]["look"]
+	var f: Dictionary
+	var look: Dictionary
+	if id.begins_with("~"):
+		f = Data.npcs[id.substr(1)]
+		look = f["variants"][combos[idx][1]]
+	else:
+		f = Data.fighter(id)
+		look = f["costumes"][combos[idx][1]]["look"]
 	for pn in Poses.LIB:
 		for sway in [0.0, 1.0]:
 			for rot in [0.0, 90.0, 180.0, 270.0]:

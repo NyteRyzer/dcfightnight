@@ -11,50 +11,71 @@
    "score": 100,
    "look": {
     "build": "male",
-    "skin": "#c08a66",
-    "suit": "#3a3e46",
-    "arms": "#3a3e46",
-    "forearm": "#3a3e46",
-    "gloves": "#c08a66",
-    "legs": "#2e3a52",
-    "boots": "#d8d8d8",
-    "boot_len": 0.22,
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0,
+    "skin": "#c68e65",
+    "suit": "#4a4d55",
+    "legs": "#34466a",
+    "pants": "jeans",
+    "boots": "#e6e6e6",
+    "shoes": "sneaker",
+    "shoe_accent": "#a01818",
     "hair": "#1a1210",
     "head": "short",
+    "top": "hoodie",
     "hat": "beanie",
     "hat_color": "#1c1c20",
+    "stubble": "#1a1210",
     "power": "#ffffff",
-    "bulk": 1.05,
-    "seams": "#2a2e36"
+    "bulk": 1.05
    },
    "variants": [
+    {},
     {
-     "suit": "#3a3e46",
-     "arms": "#3a3e46",
-     "forearm": "#3a3e46",
-     "hat_color": "#1c1c20"
+     "skin": "#6b4430",
+     "hair": "#0e0a08",
+     "stubble": "#0e0a08",
+     "suit": "#22304a",
+     "hat": "cap",
+     "hat_color": "#8a1a1a",
+     "boots": "#1c1c1c",
+     "sole": "#e8e8e8",
+     "shoe_accent": "#e8e8e8"
     },
     {
-     "suit": "#2a3a5a",
-     "arms": "#2a3a5a",
-     "forearm": "#2a3a5a",
-     "hat_color": "#8a1a1a"
-    },
-    {
-     "suit": "#4a4a2a",
-     "arms": "#4a4a2a",
-     "forearm": "#4a4a2a",
+     "skin": "#e0ac87",
+     "hair": "#3a2a1a",
+     "stubble": "#3a2a1a",
+     "top": "tee",
+     "sleeve_len": 0.4,
+     "suit": "#5a5a3a",
+     "print": "#c8b070",
      "hat": "none",
-     "head": "shaved"
+     "head": "shaved",
+     "tattoo": "#2a3a5a",
+     "legs": "#2a3448"
     },
     {
+     "skin": "#a8714c",
      "suit": "#5a1a20",
-     "arms": "#5a1a20",
-     "forearm": "#5a1a20",
+     "top": "jacket",
+     "shirt": "#d8d8d8",
      "hat": "cap",
      "hat_color": "#e8e8e8",
      "face": "bandana",
-     "mask": "#1a1a1a"
+     "mask": "#1a1a1a",
+     "stubble": "none"
+    },
+    {
+     "skin": "#8a5a3c",
+     "hair": "#0e0a08",
+     "stubble": "#0e0a08",
+     "suit": "#6a6a6e",
+     "legs": "#1e2430",
+     "hat": "none",
+     "head": "short",
+     "scar": "#5a3020"
     }
    ],
    "moves": {
@@ -68,7 +89,8 @@
      "damage": 70,
      "startup": 13
     }
-   }
+   },
+   "stance": "street"
   },
   "punk": {
    "name": "Glades Knife Punk",
@@ -80,41 +102,44 @@
    "score": 120,
    "look": {
     "build": "male",
-    "skin": "#d9a588",
-    "suit": "#c8c8c8",
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0.3,
+    "skin": "#e0ac87",
+    "suit": "#1c1a1a",
+    "top": "jacket",
     "shirt": "#a01818",
-    "arms": "#1c1a1a",
-    "forearm": "#1c1a1a",
-    "gloves": "#d9a588",
+    "zip_color": "#9a9aa0",
     "legs": "#141414",
+    "pants": "jeans",
     "boots": "#2a1a12",
-    "boot_len": 0.62,
+    "shoes": "boot",
     "hair": "#d02040",
     "head": "mohawk",
     "weapon": "dagger",
     "blade_color": "#c8ccd4",
-    "coat": "#1c1a1a",
-    "coat_len": 0.12,
     "power": "#ff6080",
     "bulk": 0.95,
-    "pads": true,
-    "pad_color": "#2a2626"
+    "scar": "#8a4a3a"
    },
    "variants": [
-    {
-     "hair": "#d02040"
-    },
+    {},
     {
      "hair": "#30c060",
-     "shirt": "#e0e0e0"
+     "shirt": "#e0e0e0",
+     "skin": "#f1c9a5"
     },
     {
      "hair": "#3080ff",
-     "shirt": "#202020"
+     "shirt": "#3a3a3a",
+     "skin": "#c68e65",
+     "print": "#e0e0e0"
     },
     {
      "hair": "#f0d040",
-     "face": "shades"
+     "face": "shades",
+     "skin": "#a8714c",
+     "scar": "none"
     }
    ],
    "moves": {
@@ -162,7 +187,8 @@
      "sfx": "slash",
      "fx_hit": "slash"
     }
-   }
+   },
+   "stance": "street"
   },
   "bratva": {
    "name": "Bratva Enforcer",
@@ -175,41 +201,49 @@
    "stance": "heavy",
    "look": {
     "build": "male",
-    "skin": "#f0c8a8",
-    "suit": "#121214",
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0,
+    "skin": "#f1c9a5",
+    "suit": "#141416",
+    "top": "jacket",
     "shirt": "#e8e8ea",
     "emblem": "tie",
-    "accent": "#141418",
+    "accent": "#2a0e12",
     "coat": "#0e0e10",
     "coat_len": 0.42,
-    "arms": "#121214",
-    "forearm": "#121214",
     "gloves": "#1a1a1a",
-    "glove_len": 0.3,
-    "legs": "#121214",
+    "legs": "#141416",
     "boots": "#0a0a0a",
-    "boot_len": 0.3,
+    "shoes": "boot",
+    "sole": "#050505",
     "hair": "#2a1e14",
     "head": "slick",
     "face": "shades",
+    "stubble": "#2a1e14",
     "power": "#c8d8ff",
     "bulk": 1.3
    },
    "variants": [
-    {
-     "hair": "#2a1e14"
-    },
+    {},
     {
      "hair": "#b0a080",
-     "beard": "#8a7a60"
+     "beard": "#8a7a60",
+     "face": "none",
+     "scar": "#c08070"
     },
     {
      "head": "shaved",
-     "hair": "#3a2a1a"
+     "hair": "#3a2a1a",
+     "stubble": "#3a2a1a"
     },
     {
      "suit": "#2a2a30",
-     "coat": "#3a3028"
+     "coat": "#3a3028",
+     "legs": "#2a2a30",
+     "accent": "#1a2a4a",
+     "face": "none",
+     "skin": "#e0ac87"
     }
    ],
    "moves": {
@@ -278,21 +312,22 @@
    "score": 180,
    "look": {
     "build": "male",
-    "skin": "#c08a66",
+    "realistic": false,
+    "fit": "loose",
+    "boot_len": 0.35,
+    "skin": "#c68e65",
     "suit": "#22242a",
-    "arms": "#2a2c32",
-    "forearm": "#2a2c32",
+    "top": "tactical",
+    "vest": "#14161a",
     "gloves": "#121214",
-    "glove_len": 0.5,
     "legs": "#22242a",
+    "pants": "cargo",
     "boots": "#101012",
-    "boot_len": 0.6,
+    "shoes": "boot",
     "head": "visor",
     "mask": "#16161a",
     "hood": "#2a2c32",
     "lens": "#ff7a20",
-    "emblem": "vest",
-    "vest": "#14161a",
     "belt": "#1a1a1c",
     "pouches": true,
     "kneepads": "#2a2c32",
@@ -306,7 +341,7 @@
     {
      "lens": "#30d0ff",
      "suit": "#1a2430",
-     "arms": "#1e2a36"
+     "legs": "#1a2430"
     },
     {
      "lens": "#ff2040",
@@ -357,37 +392,46 @@
    "stance": "heavy",
    "look": {
     "build": "male",
-    "skin": "#a06a4a",
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0,
+    "skin": "#a8714c",
     "suit": "#e0701c",
-    "arms": "#a06a4a",
-    "forearm": "#a06a4a",
-    "gloves": "#a06a4a",
+    "top": "jumpsuit",
+    "sleeve_len": 0.45,
     "legs": "#d8681a",
     "boots": "#f0f0f0",
-    "boot_len": 0.2,
+    "shoes": "sneaker",
+    "shoe_accent": "#c0c0c0",
     "head": "shaved",
     "hair": "#1a1210",
-    "muscles": true,
-    "seams": "#a04a10",
+    "stubble": "#1a1210",
+    "tattoo": "#24304a",
     "power": "#ffa040",
     "bulk": 1.45
    },
    "variants": [
     {
-     "skin": "#d9a588"
+     "skin": "#e0ac87",
+     "hair": "#3a2a1a",
+     "stubble": "#3a2a1a"
     },
     {
-     "skin": "#c08a66"
+     "skin": "#c68e65"
     },
     {
-     "skin": "#a06a4a"
+     "skin": "#a8714c",
+     "scar": "#6a3a24"
     },
     {
-     "skin": "#7a4e34"
+     "skin": "#6b4430",
+     "hair": "#0e0a08",
+     "stubble": "#0e0a08"
     },
     {
      "beard": "#2a1a10",
-     "skin": "#f0c8a8"
+     "skin": "#f1c9a5",
+     "tattoo": "#3a3a5a"
     }
    ],
    "moves": {
@@ -454,43 +498,44 @@
    "score": 220,
    "look": {
     "build": "male",
-    "skin": "#d9a588",
-    "suit": "#3a1a4a",
-    "arms": "#3a1a4a",
-    "forearm": "#3a1a4a",
-    "gloves": "#c060ff",
-    "glove_len": 0.25,
-    "legs": "#1e1e28",
-    "boots": "#121214",
-    "boot_len": 0.35,
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0,
+    "skin": "#e0ac87",
+    "suit": "#3a2a4a",
+    "top": "jacket",
+    "shirt": "#202024",
+    "legs": "#2a2e3a",
+    "pants": "jeans",
+    "boots": "#202020",
+    "shoes": "sneaker",
     "hair": "#1a1210",
     "head": "short",
+    "gloves": "#c060ff",
     "glow_eyes": "#d080ff",
     "power": "#c060ff",
     "bulk": 1.0
    },
    "variants": [
-    {
-     "gloves": "#c060ff",
-     "glow_eyes": "#d080ff",
-     "power": "#c060ff"
-    },
+    {},
     {
      "gloves": "#30c0ff",
      "glow_eyes": "#80e0ff",
      "power": "#30c0ff",
-     "suit": "#1a2a4a",
-     "arms": "#1a2a4a",
-     "forearm": "#1a2a4a"
+     "suit": "#4a5a6a",
+     "shirt": "#d0d0d0",
+     "skin": "#8a5a3c",
+     "hair": "#0e0a08"
     },
     {
      "gloves": "#ff6020",
      "glow_eyes": "#ffa060",
      "power": "#ff6020",
-     "suit": "#4a1a14",
-     "arms": "#4a1a14",
-     "forearm": "#4a1a14",
-     "head": "shaved"
+     "suit": "#3a3a2a",
+     "top": "hoodie",
+     "head": "shaved",
+     "skin": "#c68e65",
+     "stubble": "#2a1a10"
     }
    ],
    "moves": {
@@ -522,7 +567,8 @@
       "level": "mid"
      }
     }
-   }
+   },
+   "stance": "street"
   },
   "assassin": {
    "name": "League Assassin",
@@ -536,15 +582,16 @@
    "flip_jump": true,
    "look": {
     "build": "male",
-    "skin": "#c08a66",
+    "fit": "loose",
+    "skin": "#c68e65",
     "suit": "#121214",
     "arms": "#141416",
     "forearm": "#1a1a1e",
     "gloves": "#0e0e10",
-    "glove_len": 0.6,
     "legs": "#121214",
     "boots": "#0e0e10",
-    "boot_len": 0.7,
+    "boot_len": 0.5,
+    "shoes": "boot",
     "head": "hood",
     "hood": "#16161a",
     "face": "bandana",
@@ -632,37 +679,41 @@
    "score": 200,
    "look": {
     "build": "male",
-    "skin": "#f0c8a8",
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0.4,
+    "skin": "#f1c9a5",
     "suit": "#34362f",
-    "arms": "#34362f",
-    "forearm": "#34362f",
+    "top": "tactical",
+    "vest": "#26281f",
     "gloves": "#141414",
-    "glove_len": 0.3,
     "legs": "#2c2e28",
+    "pants": "cargo",
     "boots": "#0e0e0e",
-    "boot_len": 0.7,
+    "shoes": "boot",
     "hat": "army",
     "hat_color": "#2a2c26",
     "head": "shaved",
     "hair": "#3a2a1a",
-    "stripe": "#a01818",
+    "stubble": "#3a2a1a",
     "belt": "#1a1a14",
     "pouches": true,
-    "emblem": "vest",
-    "vest": "#26281f",
     "power": "#ff4040",
     "bulk": 1.05
    },
    "variants": [
+    {},
     {
-     "skin": "#f0c8a8"
+     "skin": "#c68e65",
+     "hat_color": "#1e1e1c",
+     "hair": "#1a1210",
+     "stubble": "#1a1210"
     },
     {
-     "skin": "#d9a588",
-     "hat_color": "#1e1e1c"
-    },
-    {
-     "face": "shades"
+     "face": "shades",
+     "skin": "#8a5a3c",
+     "hair": "#0e0a08",
+     "stubble": "none"
     }
    ],
    "moves": {
@@ -706,14 +757,14 @@
    "score": 150,
    "look": {
     "build": "male",
-    "skin": "#f0c8a8",
+    "realistic": true,
+    "fit": "loose",
+    "boot_len": 0,
+    "skin": "#f1c9a5",
     "suit": "#5a0a10",
-    "arms": "#5a0a10",
-    "forearm": "#5a0a10",
-    "gloves": "#f0c8a8",
     "legs": "#3a060a",
     "boots": "#1a0a0a",
-    "boot_len": 0.4,
+    "shoes": "boot",
     "head": "hood",
     "hood": "#6a0c12",
     "coat": "#5a0a10",
@@ -722,7 +773,8 @@
     "emblem": "glyph",
     "accent": "#e0b030",
     "power": "#ff3020",
-    "bulk": 1.0
+    "bulk": 1.0,
+    "scowl": false
    },
    "variants": [
     {
@@ -731,12 +783,14 @@
     {
      "build": "female",
      "height": 160,
-     "lips": "#7a2a2a"
+     "lips": "#7a2a2a",
+     "skin": "#e0ac87"
     },
     {
      "hood": "#3a0a0e",
      "coat": "#2a0608",
-     "glow_eyes": "#ff8030"
+     "glow_eyes": "#ff8030",
+     "skin": "#a8714c"
     }
    ]
   },
@@ -750,16 +804,18 @@
    "score": 240,
    "look": {
     "build": "male",
-    "skin": "#c08a66",
+    "fit": "loose",
+    "skin": "#c68e65",
     "suit": "#3a3428",
+    "top": "tactical",
+    "vest": "#4a4232",
     "plates": "#5a4e38",
-    "arms": "#3a3428",
-    "forearm": "#4a4232",
     "gloves": "#1a1612",
-    "glove_len": 0.6,
     "legs": "#2e2a22",
+    "pants": "cargo",
     "boots": "#141210",
-    "boot_len": 0.7,
+    "boot_len": 0.45,
+    "shoes": "boot",
     "kneepads": "#5a4e38",
     "pads": true,
     "pad_color": "#5a4e38",
@@ -826,40 +882,42 @@
    "score": 160,
    "look": {
     "build": "male",
+    "realistic": false,
+    "fit": "loose",
+    "boot_len": 0,
     "skin": "#f0c09a",
     "suit": "#5c3a96",
-    "arms": "#5c3a96",
-    "forearm": "#5c3a96",
+    "top": "jacket",
+    "zip_color": "#e8e8e8",
+    "stripe": "#e8e8e8",
     "gloves": "#1a1a1a",
-    "glove_len": 0.4,
     "legs": "#2a3e7a",
-    "boots": "#1a1a1a",
-    "boot_len": 0.4,
+    "pants": "track",
+    "boots": "#e8e8e8",
+    "shoes": "sneaker",
     "head": "tv",
     "mask": "#3a2a20",
     "lens": "#40ffb0",
-    "belt": "#1a1a1a",
     "power": "#40ffb0",
     "bulk": 1.05
    },
    "variants": [
-    {
-     "lens": "#40ffb0"
-    },
+    {},
     {
      "lens": "#ff60c0",
      "suit": "#2a2a2a",
-     "arms": "#2a2a2a",
-     "forearm": "#2a2a2a"
+     "legs": "#2a2a2a",
+     "stripe": "#ff60c0"
     },
     {
      "lens": "#ffd040",
      "mask": "#5a5a60",
      "suit": "#1a4a3a",
-     "arms": "#1a4a3a",
-     "forearm": "#1a4a3a"
+     "legs": "#1a4a3a",
+     "stripe": "#ffd040"
     }
-   ]
+   ],
+   "stance": "street"
   }
  }
 }

@@ -35,6 +35,9 @@ const LIB := {
 	"idle_sword2": {"hip": Vector2(0, -0.432), "t": 6.0, "fh": Vector2(0.19, -0.015), "bh": Vector2(0.03, -0.095), "ff": Vector2(0.14, 0), "bf": Vector2(-0.16, 0), "blade": -62.0},
 	"idle_guns": {"hip": Vector2(0, -0.45), "t": 4.0, "fh": Vector2(0.21, -0.05), "bh": Vector2(0.17, -0.03), "ff": Vector2(0.13, 0), "bf": Vector2(-0.14, 0), "gun": 1.0},
 	"idle_guns2": {"hip": Vector2(0, -0.442), "t": 5.0, "fh": Vector2(0.21, -0.035), "bh": Vector2(0.17, -0.015), "ff": Vector2(0.13, 0), "bf": Vector2(-0.14, 0), "gun": 1.0},
+	# Street fighters and thugs: lower, looser guard, chin tucked, hunched.
+	"idle_street": {"hip": Vector2(0, -0.448), "t": 10.0, "h": 5.0, "fh": Vector2(0.15, -0.035), "bh": Vector2(0.075, -0.01), "ff": Vector2(0.12, 0), "bf": Vector2(-0.14, 0)},
+	"idle_street2": {"hip": Vector2(0, -0.438), "t": 12.0, "h": 6.0, "fh": Vector2(0.155, -0.02), "bh": Vector2(0.08, 0.005), "ff": Vector2(0.12, 0), "bf": Vector2(-0.14, 0)},
 	"idle2": {"hip": Vector2(0, -0.445), "t": 7.0, "fh": Vector2(0.15, -0.085), "bh": Vector2(0.07, -0.055)},
 	"walk1": {"hip": Vector2(0, -0.46), "t": 8.0, "ff": Vector2(0.17, 0), "bf": Vector2(-0.15, 0)},
 	"walk2": {"hip": Vector2(0, -0.48), "t": 8.0, "ff": Vector2(0.03, -0.07), "bf": Vector2(0.0, 0)},
