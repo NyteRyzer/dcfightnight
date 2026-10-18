@@ -1,0 +1,1835 @@
+{
+ "_doc": "Stylized finishers: after the deciding round, input Back, Forward, Special while the opponent is dizzy. Steps run on frame 'at'. Actions: pose, lpose, dash, blink, hop, rise, fall, levitate, drop, hit, slash, shot, beam, rain, ring, explode, launch, breach_target, vanish, trail, text, sound, shake, zoom.",
+ "finishers": {
+  "flash": {
+   "name": "Speed Force Storm",
+   "len": 200,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "idle_speed"
+    },
+    {
+     "at": 0,
+     "do": "trail",
+     "frames": 150
+    },
+    {
+     "at": 6,
+     "do": "dash",
+     "offset": 0.32,
+     "frames": 6
+    },
+    {
+     "at": 14,
+     "do": "pose",
+     "pose": "jab_s"
+    },
+    {
+     "at": 16,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 20,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 22,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 26,
+     "do": "pose",
+     "pose": "highkick_s"
+    },
+    {
+     "at": 28,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 32,
+     "do": "pose",
+     "pose": "elbow_s"
+    },
+    {
+     "at": 34,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 38,
+     "do": "pose",
+     "pose": "jab_s"
+    },
+    {
+     "at": 40,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 44,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 46,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 50,
+     "do": "pose",
+     "pose": "highkick_s"
+    },
+    {
+     "at": 52,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 56,
+     "do": "pose",
+     "pose": "elbow_s"
+    },
+    {
+     "at": 58,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 62,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 64,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 66,
+     "do": "hit",
+     "scale": 1.0
+    },
+    {
+     "at": 69,
+     "do": "pose",
+     "pose": "midkick_s"
+    },
+    {
+     "at": 71,
+     "do": "hit",
+     "scale": 1.0
+    },
+    {
+     "at": 74,
+     "do": "pose",
+     "pose": "jab_s"
+    },
+    {
+     "at": 76,
+     "do": "hit",
+     "scale": 1.0
+    },
+    {
+     "at": 79,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 81,
+     "do": "hit",
+     "scale": 1.0
+    },
+    {
+     "at": 84,
+     "do": "pose",
+     "pose": "midkick_s"
+    },
+    {
+     "at": 86,
+     "do": "hit",
+     "scale": 1.0
+    },
+    {
+     "at": 89,
+     "do": "pose",
+     "pose": "jab_s"
+    },
+    {
+     "at": 91,
+     "do": "hit",
+     "scale": 1.0
+    },
+    {
+     "at": 96,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 98,
+     "do": "ring",
+     "radius": 14
+    },
+    {
+     "at": 104,
+     "do": "pose",
+     "pose": "uppercut_w"
+    },
+    {
+     "at": 110,
+     "do": "pose",
+     "pose": "uppercut_s"
+    },
+    {
+     "at": 112,
+     "do": "hit",
+     "scale": 1.8
+    },
+    {
+     "at": 112,
+     "do": "launch",
+     "vx": 2,
+     "vy": -12
+    },
+    {
+     "at": 112,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 116,
+     "do": "beam",
+     "from": "hand",
+     "to": "sky",
+     "width": 6,
+     "frames": 20
+    },
+    {
+     "at": 150,
+     "do": "pose",
+     "pose": "victory"
+    }
+   ]
+  },
+  "green_arrow": {
+   "name": "You Have Failed This City",
+   "len": 210,
+   "steps": [
+    {
+     "at": 0,
+     "do": "hop",
+     "vx": -4,
+     "vy": -8
+    },
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "jump_tuck"
+    },
+    {
+     "at": 24,
+     "do": "pose",
+     "pose": "bow_up_w"
+    },
+    {
+     "at": 34,
+     "do": "pose",
+     "pose": "bow_up_s"
+    },
+    {
+     "at": 36,
+     "do": "sound",
+     "id": "arrow"
+    },
+    {
+     "at": 60,
+     "do": "rain",
+     "spread": -28
+    },
+    {
+     "at": 62,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 65,
+     "do": "rain",
+     "spread": -14
+    },
+    {
+     "at": 67,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 70,
+     "do": "rain",
+     "spread": 0
+    },
+    {
+     "at": 72,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 75,
+     "do": "rain",
+     "spread": 14
+    },
+    {
+     "at": 77,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 80,
+     "do": "rain",
+     "spread": 28
+    },
+    {
+     "at": 82,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 85,
+     "do": "rain",
+     "spread": -28
+    },
+    {
+     "at": 87,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 90,
+     "do": "rain",
+     "spread": -14
+    },
+    {
+     "at": 92,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 95,
+     "do": "rain",
+     "spread": 0
+    },
+    {
+     "at": 97,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 100,
+     "do": "rain",
+     "spread": 14
+    },
+    {
+     "at": 102,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 105,
+     "do": "rain",
+     "spread": 28
+    },
+    {
+     "at": 107,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 115,
+     "do": "pose",
+     "pose": "bow_w"
+    },
+    {
+     "at": 135,
+     "do": "pose",
+     "pose": "bow_s"
+    },
+    {
+     "at": 137,
+     "do": "beam",
+     "from": "hand",
+     "to": "target",
+     "width": 3,
+     "frames": 8
+    },
+    {
+     "at": 140,
+     "do": "explode",
+     "radius": 70
+    },
+    {
+     "at": 140,
+     "do": "launch",
+     "vx": 5,
+     "vy": -8
+    },
+    {
+     "at": 140,
+     "do": "zoom",
+     "amount": 0.07
+    },
+    {
+     "at": 175,
+     "do": "pose",
+     "pose": "victory_bow"
+    }
+   ]
+  },
+  "supergirl": {
+   "name": "Heat Vision Overdrive",
+   "len": 210,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "fly_s"
+    },
+    {
+     "at": 0,
+     "do": "rise",
+     "height": 0.35,
+     "frames": 20
+    },
+    {
+     "at": 28,
+     "do": "pose",
+     "pose": "beam_s"
+    },
+    {
+     "at": 30,
+     "do": "beam",
+     "from": "head",
+     "to": "target",
+     "width": 7,
+     "frames": 50
+    },
+    {
+     "at": 30,
+     "do": "sound",
+     "id": "beam"
+    },
+    {
+     "at": 32,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 38,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 44,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 50,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 56,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 62,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 68,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 74,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 86,
+     "do": "pose",
+     "pose": "rush_s"
+    },
+    {
+     "at": 86,
+     "do": "dash",
+     "offset": 0.3,
+     "frames": 8
+    },
+    {
+     "at": 86,
+     "do": "fall"
+    },
+    {
+     "at": 96,
+     "do": "pose",
+     "pose": "haymaker_s"
+    },
+    {
+     "at": 96,
+     "do": "hit",
+     "scale": 2.0
+    },
+    {
+     "at": 96,
+     "do": "launch",
+     "vx": 9,
+     "vy": -7
+    },
+    {
+     "at": 96,
+     "do": "ring",
+     "radius": 20
+    },
+    {
+     "at": 96,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 160,
+     "do": "pose",
+     "pose": "victory_hips"
+    }
+   ]
+  },
+  "black_canary": {
+   "name": "Canary Cry Crescendo",
+   "len": 190,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "scream_s"
+    },
+    {
+     "at": 4,
+     "do": "sound",
+     "id": "sonic"
+    },
+    {
+     "at": 6,
+     "do": "ring",
+     "radius": 10
+    },
+    {
+     "at": 8,
+     "do": "beam",
+     "from": "head",
+     "to": "target",
+     "width": 12,
+     "frames": 70
+    },
+    {
+     "at": 10,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 18,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 20,
+     "do": "ring",
+     "radius": 14
+    },
+    {
+     "at": 26,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 34,
+     "do": "ring",
+     "radius": 18
+    },
+    {
+     "at": 34,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 42,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 48,
+     "do": "ring",
+     "radius": 22
+    },
+    {
+     "at": 50,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 58,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 62,
+     "do": "ring",
+     "radius": 26
+    },
+    {
+     "at": 66,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 80,
+     "do": "launch",
+     "vx": 12,
+     "vy": -6
+    },
+    {
+     "at": 80,
+     "do": "zoom",
+     "amount": 0.06
+    },
+    {
+     "at": 80,
+     "do": "shake",
+     "amount": 10
+    },
+    {
+     "at": 140,
+     "do": "pose",
+     "pose": "victory_hips"
+    }
+   ]
+  },
+  "vibe": {
+   "name": "Breach to Nowhere",
+   "len": 180,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "cast_w"
+    },
+    {
+     "at": 14,
+     "do": "pose",
+     "pose": "vibrate_s"
+    },
+    {
+     "at": 16,
+     "do": "ring",
+     "radius": 8
+    },
+    {
+     "at": 20,
+     "do": "beam",
+     "from": "hand",
+     "to": "target",
+     "width": 5,
+     "frames": 40
+    },
+    {
+     "at": 22,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 24,
+     "do": "ring",
+     "radius": 8
+    },
+    {
+     "at": 29,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 32,
+     "do": "ring",
+     "radius": 8
+    },
+    {
+     "at": 36,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 40,
+     "do": "ring",
+     "radius": 8
+    },
+    {
+     "at": 43,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 48,
+     "do": "ring",
+     "radius": 8
+    },
+    {
+     "at": 50,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 57,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 66,
+     "do": "pose",
+     "pose": "cast_s"
+    },
+    {
+     "at": 70,
+     "do": "breach_target"
+    },
+    {
+     "at": 74,
+     "do": "vanish"
+    },
+    {
+     "at": 80,
+     "do": "text",
+     "text": "...see you on Earth-19"
+    },
+    {
+     "at": 120,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "wild_dog": {
+   "name": "Off the Leash",
+   "len": 180,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "shoot_w"
+    },
+    {
+     "at": 10,
+     "do": "pose",
+     "pose": "shoot_s"
+    },
+    {
+     "at": 11,
+     "do": "shot"
+    },
+    {
+     "at": 13,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 16,
+     "do": "pose",
+     "pose": "shoot_w"
+    },
+    {
+     "at": 17,
+     "do": "shot"
+    },
+    {
+     "at": 19,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 22,
+     "do": "pose",
+     "pose": "shoot_s"
+    },
+    {
+     "at": 23,
+     "do": "shot"
+    },
+    {
+     "at": 25,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 28,
+     "do": "pose",
+     "pose": "shoot_w"
+    },
+    {
+     "at": 29,
+     "do": "shot"
+    },
+    {
+     "at": 31,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 34,
+     "do": "pose",
+     "pose": "shoot_s"
+    },
+    {
+     "at": 35,
+     "do": "shot"
+    },
+    {
+     "at": 37,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 40,
+     "do": "pose",
+     "pose": "shoot_w"
+    },
+    {
+     "at": 41,
+     "do": "shot"
+    },
+    {
+     "at": 43,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 46,
+     "do": "pose",
+     "pose": "shoot_s"
+    },
+    {
+     "at": 47,
+     "do": "shot"
+    },
+    {
+     "at": 49,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 52,
+     "do": "pose",
+     "pose": "shoot_w"
+    },
+    {
+     "at": 53,
+     "do": "shot"
+    },
+    {
+     "at": 55,
+     "do": "hit",
+     "scale": 0.7
+    },
+    {
+     "at": 64,
+     "do": "dash",
+     "offset": 0.3,
+     "frames": 8
+    },
+    {
+     "at": 64,
+     "do": "pose",
+     "pose": "charge_s"
+    },
+    {
+     "at": 74,
+     "do": "pose",
+     "pose": "haymaker_s"
+    },
+    {
+     "at": 74,
+     "do": "hit",
+     "scale": 1.8
+    },
+    {
+     "at": 74,
+     "do": "launch",
+     "vx": 8,
+     "vy": -8
+    },
+    {
+     "at": 74,
+     "do": "zoom",
+     "amount": 0.07
+    },
+    {
+     "at": 130,
+     "do": "pose",
+     "pose": "victory"
+    }
+   ]
+  },
+  "martian_manhunter": {
+   "name": "Martian Mind Crush",
+   "len": 200,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "telepath_s"
+    },
+    {
+     "at": 4,
+     "do": "sound",
+     "id": "psi"
+    },
+    {
+     "at": 6,
+     "do": "ring",
+     "radius": 12
+    },
+    {
+     "at": 10,
+     "do": "lpose",
+     "pose": "airhit"
+    },
+    {
+     "at": 10,
+     "do": "levitate",
+     "height": 0.6,
+     "frames": 50
+    },
+    {
+     "at": 18,
+     "do": "ring",
+     "radius": 12
+    },
+    {
+     "at": 20,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 30,
+     "do": "ring",
+     "radius": 12
+    },
+    {
+     "at": 30,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 40,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 42,
+     "do": "ring",
+     "radius": 12
+    },
+    {
+     "at": 50,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 54,
+     "do": "ring",
+     "radius": 12
+    },
+    {
+     "at": 60,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 66,
+     "do": "ring",
+     "radius": 12
+    },
+    {
+     "at": 80,
+     "do": "pose",
+     "pose": "slam_w"
+    },
+    {
+     "at": 92,
+     "do": "pose",
+     "pose": "slam_s"
+    },
+    {
+     "at": 92,
+     "do": "drop"
+    },
+    {
+     "at": 100,
+     "do": "explode",
+     "radius": 60
+    },
+    {
+     "at": 100,
+     "do": "shake",
+     "amount": 12
+    },
+    {
+     "at": 100,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 150,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "citizen_steel": {
+   "name": "Steel Hammer",
+   "len": 190,
+   "steps": [
+    {
+     "at": 0,
+     "do": "dash",
+     "offset": 0.35,
+     "frames": 12
+    },
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "rush_s"
+    },
+    {
+     "at": 14,
+     "do": "pose",
+     "pose": "haymaker_s"
+    },
+    {
+     "at": 16,
+     "do": "hit",
+     "scale": 1.2
+    },
+    {
+     "at": 22,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 24,
+     "do": "hit",
+     "scale": 1.2
+    },
+    {
+     "at": 30,
+     "do": "pose",
+     "pose": "haymaker_s"
+    },
+    {
+     "at": 32,
+     "do": "hit",
+     "scale": 1.2
+    },
+    {
+     "at": 38,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 40,
+     "do": "hit",
+     "scale": 1.2
+    },
+    {
+     "at": 50,
+     "do": "pose",
+     "pose": "slam_w"
+    },
+    {
+     "at": 50,
+     "do": "hop",
+     "vx": 0,
+     "vy": -9
+    },
+    {
+     "at": 72,
+     "do": "pose",
+     "pose": "slam_s"
+    },
+    {
+     "at": 76,
+     "do": "explode",
+     "radius": 90
+    },
+    {
+     "at": 76,
+     "do": "hit",
+     "scale": 2.0
+    },
+    {
+     "at": 76,
+     "do": "launch",
+     "vx": 4,
+     "vy": -11
+    },
+    {
+     "at": 76,
+     "do": "shake",
+     "amount": 14
+    },
+    {
+     "at": 76,
+     "do": "zoom",
+     "amount": 0.09
+    },
+    {
+     "at": 140,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "deathstroke": {
+   "name": "Contract Fulfilled",
+   "len": 190,
+   "steps": [
+    {
+     "at": 0,
+     "do": "dash",
+     "offset": 0.3,
+     "frames": 8
+    },
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "hslash_w"
+    },
+    {
+     "at": 10,
+     "do": "pose",
+     "pose": "hslash_s"
+    },
+    {
+     "at": 12,
+     "do": "slash",
+     "scale": 1.2
+    },
+    {
+     "at": 18,
+     "do": "pose",
+     "pose": "slash_s"
+    },
+    {
+     "at": 20,
+     "do": "slash",
+     "scale": 1.2
+    },
+    {
+     "at": 26,
+     "do": "pose",
+     "pose": "hslash_w"
+    },
+    {
+     "at": 28,
+     "do": "slash",
+     "scale": 1.2
+    },
+    {
+     "at": 34,
+     "do": "pose",
+     "pose": "hslash_s"
+    },
+    {
+     "at": 36,
+     "do": "slash",
+     "scale": 1.2
+    },
+    {
+     "at": 42,
+     "do": "pose",
+     "pose": "slash_s"
+    },
+    {
+     "at": 44,
+     "do": "slash",
+     "scale": 1.2
+    },
+    {
+     "at": 50,
+     "do": "pose",
+     "pose": "hslash_w"
+    },
+    {
+     "at": 52,
+     "do": "slash",
+     "scale": 1.2
+    },
+    {
+     "at": 62,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 66,
+     "do": "pose",
+     "pose": "rising_slash_s"
+    },
+    {
+     "at": 68,
+     "do": "slash",
+     "scale": 2.0
+    },
+    {
+     "at": 68,
+     "do": "launch",
+     "vx": 3,
+     "vy": -11
+    },
+    {
+     "at": 68,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 130,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "reverse_flash": {
+   "name": "Negative Speed Force",
+   "len": 200,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "idle_speed"
+    },
+    {
+     "at": 0,
+     "do": "trail",
+     "frames": 140
+    },
+    {
+     "at": 6,
+     "do": "blink",
+     "side": 1
+    },
+    {
+     "at": 7,
+     "do": "pose",
+     "pose": "jab_s"
+    },
+    {
+     "at": 8,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 14,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 15,
+     "do": "pose",
+     "pose": "highkick_s"
+    },
+    {
+     "at": 16,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 22,
+     "do": "blink",
+     "side": 1
+    },
+    {
+     "at": 23,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 24,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 30,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 31,
+     "do": "pose",
+     "pose": "elbow_s"
+    },
+    {
+     "at": 32,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 38,
+     "do": "blink",
+     "side": 1
+    },
+    {
+     "at": 39,
+     "do": "pose",
+     "pose": "jab_s"
+    },
+    {
+     "at": 40,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 46,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 47,
+     "do": "pose",
+     "pose": "highkick_s"
+    },
+    {
+     "at": 48,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 54,
+     "do": "blink",
+     "side": 1
+    },
+    {
+     "at": 55,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 56,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 62,
+     "do": "blink",
+     "side": -1
+    },
+    {
+     "at": 63,
+     "do": "pose",
+     "pose": "elbow_s"
+    },
+    {
+     "at": 64,
+     "do": "hit",
+     "scale": 0.9
+    },
+    {
+     "at": 76,
+     "do": "pose",
+     "pose": "vibrate_s"
+    },
+    {
+     "at": 76,
+     "do": "ring",
+     "radius": 10
+    },
+    {
+     "at": 96,
+     "do": "pose",
+     "pose": "cross_s"
+    },
+    {
+     "at": 98,
+     "do": "hit",
+     "scale": 2.0
+    },
+    {
+     "at": 98,
+     "do": "launch",
+     "vx": 10,
+     "vy": -6
+    },
+    {
+     "at": 98,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 150,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "reign": {
+   "name": "Worldkiller Judgment",
+   "len": 200,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "fly_s"
+    },
+    {
+     "at": 0,
+     "do": "rise",
+     "height": 0.25,
+     "frames": 16
+    },
+    {
+     "at": 20,
+     "do": "pose",
+     "pose": "beam_s"
+    },
+    {
+     "at": 22,
+     "do": "beam",
+     "from": "head",
+     "to": "target",
+     "width": 6,
+     "frames": 40
+    },
+    {
+     "at": 22,
+     "do": "sound",
+     "id": "beam"
+    },
+    {
+     "at": 24,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 31,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 38,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 45,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 52,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 59,
+     "do": "hit",
+     "scale": 0.8
+    },
+    {
+     "at": 70,
+     "do": "dash",
+     "offset": 0.28,
+     "frames": 8
+    },
+    {
+     "at": 70,
+     "do": "fall"
+    },
+    {
+     "at": 70,
+     "do": "pose",
+     "pose": "rush_s"
+    },
+    {
+     "at": 80,
+     "do": "pose",
+     "pose": "slam_s"
+    },
+    {
+     "at": 80,
+     "do": "hit",
+     "scale": 2.0
+    },
+    {
+     "at": 80,
+     "do": "launch",
+     "vx": 3,
+     "vy": -12
+    },
+    {
+     "at": 96,
+     "do": "drop"
+    },
+    {
+     "at": 104,
+     "do": "explode",
+     "radius": 70
+    },
+    {
+     "at": 104,
+     "do": "shake",
+     "amount": 12
+    },
+    {
+     "at": 104,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 150,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "vandal_savage": {
+   "name": "Immortal Wrath",
+   "len": 190,
+   "steps": [
+    {
+     "at": 0,
+     "do": "dash",
+     "offset": 0.32,
+     "frames": 10
+    },
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "hslash_w"
+    },
+    {
+     "at": 12,
+     "do": "pose",
+     "pose": "hslash_s"
+    },
+    {
+     "at": 14,
+     "do": "slash",
+     "scale": 1.4
+    },
+    {
+     "at": 22,
+     "do": "pose",
+     "pose": "slash_s"
+    },
+    {
+     "at": 24,
+     "do": "slash",
+     "scale": 1.4
+    },
+    {
+     "at": 32,
+     "do": "pose",
+     "pose": "hslash_s"
+    },
+    {
+     "at": 34,
+     "do": "slash",
+     "scale": 1.4
+    },
+    {
+     "at": 42,
+     "do": "pose",
+     "pose": "slash_s"
+    },
+    {
+     "at": 44,
+     "do": "slash",
+     "scale": 1.4
+    },
+    {
+     "at": 56,
+     "do": "pose",
+     "pose": "stomp_w"
+    },
+    {
+     "at": 66,
+     "do": "pose",
+     "pose": "stomp_s"
+    },
+    {
+     "at": 66,
+     "do": "ring",
+     "radius": 20
+    },
+    {
+     "at": 66,
+     "do": "shake",
+     "amount": 10
+    },
+    {
+     "at": 72,
+     "do": "pose",
+     "pose": "rising_slash_s"
+    },
+    {
+     "at": 74,
+     "do": "slash",
+     "scale": 2.2
+    },
+    {
+     "at": 74,
+     "do": "launch",
+     "vx": 6,
+     "vy": -10
+    },
+    {
+     "at": 74,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 130,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  },
+  "vigilante": {
+   "name": "Last Call",
+   "len": 190,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "dual_shoot_s"
+    },
+    {
+     "at": 6,
+     "do": "shot"
+    },
+    {
+     "at": 8,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 11,
+     "do": "shot"
+    },
+    {
+     "at": 13,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 16,
+     "do": "shot"
+    },
+    {
+     "at": 18,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 21,
+     "do": "shot"
+    },
+    {
+     "at": 23,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 26,
+     "do": "shot"
+    },
+    {
+     "at": 28,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 31,
+     "do": "shot"
+    },
+    {
+     "at": 33,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 36,
+     "do": "shot"
+    },
+    {
+     "at": 38,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 41,
+     "do": "shot"
+    },
+    {
+     "at": 43,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 46,
+     "do": "shot"
+    },
+    {
+     "at": 48,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 51,
+     "do": "shot"
+    },
+    {
+     "at": 53,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 56,
+     "do": "shot"
+    },
+    {
+     "at": 58,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 61,
+     "do": "shot"
+    },
+    {
+     "at": 63,
+     "do": "hit",
+     "scale": 0.6
+    },
+    {
+     "at": 70,
+     "do": "pose",
+     "pose": "toss_w"
+    },
+    {
+     "at": 80,
+     "do": "pose",
+     "pose": "toss_s"
+    },
+    {
+     "at": 96,
+     "do": "explode",
+     "radius": 80
+    },
+    {
+     "at": 96,
+     "do": "launch",
+     "vx": 7,
+     "vy": -10
+    },
+    {
+     "at": 96,
+     "do": "zoom",
+     "amount": 0.08
+    },
+    {
+     "at": 96,
+     "do": "shake",
+     "amount": 10
+    },
+    {
+     "at": 140,
+     "do": "pose",
+     "pose": "victory"
+    }
+   ]
+  },
+  "control_freak": {
+   "name": "Cancelled!",
+   "len": 190,
+   "steps": [
+    {
+     "at": 0,
+     "do": "pose",
+     "pose": "point_s"
+    },
+    {
+     "at": 6,
+     "do": "sound",
+     "id": "static"
+    },
+    {
+     "at": 8,
+     "do": "beam",
+     "from": "hand",
+     "to": "target",
+     "width": 4,
+     "frames": 50
+    },
+    {
+     "at": 10,
+     "do": "hit",
+     "scale": 0.5
+    },
+    {
+     "at": 18,
+     "do": "hit",
+     "scale": 0.5
+    },
+    {
+     "at": 26,
+     "do": "hit",
+     "scale": 0.5
+    },
+    {
+     "at": 34,
+     "do": "hit",
+     "scale": 0.5
+    },
+    {
+     "at": 42,
+     "do": "hit",
+     "scale": 0.5
+    },
+    {
+     "at": 50,
+     "do": "hit",
+     "scale": 0.5
+    },
+    {
+     "at": 60,
+     "do": "breach_target"
+    },
+    {
+     "at": 64,
+     "do": "vanish"
+    },
+    {
+     "at": 70,
+     "do": "text",
+     "text": "CANCELLED"
+    },
+    {
+     "at": 110,
+     "do": "pose",
+     "pose": "victory_arms"
+    }
+   ]
+  }
+ }
+}

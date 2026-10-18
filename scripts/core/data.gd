@@ -17,6 +17,9 @@ var base_moves: Dictionary = {}
 ## Beat 'em up enemies (built like fighters) and level data.
 var npcs: Dictionary = {}
 var brawl: Dictionary = {}
+## Stylized finishers per fighter id, and pre-fight banter.
+var finishers: Dictionary = {}
+var banter: Dictionary = {}
 
 
 func _ready() -> void:
@@ -54,6 +57,8 @@ func reload() -> void:
 		d["variants"] = variants
 		npcs[id] = d
 	brawl = load_json("res://data/brawl.json")
+	finishers = load_json("res://data/finishers.json").get("finishers", {})
+	banter = load_json("res://data/banter.json")
 
 
 func load_json(path: String) -> Dictionary:
@@ -181,6 +186,23 @@ func validate() -> Array:
 				errors.append("brawl level '%s' has unknown miniboss" % lv.get("name", "?"))
 		if not fighters.has(lv.get("boss", {}).get("fighter", "")):
 			errors.append("brawl level '%s' has unknown boss" % lv.get("name", "?"))
+	const FINISHER_ACTIONS := ["pose", "lpose", "dash", "blink", "hop", "rise", "fall", "levitate", "drop", "hit", "slash", "shot",
+		"beam", "rain", "ring", "explode", "launch", "breach_target", "vanish", "trail", "text", "sound", "shake", "zoom"]
+	for id in fighters:
+		if not finishers.has(id):
+			errors.append("%s: no finisher" % id)
+		if not banter.get("generic", {}).has(id):
+			errors.append("%s: no pre-fight banter lines" % id)
+	for id in finishers:
+		for st in finishers[id].get("steps", []):
+			if not str(st.get("do", "")) in FINISHER_ACTIONS:
+				errors.append("finisher %s: unknown action '%s'" % [id, st.get("do", "")])
+			if st.has("pose") and not Poses.has_pose(st["pose"]):
+				errors.append("finisher %s: unknown pose '%s'" % [id, st["pose"]])
+	for key in banter.get("pairs", {}):
+		for line in banter["pairs"][key]:
+			if not fighters.has(line[0]):
+				errors.append("banter %s: unknown speaker '%s'" % [key, line[0]])
 	for ch in story.get("chapters", []):
 		if not ch.get("choose", false) and not fighters.has(ch.get("player", "")):
 			errors.append("story chapter '%s' has unknown player" % ch.get("title", "?"))

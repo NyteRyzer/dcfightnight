@@ -10,6 +10,7 @@ const Effects = preload("res://scripts/combat/effects.gd")
 const Arena = preload("res://scripts/arenas/arena.gd")
 const CpuAI = preload("res://scripts/combat/cpu_ai.gd")
 const MenuList = preload("res://scripts/ui/menu_list.gd")
+const Tutorial = preload("res://scripts/fight/tutorial.gd")
 
 const STAGE_W := 1000.0
 const FLOOR_Y := 322.0
@@ -52,6 +53,24 @@ var pause_lock := 0
 var zoom_punch := 0.0
 var first_strike := false
 var ko_freeze := 0
+
+# Finishers: after the deciding KO the loser staggers ("finish_wait") and the
+# winner has FINISH_WINDOW frames to input Back, Forward, Special.
+const FINISH_WINDOW := 300
+const FINISH_CMD := ["b", "f", "S"]
+var finish_step := 0
+var finish_t := 0
+var finish_prev := {}
+var finish_seq: Dictionary = {}
+var finish_tween := {}
+var finish_trail := 0
+var finish_done := false
+var finish_name := ""
+# Pre-fight banter lines: [[side, text], ...].
+## Interactive tutorial (training room in "tutorial" mode), else null.
+var tutorial = null
+var banter_lines: Array = []
+var banter_i := 0
 
 
 func _ready() -> void:
@@ -113,6 +132,9 @@ func _ready() -> void:
 			if training and i == 1:
 				brain.mode = Game.training.get("dummy", "stand")
 			ai[i] = brain
+	if training and Game.mode == "tutorial" and not autoplay:
+		tutorial = Tutorial.new()
+		tutorial.setup(self)
 	_play_music()
 	InputManager.pad_disconnected.connect(_on_pad_lost)
 	if training:
@@ -181,7 +203,40 @@ func start_round() -> void:
 			f.health = f.max_health * float(Game.fight_opts["start_health"])
 		f.set_state("intro")
 		f.controlled = false
+		f.vanished = false
 	timer = round_time * 60
+	finish_done = false
+	if round_num == 1 and not training and not autoplay and Game.settings.get("banter", true) and banter_lines.is_empty() and banter_i == 0:
+		banter_lines = _pick_banter()
+		if not banter_lines.is_empty():
+			phase = "banter"
+			pt = 0
+			return
+	_begin_intro()
+
+
+## Two lines of pre-fight banter: a scripted exchange for iconic match-ups,
+## otherwise one random line from each fighter.
+func _pick_banter() -> Array:
+	var ids := [str(fighters[0].def.get("id", "")), str(fighters[1].def.get("id", ""))]
+	var key_ids := ids.duplicate()
+	key_ids.sort()
+	var pairs: Dictionary = Data.banter.get("pairs", {})
+	var key := "%s|%s" % [key_ids[0], key_ids[1]]
+	var out: Array = []
+	if pairs.has(key) and ids[0] != ids[1]:
+		for line in pairs[key]:
+			out.append([ids.find(line[0]), str(line[1])])
+		return out
+	var gen: Dictionary = Data.banter.get("generic", {})
+	for i in [1, 0]:
+		var lines: Array = gen.get(ids[i], [])
+		if lines.size() > 0:
+			out.append([i, str(lines[randi() % lines.size()])])
+	return out
+
+
+func _begin_intro() -> void:
 	phase = "intro"
 	pt = 0
 	var label := "FINAL ROUND" if fighters[0].wins == rounds_to_win - 1 and fighters[1].wins == rounds_to_win - 1 and rounds_to_win > 1 else "ROUND %d" % round_num
@@ -199,6 +254,19 @@ func _physics_process(_delta: float) -> void:
 		"vs":
 			if pt > 150 or (pt > 30 and (InputManager.menu("accept") or autoplay)):
 				start_round()
+		"banter":
+			_sim(false)
+			var line_len := 40 + int(str(banter_lines[banter_i][1]).length() * 2.2)
+			if pt > line_len or (pt > 12 and InputManager.menu("accept")):
+				banter_i += 1
+				pt = 0
+				if banter_i >= banter_lines.size():
+					banter_lines.clear()
+					_begin_intro()
+		"finish_wait":
+			_finish_wait()
+		"finisher":
+			_finisher_tick()
 		"intro":
 			_sim(false)
 			if pt == 62:
@@ -252,7 +320,9 @@ func _sim(control: bool) -> void:
 		var f: Node2D = fighters[i]
 		var inp := {}
 		if control:
-			if ai[i] != null:
+			if tutorial != null and i == 1:
+				inp = tutorial.dummy_input()
+			elif ai[i] != null:
 				inp = ai[i].think()
 			else:
 				inp = InputManager.sample(i)
@@ -296,6 +366,9 @@ func _on_ko(d0: bool, d1: bool) -> void:
 	pt = 0
 	slowmo = 50
 	winner = -1 if (d0 and d1) else (1 if d0 else 0)
+	if winner >= 0 and _finisher_allowed():
+		_start_finish_wait()
+		return
 	for i in 2:
 		var f: Node2D = fighters[i]
 		if f.health <= 0.0:
@@ -331,9 +404,20 @@ func _ko_phase() -> void:
 	for f in fighters:
 		if f.state in ["airhit", "hitstun", "attack", "thrown", "throwing"] or not f.grounded():
 			return
+	_declare_round()
+
+
+func _declare_round() -> void:
 	phase = "roundwin"
 	pt = 0
-	if winner >= 0:
+	if winner >= 0 and finish_done:
+		var w2: Node2D = fighters[winner]
+		w2.wins += 1
+		w2.set_state("win")
+		w2.controlled = false
+		hud.announce(finish_name.to_upper(), "%s - HEROIC FINISH" % str(w2.def.get("name", "")).to_upper(), 160, w2.look.get("power", Color(1, 0.85, 0.2)).lightened(0.2))
+		Sound.announce("win")
+	elif winner >= 0:
 		var w: Node2D = fighters[winner]
 		var l: Node2D = fighters[1 - winner]
 		w.wins += 1
@@ -374,6 +458,304 @@ func _match_end() -> void:
 	if autoplay:
 		return
 	_show_results()
+
+
+# --- Finishers -------------------------------------------------------------------------------
+
+func _finisher_allowed() -> bool:
+	if training or not Game.settings.get("finishers", true):
+		return false
+	var w: Node2D = fighters[winner]
+	return w.wins + 1 >= rounds_to_win and Data.finishers.has(str(w.def.get("id", "")))
+
+
+func _start_finish_wait() -> void:
+	phase = "finish_wait"
+	pt = 0
+	slowmo = 0
+	finish_step = 0
+	finish_t = 0
+	finish_prev = {}
+	var w: Node2D = fighters[winner]
+	var l: Node2D = fighters[1 - winner]
+	l.health = 0.0
+	w.move = {}
+	w.controlled = false
+	if w.grounded() and w.state not in ["thrown", "airhit"]:
+		w.to_neutral()
+	if l.grounded() and l.state not in ["thrown", "throwing"]:
+		_make_dizzy(l)
+	hud.announce("FINISH IT!", "", FINISH_WINDOW + 60, Color(1, 0.25, 0.15))
+	Sound.announce("ko_voice")
+	zoom_punch = 0.08
+	shake(6.0)
+	for i in 2:
+		_rumble(i, 0.6, 0.3)
+
+
+func _make_dizzy(l: Node2D) -> void:
+	l.move = {}
+	l.vel = Vector2.ZERO
+	l.stun = 0
+	l.set_state("dizzy")
+
+
+## Waits for the winner's Back, Forward, Special. The loser staggers; both
+## fighters are otherwise frozen. Times out into a normal KO.
+func _finish_wait() -> void:
+	var w: Node2D = fighters[winner]
+	var l: Node2D = fighters[1 - winner]
+	# Let anyone still airborne land first; a KO'd loser staggers back up.
+	for f in fighters:
+		f.controlled = false
+		f.set_input({})
+		f.step()
+		clamp_fighter(f)
+		f.position = f.pos.round()
+		f.queue_redraw()
+	if (l.state in ["ko", "knockdown"] and l.grounded() and l.sf > 20) or l.state in ["idle", "getup"]:
+		_make_dizzy(l)
+	if w.state in ["knockdown", "ko"] and w.sf > 20:
+		w.to_neutral()
+	if w.grounded() and w.state in ["walk_f", "walk_b", "crouch", "block", "block_low", "land", "dash_f", "dash_b"]:
+		w.set_state("idle")
+	# Whatever was happening at the KO (throws, long moves, juggles), both
+	# fighters are in place after a short grace period.
+	if pt > 45:
+		for f in [w, l]:
+			if f.state != ("dizzy" if f == l else "idle"):
+				f.throw_victim = null
+				f.thrower = null
+				f.move = {}
+				f.vel = Vector2.ZERO
+				f.pos.y = f.floor_y
+				if f == l:
+					_make_dizzy(l)
+				else:
+					f.set_state("idle")
+	fx.step()
+	var ready: bool = l.state == "dizzy" and w.grounded() and w.state == "idle"
+	if ready:
+		finish_t += 1
+		w.facing = 1 if l.pos.x >= w.pos.x else -1
+		var inp: Dictionary
+		if ai[winner] != null or Game.cpu[winner]:
+			inp = _cpu_finish_input()
+		else:
+			inp = InputManager.sample(winner)
+		var right: bool = w.facing == 1
+		var pressed := {}
+		for k in ["l", "r", "S"]:
+			pressed[k] = inp.get(k, false) and not finish_prev.get(k, false)
+		finish_prev = inp
+		var want: String = FINISH_CMD[finish_step]
+		var hit := false
+		match want:
+			"b":
+				hit = pressed["l"] if right else pressed["r"]
+			"f":
+				hit = pressed["r"] if right else pressed["l"]
+			"S":
+				hit = pressed["S"]
+		if hit:
+			finish_step += 1
+			Sound.play("menu_move", 1.0 + finish_step * 0.15)
+			if finish_step >= FINISH_CMD.size():
+				_start_finisher()
+				return
+	if finish_t >= FINISH_WINDOW:
+		# Missed it: the loser collapses.
+		hud.announce("", "", 1)
+		var away := -1 if w.pos.x > l.pos.x else 1
+		l.vel = Vector2(2.0 * away, -4.0)
+		l.pos.y = minf(l.pos.y, l.floor_y - 1.0)
+		l.set_state("airhit")
+		phase = "ko"
+		pt = 90
+
+
+## CPU winners perform their finisher most of the time, after a short pause.
+func _cpu_finish_input() -> Dictionary:
+	if finish_t < 50:
+		finish_prev = {}
+		return {}
+	if finish_t % 6 >= 3:
+		return {}
+	var w: Node2D = fighters[winner]
+	var right: bool = w.facing == 1
+	match FINISH_CMD[finish_step]:
+		"b":
+			return {"l": true} if right else {"r": true}
+		"f":
+			return {"r": true} if right else {"l": true}
+	return {"S": true}
+
+
+func _start_finisher() -> void:
+	var w: Node2D = fighters[winner]
+	var l: Node2D = fighters[1 - winner]
+	finish_seq = Data.finishers[str(w.def.get("id", ""))]
+	finish_name = str(finish_seq.get("name", "Finisher"))
+	finish_tween = {}
+	finish_trail = 0
+	phase = "finisher"
+	pt = 0
+	hud.announce("", "", 1)
+	hud.banner(finish_name.to_upper(), winner, w.look.get("power", Color.WHITE))
+	Sound.play("super")
+	Sound.announce("super_voice")
+	w.set_cine("idle")
+	l.set_cine("hit")
+	l.health = 0.0
+	zoom_punch = 0.1
+
+
+func _finisher_tick() -> void:
+	var w: Node2D = fighters[winner]
+	var l: Node2D = fighters[1 - winner]
+	arena.dim = minf(0.55, arena.dim + 0.05)
+	for st in finish_seq.get("steps", []):
+		if int(st.get("at", -1)) == pt - 1:
+			_finisher_step(st, w, l)
+	# Tweened movement (dash / rise / levitate).
+	for who in finish_tween.keys():
+		var tw: Dictionary = finish_tween[who]
+		var f: Node2D = fighters[who]
+		tw["t"] += 1
+		var k := clampf(float(tw["t"]) / float(tw["n"]), 0.0, 1.0)
+		f.pos = (tw["from"] as Vector2).lerp(tw["to"], k * k * (3.0 - 2.0 * k))
+		if k >= 1.0:
+			finish_tween.erase(who)
+	if finish_trail > 0:
+		finish_trail -= 1
+		if pt % 2 == 0:
+			w.afterimages.push_front({"p": w.pos, "f": w.facing, "pose": w.display_pose, "life": 1.0})
+	for f in fighters:
+		f.step()
+		var b2 := bounds()
+		f.pos.x = clampf(f.pos.x, b2.x, b2.y)
+		f.position = f.pos.round()
+		f.queue_redraw()
+	fx.step()
+	if pt >= int(finish_seq.get("len", 180)):
+		if not l.vanished:
+			l.pos.y = l.floor_y
+			l.vel = Vector2.ZERO
+			l.set_state("ko")
+		finish_done = true
+		_declare_round()
+
+
+func _fpoint(f: Node2D, where: String) -> Vector2:
+	match where:
+		"head":
+			return f.pos + Vector2(0.06 * f.H * f.facing, -0.88 * f.H)
+		"hand":
+			return f.pos + Vector2(0.32 * f.H * f.facing, -0.62 * f.H)
+	return f.pos + Vector2(0, -0.55 * f.H)
+
+
+func _finisher_step(st: Dictionary, w: Node2D, l: Node2D) -> void:
+	var dir := 1.0 if l.pos.x >= w.pos.x else -1.0
+	var power: Color = w.look.get("power", Color.WHITE)
+	var chest := _fpoint(l, "chest")
+	match str(st["do"]):
+		"pose":
+			w.set_cine(st["pose"])
+		"lpose":
+			l.set_cine(st["pose"])
+		"dash":
+			var to := Vector2(l.pos.x - dir * float(st.get("offset", 0.3)) * w.H, w.pos.y)
+			finish_tween[winner] = {"from": w.pos, "to": to, "t": 0, "n": int(st.get("frames", 8))}
+			Sound.play("whoosh", 1.2, -4.0)
+		"blink":
+			# Teleport to the other side of the opponent (speedsters, assassins).
+			var side := float(st.get("side", -1)) * dir
+			var bd := bounds()
+			var nx: float = l.pos.x - side * 0.3 * w.H
+			if nx < bd.x or nx > bd.y:
+				# Cornered opponent: appear on the open side instead.
+				nx = l.pos.x + side * 0.3 * w.H
+			w.pos.x = clampf(nx, bd.x, bd.y)
+			w.facing = 1 if l.pos.x >= w.pos.x else -1
+			fx.spark(w.pos + Vector2(0, -w.H * 0.5), 0.7, power)
+			Sound.play("whoosh", 1.5, -6.0)
+		"hop":
+			w.vel = Vector2(float(st.get("vx", 0)) * dir, float(st.get("vy", -8)))
+			w.cine_fall = true
+		"rise":
+			finish_tween[winner] = {"from": w.pos, "to": w.pos + Vector2(0, -float(st.get("height", 0.3)) * w.H), "t": 0, "n": int(st.get("frames", 16))}
+		"fall":
+			w.vel = Vector2(0, 2.0)
+			w.cine_fall = true
+		"levitate":
+			finish_tween[1 - winner] = {"from": l.pos, "to": l.pos + Vector2(0, -float(st.get("height", 0.5)) * l.H), "t": 0, "n": int(st.get("frames", 40))}
+		"drop":
+			finish_tween.erase(1 - winner)
+			l.vel = Vector2(0, 12.0)
+			l.cine_fall = true
+			l.set_cine("airhit")
+		"hit", "slash", "shot":
+			var sc := float(st.get("scale", 1.0))
+			var at := chest + Vector2(randf_range(-6, 6), randf_range(-14, 10))
+			if st["do"] == "slash":
+				fx.slash(at, int(dir), sc, power)
+				Sound.play("slash", randf_range(0.9, 1.1))
+			elif st["do"] == "shot":
+				fx.beam(_fpoint(w, "hand"), at, Color(1, 0.9, 0.5), 2.0, 4)
+				Sound.play("shot", randf_range(0.9, 1.15))
+			else:
+				Sound.play("hit_h" if sc >= 1.5 else ("hit_m" if sc >= 0.9 else "hit_l"), randf_range(0.95, 1.1))
+			fx.spark(at, sc, power.lerp(Color.WHITE, 0.4))
+			l.flash = 1.0
+			if l.state != "cine" or l.cine_pose in ["hit", "hit_low"]:
+				l.set_cine("hit_low" if l.cine_pose == "hit" else "hit")
+			if not l.cine_fall and not finish_tween.has(1 - winner):
+				l.pos.x += dir * 2.0 * sc
+			shake(1.5 + sc * 2.0)
+			hud.show_combo(winner, int(hud.combo[winner]) + 1 if hud.combo_t[winner] > 0 else 1, 0.0)
+		"beam":
+			var from := _fpoint(w, str(st.get("from", "hand")))
+			var to := chest
+			if st.get("to", "target") == "sky":
+				to = from + Vector2(0, -400)
+			else:
+				to = chest + (chest - from).normalized() * 40.0
+			fx.beam(from, to, power, float(st.get("width", 6)), int(st.get("frames", 20)))
+		"rain":
+			var x: float = l.pos.x + float(st.get("spread", 0))
+			fx.beam(Vector2(x - 30, l.pos.y - 360), Vector2(x, l.pos.y - l.H * 0.4), power, 2.0, 6)
+			Sound.play("arrow", randf_range(1.0, 1.2), -6.0)
+		"ring":
+			fx.shockring(_fpoint(w, "chest"), power, float(st.get("radius", 12)), 4.0, 22)
+		"explode":
+			fx.explosion(chest, float(st.get("radius", 70)), power)
+			Sound.play("explode", 1.0)
+			hud.flash_t = 6
+		"launch":
+			finish_tween.erase(1 - winner)
+			l.vel = Vector2(float(st.get("vx", 4)) * dir, float(st.get("vy", -8)))
+			l.pos.y = minf(l.pos.y, l.floor_y - 1.0)
+			l.cine_fall = true
+			l.set_cine("airhit")
+		"breach_target":
+			fx.breach(chest, power)
+			Sound.play("teleport")
+		"vanish":
+			l.vanished = true
+			fx.spark(chest, 1.4, power)
+		"trail":
+			finish_trail = int(st.get("frames", 60))
+		"text":
+			fx.text(l.pos + Vector2(0, -l.H * 1.15), str(st.get("text", "")), power.lightened(0.3))
+		"sound":
+			Sound.play(str(st.get("id", "hit_m")))
+		"shake":
+			shake(float(st.get("amount", 8)))
+			for i in 2:
+				_rumble(i, 0.6, 0.25)
+		"zoom":
+			zoom_punch = maxf(zoom_punch, float(st.get("amount", 0.06)))
 
 
 # --- Collision & hits -------------------------------------------------------------------------
@@ -446,6 +828,8 @@ func _resolve_hits() -> void:
 
 
 func _feedback(a: Node2D, d: Node2D, res: String, atk: Dictionary, at: Vector2, is_proj: bool) -> void:
+	if tutorial != null:
+		tutorial.on_hit(a, d, res, atk)
 	var dmg := float(atk.get("damage", 0))
 	if res == "hit":
 		hit_count[a.pid] += 1
@@ -792,6 +1176,14 @@ func _update_camera() -> void:
 # --- Training ------------------------------------------------------------------------------------
 
 func _training_tick() -> void:
+	if tutorial != null:
+		for f in fighters:
+			if f.state not in ["hitstun", "airhit", "knockdown", "getup", "blockstun", "thrown"]:
+				f.health = move_toward(f.health, f.max_health, 10.0)
+			f.health = maxf(1.0, f.health)
+		tutorial.tick()
+		hud.training_info = ""
+		return
 	var opts: Dictionary = Game.training
 	for f in fighters:
 		f.show_boxes = opts.get("boxes", false)
@@ -854,7 +1246,9 @@ func open_pause() -> void:
 	get_tree().paused = true
 	Sound.play("menu_ok")
 	var items := [{"id": "resume", "label": "Resume"}, {"id": "moves", "label": "Move List"}]
-	if training:
+	if tutorial != null:
+		items += [{"id": "skip", "label": "Skip Lesson"}, {"id": "reset", "label": "Reset Position"}, {"id": "menu", "label": "Main Menu"}]
+	elif training:
 		items += [
 			{"id": "dummy", "label": "Dummy", "value": str(Game.training.get("dummy", "stand")).to_upper()},
 			{"id": "meter", "label": "Super Meter", "value": str(Game.training.get("meter", "infinite")).to_upper()},
@@ -864,7 +1258,8 @@ func open_pause() -> void:
 		]
 	else:
 		items.append({"id": "restart", "label": "Restart Match"})
-	items += [{"id": "select", "label": "Character Select"}, {"id": "menu", "label": "Main Menu"}]
+	if tutorial == null:
+		items += [{"id": "select", "label": "Character Select"}, {"id": "menu", "label": "Main Menu"}]
 	var m := _make_menu("PAUSED", items, 240.0)
 	m.position.y = 70
 	m.chosen.connect(_on_pause_choice)
@@ -904,6 +1299,9 @@ func _on_pause_choice(id: String) -> void:
 			menu.index = 5
 		"reset":
 			_reset_positions()
+			_resume()
+		"skip":
+			tutorial.skip()
 			_resume()
 		"restart":
 			Game.begin_fight()

@@ -96,6 +96,8 @@ func _process(_d: float) -> void:
 		_start(shots.pop_front())
 		return
 	wait -= 1
+	if name_s.begins_with("finishwait") and current.get("phase") == "fight":
+		current.fighters[1].health = 0.0
 	if wait <= 0:
 		var img := get_viewport().get_texture().get_image()
 		img.save_png(out_dir.path_join(name_s + ".png"))
@@ -148,6 +150,25 @@ func _start(s: String) -> void:
 				Game.training["boxes"] = true
 			current = load("res://scenes/fight/TrainingRoom.tscn" if parts[0] == "training" else "res://scenes/fight/FightStage.tscn").instantiate()
 			wait = int(parts[4]) if parts.size() > 4 else 300
+		"tutorial":
+			Game.mode = "tutorial"
+			Game.chars = ["flash", "citizen_steel"]
+			Game.cpu = [false, true]
+			Game.costume = [0, 0]
+			Game.stage_id = "star_labs"
+			Game.fight_opts = {}
+			current = load("res://scenes/fight/TrainingRoom.tscn").instantiate()
+			wait = int(parts[1]) if parts.size() > 1 else 260
+		"banter", "finishwait":
+			# Human P1 so banter and the finish prompt show.
+			Game.chars = [parts[1], parts[2]]
+			Game.stage_id = parts[3]
+			Game.costume = [0, 0]
+			Game.cpu = [false, true]
+			Game.mode = "versus_cpu"
+			Game.fight_opts = {"single_round": true}
+			current = load("res://scenes/fight/FightStage.tscn").instantiate()
+			wait = int(parts[4]) if parts.size() > 4 else 230
 		"brawl":
 			Game.brawl = {"players": Array(parts[1].split(",")), "costumes": [0, 0], "level": int(parts[2]), "continues": 0}
 			current = load("res://scenes/brawl/BrawlStage.tscn").instantiate()

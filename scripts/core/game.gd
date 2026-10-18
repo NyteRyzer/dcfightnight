@@ -49,6 +49,7 @@ var settings := {
 	"shake": true, "reduce_flash": false, "difficulty": 1,
 	"round_time": 99, "rounds": 2,
 	"rumble": true, "rumble_strength": 0.8, "deadzone": 0.45,
+	"finishers": true, "banter": true,
 }
 ## Losses in a row on the current Story chapter / Arcade fight. Each retry
 ## eases the CPU a little more (see _assist_opts).
@@ -169,6 +170,17 @@ func random_stage(include_locked := false) -> String:
 
 
 # --- Mode flows ---------------------------------------------------------------
+
+## Tutorial: Flash vs a Citizen Steel practice dummy, lesson by lesson.
+func start_tutorial() -> void:
+	mode = "tutorial"
+	chars = ["flash", "citizen_steel"]
+	cpu = [false, true]
+	costume = [0, 0]
+	stage_id = "star_labs"
+	fight_opts = {}
+	goto("training")
+
 
 ## Beat 'em up: 1 player ("brawl") or 2-player co-op ("brawl_coop").
 func choose_brawl(coop: bool) -> void:

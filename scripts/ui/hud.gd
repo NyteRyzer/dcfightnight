@@ -11,6 +11,7 @@ var trail := [1.0, 1.0]
 var announce_text := ""
 var announce_sub := ""
 var announce_t := 0
+var announce_total := 1
 var announce_col := Color(1, 0.85, 0.2)
 var banner_text := ""
 var banner_t := 0
@@ -44,6 +45,7 @@ func announce(text: String, sub: String = "", frames: int = 70, col: Color = Col
 	announce_text = text
 	announce_sub = sub
 	announce_t = frames
+	announce_total = frames
 	announce_col = col
 
 
@@ -168,7 +170,8 @@ func _draw() -> void:
 			var al := HORIZONTAL_ALIGNMENT_LEFT if i == 0 else HORIZONTAL_ALIGNMENT_RIGHT
 			var a := minf(1.0, combo_t[i] / 15.0)
 			_text(Vector2(cx, 120), "%d HITS" % combo[i], 20, Color(1, 0.85, 0.2, a), al, 4)
-			_text(Vector2(cx, 136), "%d DAMAGE" % int(combo_dmg[i]), 10, Color(1, 1, 1, a), al)
+			if combo_dmg[i] > 0.0:
+				_text(Vector2(cx, 136), "%d DAMAGE" % int(combo_dmg[i]), 10, Color(1, 1, 1, a), al)
 	# Timer.
 	draw_rect(Rect2(296, 8, 48, 28), Color(0, 0, 0, 0.85))
 	draw_rect(Rect2(296, 8, 48, 28), Color(1, 1, 1, 0.4), false, 1.0)
@@ -193,15 +196,126 @@ func _draw() -> void:
 	# Announcement.
 	if announce_t > 0:
 		var a2 := minf(1.0, announce_t / 10.0)
-		var sc := 1.0 + maxf(0.0, (announce_t - 55) / 15.0) * 0.6
+		# Pops in large and settles over the first 15 frames.
+		var elapsed := announce_total - announce_t
+		var sc := 1.0 + maxf(0.0, 1.0 - elapsed / 15.0) * 0.6 * minf(1.0, announce_total / 70.0)
 		_text(Vector2(320, 170), announce_text, int(36 * sc), Color(announce_col.r, announce_col.g, announce_col.b, a2), HORIZONTAL_ALIGNMENT_CENTER, 6)
 		if announce_sub != "":
 			_text(Vector2(320, 196), announce_sub, 12, Color(1, 1, 1, a2), HORIZONTAL_ALIGNMENT_CENTER, 3)
+	if fight.tutorial != null:
+		_draw_tutorial()
+	if fight.phase == "finish_wait":
+		_draw_finish_prompt()
+	if fight.phase == "banter":
+		_draw_speech()
 	# VS splash.
 	if vs_t > 0:
 		_draw_vs(fs)
 	if flash_t > 0 and not Game.settings.get("reduce_flash", false):
 		draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, flash_t / 12.0 * 0.6))
+
+
+## Tutorial lesson panel: title, instruction with real keys, progress pips.
+func _draw_tutorial() -> void:
+	var t = fight.tutorial
+	var cur: Dictionary = t.current()
+	var font: Font = Game.font
+	var lines: Array = []
+	var row := ""
+	for wd in t.instruction().split(" "):
+		var test: String = wd if row == "" else row + " " + wd
+		if font.get_string_size(test, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x > 380.0 and row != "":
+			lines.append(row)
+			row = wd
+		else:
+			row = test
+	lines.append(row)
+	var h := 30.0 + lines.size() * 12.0
+	draw_rect(Rect2(120, 56, 400, h), Color(0, 0, 0, 0.78))
+	draw_rect(Rect2(120, 56, 400, h), Color(1, 0.85, 0.3, 0.8), false, 1.0)
+	var head: String = "TUTORIAL COMPLETE" if t.finished else "LESSON %d/%d: %s" % [t.lesson + 1, t.LESSONS.size(), str(cur["title"]).to_upper()]
+	_text(Vector2(130, 70), head, 11, Color(1, 0.85, 0.3), HORIZONTAL_ALIGNMENT_LEFT, 2)
+	for i in lines.size():
+		draw_string(font, Vector2(130, 84 + i * 12), lines[i], HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(0.92, 0.94, 1.0))
+	if not t.finished:
+		var goal: int = int(cur["goal"])
+		for g in goal:
+			var done: bool = g < t.progress
+			var c := Vector2(508 - (goal - 1 - g) * 12, 66)
+			draw_circle(c, 4.5, Color(0, 0, 0))
+			draw_circle(c, 3.5, Color(0.4, 1, 0.5) if done else Color(0.3, 0.3, 0.38))
+
+
+## "FINISH IT!" command chips: Back, Forward, Special, lit as they are entered.
+func _draw_finish_prompt() -> void:
+	var w: Node2D = fight.fighters[fight.winner]
+	var human: bool = not Game.cpu[fight.winner] and fight.ai[fight.winner] == null
+	var right: bool = w.facing == 1
+	var labels := ["<" if right else ">", ">" if right else "<", InputManager.prompt("special", w.pid)]
+	var names := ["BACK", "FORWARD", "SPECIAL"]
+	var x0 := 320.0 - 3 * 64.0 * 0.5
+	for i in 3:
+		var done: bool = fight.finish_step > i
+		var cur: bool = fight.finish_step == i
+		var r := Rect2(x0 + i * 64.0 + 4, 208, 56, 36)
+		draw_rect(r, Color(0, 0, 0, 0.8))
+		var c := Color(1, 0.85, 0.25) if done else (Color(1, 1, 1) if cur else Color(0.5, 0.5, 0.6))
+		draw_rect(r, c, false, 2.0 if cur else 1.0)
+		_text(Vector2(r.get_center().x, 230), labels[i], 14, c, HORIZONTAL_ALIGNMENT_CENTER, 3)
+		_text(Vector2(r.get_center().x, 241), names[i], 7, c, HORIZONTAL_ALIGNMENT_CENTER, 2)
+	var left := 1.0 - float(fight.finish_t) / float(fight.FINISH_WINDOW)
+	draw_rect(Rect2(x0 + 4, 248, 184, 4), Color(0, 0, 0, 0.8))
+	draw_rect(Rect2(x0 + 4, 248, 184 * clampf(left, 0.0, 1.0), 4), Color(1, 0.3, 0.2))
+	if human:
+		draw_rect(Rect2(220, 257, 200, 13), Color(0, 0, 0, 0.7))
+		_text(Vector2(320, 267), "Enter the command for a finisher", 9, Color(0.9, 0.9, 1.0), HORIZONTAL_ALIGNMENT_CENTER, 2)
+
+
+## Speech bubble over the fighter who is talking during pre-fight banter.
+func _draw_speech() -> void:
+	var lines: Array = fight.banter_lines
+	if fight.banter_i >= lines.size():
+		return
+	var side: int = int(lines[fight.banter_i][0])
+	var text: String = str(lines[fight.banter_i][1])
+	var shown := text.substr(0, int(fight.pt * 1.5))
+	var f: Node2D = fight.fighters[clampi(side, 0, 1)]
+	var sx: float = f.pos.x - fight.cam.position.x + 320.0
+	var sy: float = f.pos.y - f.H - 22.0
+	var font: Font = Game.font
+	var words := text.split(" ")
+	var rows: Array = []
+	var cur := ""
+	for wd in words:
+		var test: String = wd if cur == "" else cur + " " + wd
+		if font.get_string_size(test, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x > 190.0 and cur != "":
+			rows.append(cur)
+			cur = wd
+		else:
+			cur = test
+	rows.append(cur)
+	var bw := 0.0
+	for rw in rows:
+		bw = maxf(bw, font.get_string_size(rw, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x)
+	bw += 16.0
+	var bh := rows.size() * 12.0 + 10.0
+	var bx := clampf(sx - bw * 0.5, 6.0, 634.0 - bw)
+	var by := maxf(56.0, sy - bh)
+	var tail := clampf(sx, bx + 10.0, bx + bw - 10.0)
+	draw_colored_polygon(PackedVector2Array([Vector2(tail - 6, by + bh - 1), Vector2(tail + 6, by + bh - 1), Vector2(sx, minf(by + bh + 12.0, sy + 6.0))]), Color(0.97, 0.97, 0.94))
+	draw_rect(Rect2(bx, by, bw, bh), Color(0.97, 0.97, 0.94))
+	draw_rect(Rect2(bx, by, bw, bh), Color(0.1, 0.1, 0.14), false, 1.0)
+	var printed := 0
+	for ri in rows.size():
+		var row: String = rows[ri]
+		var vis := clampi(shown.length() - printed, 0, row.length())
+		draw_string(font, Vector2(bx + 8, by + 15 + ri * 12), row.substr(0, vis), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(0.08, 0.08, 0.12))
+		printed += row.length() + 1
+	var nm: String = str(f.def.get("short", f.def.get("name", ""))).to_upper()
+	var nw := font.get_string_size(nm, HORIZONTAL_ALIGNMENT_LEFT, -1, 9).x + 8.0
+	draw_rect(Rect2(bx, by - 13, nw, 13), Color(0.08, 0.08, 0.12))
+	draw_string(font, Vector2(bx + 4, by - 3), nm, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, f.look.get("power", Color(1, 0.85, 0.3)).lightened(0.2))
+	_text(Vector2(320, 352), "%s: skip" % InputManager.prompt("accept"), 8, Color(0.75, 0.75, 0.85), HORIZONTAL_ALIGNMENT_CENTER, 2)
 
 
 func _draw_vs(fs: Array) -> void:

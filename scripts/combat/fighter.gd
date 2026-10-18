@@ -100,6 +100,14 @@ var last_hit_bonus := ""
 var stance_names: Array = ["idle", "idle2"]
 ## Stage-tinted rim light that separates the silhouette from the background.
 var rim := Color(0.8, 0.85, 1.0, 0.55)
+## Finisher cinematics: the "cine" state shows `cine_pose` (blended in from the
+## previous one) and is moved by the fight manager; `cine_fall` applies
+## gravity until the floor; `vanished` removes the fighter (sent through a breach).
+var cine_pose := "idle"
+var cine_prev := "idle"
+var cine_t := 0
+var cine_fall := false
+var vanished := false
 
 
 func setup(fighter_def: Dictionary, player_index: int, costume_index: int = 0) -> void:
@@ -262,7 +270,7 @@ func in_move_window(arr: Array) -> bool:
 
 
 func is_invuln(kind: String) -> bool:
-	if invuln > 0 or state in ["knockdown", "getup", "ko", "thrown", "throwing", "intro", "win", "lose"]:
+	if invuln > 0 or state in ["knockdown", "getup", "ko", "thrown", "throwing", "intro", "win", "lose", "dizzy", "cine"]:
 		return true
 	if state == "airhit" and juggle_immune:
 		return true
@@ -370,6 +378,17 @@ func set_state(s: String) -> void:
 	if s != state:
 		state = s
 		sf = 0
+
+
+## Starts (or continues) a scripted finisher pose.
+func set_cine(pose_name: String) -> void:
+	if state != "cine":
+		cine_prev = "idle" if pose_name == "idle" else pose_name
+		set_state("cine")
+	else:
+		cine_prev = cine_pose
+	cine_pose = pose_name
+	cine_t = 0
 
 
 func face_opponent() -> void:
@@ -509,8 +528,17 @@ func step() -> void:
 			_throwing()
 		"thrown":
 			_thrown()
-		"intro", "win", "lose":
+		"intro", "win", "lose", "dizzy":
 			vel = Vector2.ZERO
+		"cine":
+			cine_t += 1
+			if cine_fall:
+				vel.y += 0.7
+				pos += vel
+				if pos.y >= floor_y and vel.y > 0.0:
+					pos.y = floor_y
+					vel = Vector2.ZERO
+					cine_fall = false
 		_:
 			to_neutral()
 	_trail_update()
@@ -1042,6 +1070,12 @@ func _compute_pose() -> Dictionary:
 			return Poses.get_pose("throw_w" if sf < 18 else "throw_s")
 		"intro":
 			return Poses.blend(Poses.get_pose("super"), Poses.get_pose("idle"), clampf((sf - 40) / 20.0, 0.0, 1.0))
+		"dizzy":
+			# Staggering on the spot, waiting for the finisher.
+			var wob := (sin(frame * 0.12) + 1.0) * 0.5
+			return Poses.with_rot(Poses.blend(Poses.get_pose("hit"), Poses.get_pose("defeat"), 0.35 + 0.3 * wob), sin(frame * 0.07) * 6.0)
+		"cine":
+			return Poses.blend(Poses.get_pose(cine_prev), Poses.get_pose(cine_pose), minf(1.0, cine_t / 4.0))
 		"win":
 			return Poses.blend(Poses.get_pose("idle"), Poses.get_pose(def.get("victory_pose", "victory")), minf(1.0, sf / 12.0))
 		"lose":
@@ -1089,6 +1123,8 @@ func _move_pose() -> Dictionary:
 
 
 func _draw() -> void:
+	if vanished:
+		return
 	var gy := floor_y - pos.y
 	var sh_scale := clampf(1.0 - (floor_y - pos.y) / 300.0, 0.4, 1.0)
 	draw_set_transform(Vector2(0, gy), 0.0, Vector2(1.0, 0.22))

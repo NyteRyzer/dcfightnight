@@ -58,6 +58,13 @@ Use this alongside the automated runner (`res://tests/TestRunner.tscn`). It foll
 - [ ] Survival: health carries over (+25% between fights). The win count goes up. The CPU gets harder every 3 wins.
 - [ ] Training: the timer shows "--". Health regenerates. Dummy modes (Stand / Crouch / Jump / Block / CPU), the Hitboxes toggle and R (reset) all work. The frame-data line updates.
 
+## Finishers, tutorial and banter
+- [ ] Winning the deciding round shows FINISH IT! with Back / Forward / Special chips. Entering them in order plays the winner's finisher and announces its name. Waiting 5 seconds lets the loser collapse normally.
+- [ ] The finish command follows facing: "Back" is away from the opponent on either side of the screen.
+- [ ] CPU winners usually perform their finisher. Options > Gameplay > Finishers OFF skips the prompt.
+- [ ] Before round 1, the two fighters trade speech bubbles (scripted for rivals such as Flash vs Reverse-Flash). Confirm skips a line. Options > Gameplay > Pre-Fight Banter OFF removes it.
+- [ ] Tutorial (main menu) runs 11 lessons; each shows the real keys or buttons. The dummy attacks high, then low, in the blocking lessons. Pause > Skip Lesson works.
+
 ## Beat 'em Up
 - [ ] Beat 'em Up (solo) picks one fighter. Beat 'em Up Co-op picks two, and each controller drives its own player.
 - [ ] Up/Down walks in depth. Attacks only connect with enemies in roughly the same lane.

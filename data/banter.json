@@ -1,0 +1,217 @@
+{
+ "_doc": "Pre-fight banter shown before round 1. 'pairs' keys are the two fighter ids sorted alphabetically and joined with '|'. Otherwise each fighter says one random 'generic' line.",
+ "generic": {
+  "flash": [
+   "Let's make this quick. Well... quick for me.",
+   "I'll be done before you blink.",
+   "I really don't want to do this. But I will."
+  ],
+  "green_arrow": [
+   "You're not walking away from this.",
+   "I've trained on an island for five years. Bring it.",
+   "Let's see what you've got."
+  ],
+  "supergirl": [
+   "I'm going to hold back. A little.",
+   "Stand down. Please.",
+   "Hope is stronger than you think."
+  ],
+  "black_canary": [
+   "You're going to want earplugs.",
+   "I've heard enough out of you.",
+   "Let's keep this short. I've got a city to run."
+  ],
+  "vibe": [
+   "Okay, okay, I'm vibing a very bad future for you.",
+   "Breach, punch, quip. That's the plan.",
+   "I have a good feeling about this. Mostly."
+  ],
+  "wild_dog": [
+   "Nothing personal. Okay, a little personal.",
+   "Rules are simple: I hit, you fall.",
+   "Let's dance, tough guy."
+  ],
+  "martian_manhunter": [
+   "I sense your next move already.",
+   "There is no shame in yielding.",
+   "I will not let you harm anyone else."
+  ],
+  "citizen_steel": [
+   "Historian by day, wall of steel by night.",
+   "Fair warning: I don't bend.",
+   "This is going in the history books."
+  ],
+  "deathstroke": [
+   "You were never a challenge. Only a contract.",
+   "I've already counted your mistakes.",
+   "One eye is all I need."
+  ],
+  "reverse_flash": [
+   "I'm always one step ahead of you.",
+   "Time is on my side. It always was.",
+   "Let me show you what speed really is."
+  ],
+  "reign": [
+   "Kneel before the Worldkiller.",
+   "Your world will burn with you.",
+   "I was made for this."
+  ],
+  "vandal_savage": [
+   "I have outlived empires. I will outlive you.",
+   "Fifty thousand years of experience. And you?",
+   "Kneel, and I may let you live a century."
+  ],
+  "vigilante": [
+   "Judge, jury, and very short trial.",
+   "No masks can hide what you did.",
+   "The law let you go. I won't."
+  ],
+  "control_freak": [
+   "Places, everyone! This is the season finale!",
+   "You're about to get CANCELLED!",
+   "Ratings are about to go through the roof!"
+  ]
+ },
+ "pairs": {
+  "flash|reverse_flash": [
+   [
+    "reverse_flash",
+    "Hello, Flash. Did you miss me?"
+   ],
+   [
+    "flash",
+    "Not for a second, Thawne."
+   ]
+  ],
+  "flash|green_arrow": [
+   [
+    "green_arrow",
+    "Barry. Don't make me use the boxing glove arrow."
+   ],
+   [
+    "flash",
+    "You'd have to catch me first."
+   ]
+  ],
+  "black_canary|green_arrow": [
+   [
+    "green_arrow",
+    "Laurel, step aside."
+   ],
+   [
+    "black_canary",
+    "You taught me how to fight, Ollie. Bad idea."
+   ]
+  ],
+  "deathstroke|green_arrow": [
+   [
+    "deathstroke",
+    "Hello, kid. Still playing hero?"
+   ],
+   [
+    "green_arrow",
+    "This ends today, Slade."
+   ]
+  ],
+  "reign|supergirl": [
+   [
+    "reign",
+    "Kryptonian. Your hope dies here."
+   ],
+   [
+    "supergirl",
+    "Then you've never seen what hope can do."
+   ]
+  ],
+  "citizen_steel|vandal_savage": [
+   [
+    "vandal_savage",
+    "I've met better soldiers than you, boy."
+   ],
+   [
+    "citizen_steel",
+    "Yeah? I've read about every one of them."
+   ]
+  ],
+  "vandal_savage|vibe": [
+   [
+    "vibe",
+    "Vandal Savage. Okay. Cool cool cool. Not cool."
+   ],
+   [
+    "vandal_savage",
+    "Your fear is very... refreshing."
+   ]
+  ],
+  "vigilante|wild_dog": [
+   [
+    "vigilante",
+    "You're one bad day from being me, Rene."
+   ],
+   [
+    "wild_dog",
+    "Nah. I'm the guy who stops you."
+   ]
+  ],
+  "martian_manhunter|reign": [
+   [
+    "martian_manhunter",
+    "Your mind is a storm, Reign."
+   ],
+   [
+    "reign",
+    "Then let it drown you."
+   ]
+  ],
+  "black_canary|vigilante": [
+   [
+    "black_canary",
+    "Star City has laws. Even for you."
+   ],
+   [
+    "vigilante",
+    "Your laws keep failing, Mayor."
+   ]
+  ],
+  "control_freak|flash": [
+   [
+    "control_freak",
+    "The Flash! My ratings magnet!"
+   ],
+   [
+    "flash",
+    "Okay, this guy's actually kind of a fan."
+   ]
+  ],
+  "control_freak|supergirl": [
+   [
+    "control_freak",
+    "Supergirl! Smile for the camera!"
+   ],
+   [
+    "supergirl",
+    "I'm smiling. You won't be."
+   ]
+  ],
+  "deathstroke|wild_dog": [
+   [
+    "wild_dog",
+    "Deathstroke? Okay, nobody told me about this."
+   ],
+   [
+    "deathstroke",
+    "Nobody ever does."
+   ]
+  ],
+  "reverse_flash|vibe": [
+   [
+    "vibe",
+    "I vibed you. I always vibe you. Every. Single. Time."
+   ],
+   [
+    "reverse_flash",
+    "Then you know how this ends, Cisco."
+   ]
+  ]
+ }
+}

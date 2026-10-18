@@ -17,7 +17,7 @@ func _ready() -> void:
 	menu = MenuList.new()
 	menu.width = 200.0
 	menu.font_size = 11
-	menu.item_h = 16.0
+	menu.item_h = 14.5
 	var progress := int(Game.save.get("story_progress", 0))
 	var items := [
 		{"id": "story", "label": "Story Mode"},
@@ -32,13 +32,14 @@ func _ready() -> void:
 		{"id": "versus", "label": "Versus (2 Players)"},
 		{"id": "versus_cpu", "label": "Versus CPU"},
 		{"id": "training", "label": "Training"},
+		{"id": "tutorial", "label": "Tutorial" if Game.save.get("tutorial_done", false) else "Tutorial (start here!)"},
 		{"id": "howto", "label": "How to Play"},
 		{"id": "options", "label": "Options"},
 		{"id": "credits", "label": "Credits"},
 		{"id": "quit", "label": "Quit"},
 	]
 	menu.set_items(items)
-	menu.position = Vector2(220, 112)
+	menu.position = Vector2(220, 104)
 	add_child(menu)
 	menu.chosen.connect(_on_choice)
 	pair = randi() % pairs.size()
@@ -70,6 +71,8 @@ func _on_choice(id: String) -> void:
 			Game.choose_brawl(false)
 		"brawl_coop":
 			Game.choose_brawl(true)
+		"tutorial":
+			Game.start_tutorial()
 		"howto":
 			Game.goto("howto")
 		"options":

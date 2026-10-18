@@ -43,6 +43,7 @@ const PAGES := [
 		["Quick Rise", "Press any button while knocked down. Hold Back to roll away.", ""],
 		["Blocking", "Standing block stops jump-ins. Crouching block stops sweeps.", ""],
 		["Throw Break", "Press Throw right after being grabbed.", ""],
+		["FINISHERS", "When FINISH IT! appears, enter Back, Forward, Special.", ""],
 	]},
 	{"title": "BEAT 'EM UP MODE", "lines": [
 		["Fight through 5 levels of enemy waves with 1 or 2 players.", "", ""],

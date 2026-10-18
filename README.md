@@ -17,6 +17,9 @@ A cinematic 2D one-on-one fighting game inspired by the live-action Arrowverse. 
 | **Fighting systems** | 3-bar super meter. **Amplify** (Block during a special, 1 bar) powers up specials. **Breaker** (Forward + Block while being comboed, 2 bars) escapes combos once per round. **Counter hits** (+20%) and **punishes** (+10%) reward reads. Hard launchers into the corner **wall bounce**. **Quick rise** and **back roll** on wake-up. |
 | **Hit feel** | Weighted hitstop, camera zoom punches, screen shake, directional sword-slash sparks, motion smears on strikes, eased animation timing, KO slow-motion, controller vibration. |
 | **Modes** | Story (10 chapters across 3 acts plus a Control Freak finale), Arcade (7-fight ladder + ending), Survival, **Beat 'em Up** (1 player or 2-player co-op), Versus (2 players), Versus CPU, Training. |
+| **Finishers** | Every fighter has a stylized, hero-appropriate finisher (no gore). After the deciding round the loser staggers and **FINISH IT!** appears. Enter **Back, Forward, Special** within 5 seconds for a cinematic finishing move: Flash's *Speed Force Storm*, Green Arrow's *You Have Failed This City*, Supergirl's *Heat Vision Overdrive*, Vibe's *Breach to Nowhere*, Control Freak's *Cancelled!* and more. CPU winners use them too. You can turn them off in Options. |
+| **Tutorial** | 11 interactive lessons (moving, jumping, crouching, attacks, combos, blocking high and low, specials, throws, supers, Amplify). Each lesson shows your actual keys or buttons, and the practice dummy attacks during the blocking lessons. |
+| **Pre-fight banter** | Fighters trade lines before round 1. Iconic match-ups have scripted exchanges (Flash vs Reverse-Flash, Green Arrow vs Deathstroke, Supergirl vs Reign...). Press confirm to skip, or turn banter off in Options. |
 | **Beat 'em Up** | Side-scrolling brawler with depth lanes. 5 levels (Star City streets, Iron Heights breakout, D.E.O. siege, the Savage future, the Earth-X finale), 2–3 areas each with enemy waves, a Deathstroke mini-boss, and a roster boss at the end of every level (Vigilante, Reverse-Flash, Reign, Vandal Savage, Control Freak). Includes 3 lives per player, continues, pickups (Big Belly Burgers, medkits, Speed Force cells), scoring, a best-score save, and enemies that take turns attacking instead of all piling on. |
 | **Enemies** | 11 enemy types with their own AI styles, each in 2–4 variants with different skin tones, hair and outfits: street thugs, knife punks, Bratva enforcers, H.I.V.E. gunners, Iron Heights convicts, rogue metahumans, League assassins, A.R.G.U.S. troopers, Worldkiller cultists, Earth-X soldiers and Control Freak's TV-head minions. |
 | **Training** | Dummy modes (stand / crouch / jump / block / CPU), infinite meter, hitbox display, health regen, reset position, frame data readout, combo counter, move list. |
@@ -158,6 +161,8 @@ godot --headless --path . --fixed-fps 60 res://tests/FlowTest.tscn              
 godot --headless --path . --fixed-fps 60 res://tests/BrawlTest.tscn             # beat 'em up soak: AI plays all 5 levels solo and co-op
 godot --headless --path . --fixed-fps 60 res://tests/BrawlTest.tscn -- quick    # first 2 levels in co-op (~1 min)
 godot --headless --path . --fixed-fps 60 res://tests/DifficultyCheck.tscn       # win rates vs Green Arrow at each CPU setting
+godot --headless --path . --fixed-fps 60 res://tests/FinisherCheck.tscn         # plays all 14 finishers
+godot --headless --path . --fixed-fps 60 res://tests/TutorialCheck.tscn         # completes every tutorial lesson with simulated input
 ```
 
 `FlowTest` drives every mode through real scene changes by pressing confirm and forcing round results. It covers Story (all chapters, the champion select, unlocks and credits), Arcade (7 fights and the ending), Survival, Versus, Training and Beat 'em Up (level clear, game over and continue). It restores your save file when it finishes.
@@ -190,7 +195,6 @@ There's a manual checklist in [`docs/TEST_CHECKLIST.md`](docs/TEST_CHECKLIST.md)
 - Villains are playable in Versus, Arcade, Survival and Training (each with an Arcade ending). Story Mode still follows the heroes.
 - There are no voice clips. The announcer uses synthesized musical stingers on the Voice bus.
 - Online play isn't implemented (a stretch goal in the bible). Local two-player works.
-- The optional stylized finishers from the bible aren't implemented.
 - Two players on one keyboard is cramped. A gamepad for Player 2 is recommended.
 
 ## Licensing

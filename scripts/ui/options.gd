@@ -74,6 +74,8 @@ func _build() -> void:
 				{"id": "difficulty", "label": "CPU Difficulty", "value": diff[clampi(int(s["difficulty"]), 0, 4)]},
 				{"id": "round_time", "label": "Round Timer", "value": "INFINITE" if int(s["round_time"]) <= 0 else str(s["round_time"])},
 				{"id": "rounds", "label": "Rounds to Win", "value": str(s["rounds"])},
+				{"id": "finishers", "label": "Finishers", "value": _onoff(s["finishers"])},
+				{"id": "banter", "label": "Pre-Fight Banter", "value": _onoff(s["banter"])},
 				{"id": "back", "label": "Back"},
 			]
 		"controls":
@@ -127,7 +129,7 @@ func _on_adjust(id: String, dir: int) -> void:
 			s[id] = clampf(snappedf(float(s[id]) + dir * 0.1, 0.1), 0.0, 1.0)
 		"deadzone":
 			s[id] = clampf(snappedf(float(s[id]) + dir * 0.05, 0.05), 0.1, 0.9)
-		"mute", "fullscreen", "integer_scale", "shake", "reduce_flash", "rumble":
+		"mute", "fullscreen", "integer_scale", "shake", "reduce_flash", "rumble", "finishers", "banter":
 			s[id] = not s[id]
 		"window_scale":
 			s[id] = clampi(int(s[id]) + dir, 1, 4)
