@@ -16,11 +16,14 @@ var rng := RandomNumberGenerator.new()
 var _amp_tried := false
 var _prev_b := false
 
-const REACT := [30, 18, 11, 6, 3]
-const BLOCK_P := [0.2, 0.45, 0.68, 0.86, 0.95]
-const AGGRO := [0.35, 0.5, 0.62, 0.75, 0.85]
-const COMBO_P := [0.15, 0.45, 0.75, 0.92, 1.0]
-const ANTI_AIR_P := [0.1, 0.35, 0.6, 0.8, 0.9]
+# Per difficulty: Easy, Normal, Hard, Expert, Legend.
+const REACT := [36, 23, 13, 7, 3]
+const BLOCK_P := [0.12, 0.3, 0.58, 0.82, 0.95]
+const AGGRO := [0.3, 0.45, 0.58, 0.72, 0.85]
+const COMBO_P := [0.1, 0.3, 0.62, 0.88, 1.0]
+const ANTI_AIR_P := [0.05, 0.22, 0.5, 0.75, 0.9]
+## Damage the CPU deals to a human player at each difficulty.
+const DAMAGE := [0.72, 0.85, 1.0, 1.0, 1.0]
 
 
 func setup(f: Node2D, o: Node2D, m: Node, lvl: int) -> void:

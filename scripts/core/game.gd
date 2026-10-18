@@ -46,10 +46,13 @@ var training := {"dummy": "stand", "meter": "infinite", "boxes": false, "regen":
 var settings := {
 	"music_vol": 0.6, "sfx_vol": 0.8, "voice_vol": 0.8, "mute": false,
 	"fullscreen": false, "window_scale": 2, "integer_scale": true,
-	"shake": true, "reduce_flash": false, "difficulty": 2,
+	"shake": true, "reduce_flash": false, "difficulty": 1,
 	"round_time": 99, "rounds": 2,
 	"rumble": true, "rumble_strength": 0.8, "deadzone": 0.45,
 }
+## Losses in a row on the current Story chapter / Arcade fight. Each retry
+## eases the CPU a little more (see _assist_opts).
+var retries := 0
 var save := {"story_done": false, "arcade_done": false, "story_progress": 0}
 
 
@@ -204,6 +207,7 @@ func begin_fight() -> void:
 ## Arcade: pick a fighter, beat 6 random opponents, then Control Freak.
 func start_arcade(char_id: String) -> void:
 	mode = "arcade"
+	retries = 0
 	arcade = {"char": char_id, "ladder": [], "index": 0}
 	costume_pref[1] = 0
 	var pool := hero_ids()
@@ -220,11 +224,29 @@ func _arcade_fight() -> void:
 	chars = [arcade["char"], step["opponent"]]
 	cpu = [false, true]
 	stage_id = step["stage"]
+	# The first two arcade fights are a level easier as a warm-up.
+	var offset := -1 if arcade["index"] < 2 else 0
 	fight_opts = {"boss": step.get("boss", false), "ladder_label": "ARCADE %d/%d" % [arcade["index"] + 1, arcade["ladder"].size()]}
+	fight_opts.merge(_assist_opts(offset))
 	begin_fight()
 
 
+## CPU level and damage for Story / Arcade. `offset` shifts the level for
+## early chapters; every retry after a loss lowers it one more step, and from
+## the third retry on the CPU also hits softer.
+func _assist_opts(offset: int) -> Dictionary:
+	var base := int(settings.get("difficulty", 1))
+	var lvl := clampi(base + offset - retries, 0, 4)
+	var opts := {"cpu_level": lvl}
+	if retries >= 3:
+		opts["cpu_damage"] = maxf(0.6, 1.0 - 0.1 * (retries - 2))
+	if retries > 0:
+		toast("Assist: CPU eased after %d loss%s" % [retries, "" if retries == 1 else "es"])
+	return opts
+
+
 func arcade_won() -> void:
+	retries = 0
 	arcade["index"] += 1
 	if arcade["index"] >= arcade["ladder"].size():
 		save["arcade_done"] = true
@@ -271,6 +293,7 @@ func survival_won(health_ratio: float) -> void:
 
 func start_story(from_chapter: int = 0) -> void:
 	mode = "story"
+	retries = 0
 	story_index = from_chapter
 	if from_chapter == 0:
 		story_cards = []
@@ -313,10 +336,13 @@ func story_fight() -> void:
 	stage_id = ch["stage"]
 	fight_opts = {"single_round": not ch.get("boss", false), "boss": ch.get("boss", false), "glitch": ch.get("glitch", false),
 		"ladder_label": "%s - %s" % [ch.get("act", ""), ch.get("title", "")]}
+	# Act I eases players in one difficulty level below their setting.
+	fight_opts.merge(_assist_opts(int(ch.get("cpu_offset", -1 if ch.get("act", "") == "ACT I" else 0))))
 	begin_fight()
 
 
 func story_won() -> void:
+	retries = 0
 	var ch := story_chapter()
 	story_cards = [{"title": ch.get("title", ""), "subtitle": "AFTERMATH", "lines": ch.get("after", [])}]
 	story_index += 1
@@ -341,6 +367,12 @@ func load_settings() -> void:
 		return
 	for k in settings.keys():
 		settings[k] = cfg.get_value("settings", k, settings[k])
+	# Older builds defaulted the CPU to HARD (2). Move players who never
+	# changed it to NORMAL once.
+	if int(cfg.get_value("meta", "version", 1)) < 2:
+		if int(settings["difficulty"]) == 2:
+			settings["difficulty"] = 1
+		save_settings()
 	var keys = cfg.get_value("input", "keys", null)
 	if keys is Dictionary:
 		InputManager.import_keys(keys)
@@ -348,6 +380,7 @@ func load_settings() -> void:
 
 func save_settings() -> void:
 	var cfg := ConfigFile.new()
+	cfg.set_value("meta", "version", 2)
 	for k in settings:
 		cfg.set_value("settings", k, settings[k])
 	cfg.set_value("input", "keys", InputManager.export_keys())

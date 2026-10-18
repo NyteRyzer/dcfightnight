@@ -100,13 +100,16 @@ func _ready() -> void:
 	if training:
 		round_time = 0
 		rounds_to_win = 99
-	var level: int = Game.fight_opts.get("cpu_level", int(Game.settings.get("difficulty", 2)))
+	var level: int = Game.fight_opts.get("cpu_level", int(Game.settings.get("difficulty", 1)))
 	if boss:
 		level = mini(4, level + 1)
 	for i in 2:
 		if Game.cpu[i] or autoplay:
 			var brain := CpuAI.new()
 			brain.setup(fighters[i], fighters[1 - i], self, level)
+			# On lower difficulties the CPU hits a human player softer.
+			if not Game.cpu[1 - i] and not autoplay and not training:
+				fighters[i].dmg_mult = CpuAI.DAMAGE[clampi(level, 0, 4)] * float(Game.fight_opts.get("cpu_damage", 1.0))
 			if training and i == 1:
 				brain.mode = Game.training.get("dummy", "stand")
 			ai[i] = brain
@@ -561,6 +564,9 @@ func incoming_projectile(target: Node2D, within: float):
 
 func spawn_projectile(src: Node2D, d: Dictionary, index: int = 0) -> void:
 	var owner_f := src
+	if src.dmg_mult != 1.0:
+		d = d.duplicate()
+		d["damage"] = float(d.get("damage", 0)) * src.dmg_mult
 	var off: Array = d.get("offset", [0.4, -0.8])
 	var power: Color = owner_f.look.get("power", Color.WHITE)
 	if d.has("rain"):
@@ -989,6 +995,7 @@ func _on_result_choice(id: String) -> void:
 		"arcade_next":
 			Game.arcade_won()
 		"arcade_retry":
+			Game.retries += 1
 			Game.arcade_retry()
 		"survival_next":
 			Game.survival_won(fighters[0].health / fighters[0].max_health)
@@ -997,4 +1004,5 @@ func _on_result_choice(id: String) -> void:
 		"story_next":
 			Game.story_won()
 		"story_retry":
+			Game.retries += 1
 			Game.story_fight()

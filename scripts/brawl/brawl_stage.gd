@@ -216,7 +216,7 @@ func _spawn_enemy(type_id: String) -> void:
 	e.lod = true
 	e.rim_enabled = false
 	# Grunts hit softer than versus fighters; difficulty 0-4 scales 0.5x-0.82x.
-	e.dmg_mult = 0.5 + 0.08 * int(Game.settings.get("difficulty", 2))
+	e.dmg_mult = 0.5 + 0.08 * int(Game.settings.get("difficulty", 1))
 	var side := -1.0 if randf() < 0.3 else 1.0
 	e.pos = Vector2(cam_x + side * (HALF_VIEW + 40.0), 0)
 	e.depth = randf_range(0.0, DEPTH_MAX)
@@ -224,7 +224,7 @@ func _spawn_enemy(type_id: String) -> void:
 	e.pos.y = e.floor_y
 	e.facing = -int(side)
 	var ai := BrawlAI.new()
-	ai.setup(e, self, str(def.get("ai", "brawler")), int(Game.settings.get("difficulty", 2)))
+	ai.setup(e, self, str(def.get("ai", "brawler")), int(Game.settings.get("difficulty", 1)))
 	ai_of[e] = ai
 	e.set_meta("npc", type_id)
 	e.set_meta("score", int(def.get("score", 100)))
@@ -244,7 +244,7 @@ func _spawn_boss(fighter_id: String, health: float, line: String) -> Node2D:
 	b.pos.y = b.floor_y
 	b.facing = -1
 	var ai := BrawlAI.new()
-	ai.setup(b, self, "boss", mini(4, int(Game.settings.get("difficulty", 2)) + 1))
+	ai.setup(b, self, "boss", mini(4, int(Game.settings.get("difficulty", 1)) + 1))
 	ai_of[b] = ai
 	b.set_meta("score", 5000)
 	b.set_meta("boss", true)
