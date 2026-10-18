@@ -16,12 +16,18 @@ A cinematic 2D one-on-one fighting game inspired by the live-action Arrowverse. 
 | **Combat** | Frame-based (60 Hz). Light/medium/heavy attacks, crouching and air attacks, chains, special cancels, block (high/low), throws and throw breaks. Also dashes, 3 specials + 1 super per fighter, projectiles and clashes, armor, invulnerability, counters, teleports, juggles with limits and combo damage scaling. |
 | **Fighting systems** | 3-bar super meter. **Amplify** (Block during a special, 1 bar) powers up specials. **Breaker** (Forward + Block while being comboed, 2 bars) escapes combos once per round. **Counter hits** (+20%) and **punishes** (+10%) reward reads. Hard launchers into the corner **wall bounce**. **Quick rise** and **back roll** on wake-up. |
 | **Hit feel** | Weighted hitstop, camera zoom punches, screen shake, directional sword-slash sparks, motion smears on strikes, eased animation timing, KO slow-motion, controller vibration. |
-| **Modes** | Story (10 chapters across 3 acts plus a Control Freak finale), Arcade (7-fight ladder + ending), Survival, Versus (2 players), Versus CPU, Training. |
+| **Modes** | Story (10 chapters across 3 acts plus a Control Freak finale), Arcade (7-fight ladder + ending), Survival, **Beat 'em Up** (1 player or 2-player co-op), Versus (2 players), Versus CPU, Training. |
+| **Beat 'em Up** | Side-scrolling brawler with depth lanes. 5 levels (Star City streets, Iron Heights breakout, D.E.O. siege, the Savage future, the Earth-X finale), 2–3 areas each with enemy waves, a Deathstroke mini-boss, and a roster boss at the end of every level (Vigilante, Reverse-Flash, Reign, Vandal Savage, Control Freak). Includes 3 lives per player, continues, pickups (Big Belly Burgers, medkits, Speed Force cells), scoring, a best-score save, and enemies that take turns attacking instead of all piling on. |
+| **Enemies** | 11 enemy types with their own AI styles, each in 2–4 variants: street thugs, knife punks, Bratva enforcers, H.I.V.E. gunners, Iron Heights convicts, rogue metahumans, League assassins, A.R.G.U.S. troopers, Worldkiller cultists, Earth-X soldiers and Control Freak's TV-head minions. |
 | **Training** | Dummy modes (stand / crouch / jump / block / CPU), infinite meter, hitbox display, health regen, reset position, frame data readout, combo counter, move list. |
 | **CPU** | 5 difficulty levels. It blocks, anti-airs, zones with projectiles, confirms combos, punishes whiffs, amplifies specials, uses Breakers and supers. |
 | **Controllers** | Full gamepad support: hot-plug with on-screen notices, automatic assignment, any controller works for Player 1 in single-player modes, button remapping per player, vibration (with strength setting), stick deadzone setting, hold-to-repeat menu navigation, prompts that switch between keyboard and controller (Xbox / PlayStation names), and auto-pause if a player's controller disconnects mid-fight. |
 | **Options** | Audio (music / effects / announcer, mute), Video & Accessibility (fullscreen, window scale, crisp integer scaling, screen shake, reduce flashing), Gameplay (difficulty, round timer, rounds to win), Controls (keyboard and controller remapping for both players, swap controllers, vibration, deadzone). Settings persist. |
 | **Audio** | All sound effects are synthesized at startup. Music comes from a live step sequencer, with tracks for menu, select, fight (with a variation per stage), survival, boss, story and victory. |
+
+![Beat 'em Up mode: The Flash fighting street thugs in Star City](docs/screenshot_brawl.png)
+
+![The 11 beat 'em up enemy types](docs/screenshot_enemies.png)
 
 ### Character art
 Fighters are 158–182 px tall on a 640×360 pixel canvas, so each one is roughly **half the screen height**. That's similar in scale to a classic Mortal Kombat fighter. The canvas is upscaled with nearest-neighbor filtering (2× in a 1280×720 window, 3× at 1080p fullscreen), so pixels stay crisp.
@@ -78,9 +84,12 @@ All three presets can be exported from any OS. Settings and saves go to the stan
 
 On keyboards without a numpad (laptops, Mac keyboards), Player 2 uses the backup keys shown in brackets.
 
-**Controllers** are detected automatically, including when you plug them in mid-game. In single-player modes (Story, Arcade, Survival, Versus CPU, Training) *any* connected controller controls Player 1. In 2-player Versus, the first controller is Player 1 and the second is Player 2. You can swap them in **Options → Controls & Controllers**, and remap keyboard keys and controller buttons for each player there too.
+**Controllers** are detected automatically, including when you plug them in mid-game. In single-player modes (Story, Arcade, Survival, Versus CPU, Training) *any* connected controller controls Player 1. In 2-player Versus and Beat 'em Up Co-op, the first controller is Player 1 and the second is Player 2. You can swap them in **Options → Controls & Controllers**, and remap keyboard keys and controller buttons for each player there too.
 
 **Menus:** D-pad, left stick, arrows or WASD to move (hold to scroll). Confirm with **A** / Enter / J. Go back with **B** / Esc / K. On character select, press **Y** (or U on the keyboard) to cycle through a fighter's suits. The main menu has a **How to Play** page.
+
+### Beat 'em Up controls
+Same buttons as versus, with these changes: **Up / Down** walk into and out of the screen (you can only hit enemies in your lane), the **Throw** button jumps, or grabs an enemy if one is right next to you, and **Light + Heavy** together fires your super when the meter is full. Block, Amplify and Breaker work the same as in versus. Clear each area, then follow the **GO** arrow to the right.
 
 ### Command list (all fighters)
 - **Special:** neutral, toward the opponent, or away from the opponent + Special gives three different special moves.
@@ -103,6 +112,7 @@ scenes/
   ui/        MainMenu, CharacterSelect, StageSelect, Options, HowToPlay, Credits
   fight/     FightStage, TrainingRoom, Fighter, HUD
   story/     StoryScene
+  brawl/     BrawlStage
 scripts/
   core/      data.gd (data loader + validation), game.gd (modes, settings, save), input_manager.gd
   combat/    fighter.gd (state machine), rig.gd (procedural pixel-art renderer), poses.gd,
@@ -111,9 +121,12 @@ scripts/
   arenas/    arena.gd (all 11 parallax stages)
   ui/        hud.gd, menu_list.gd, portrait.gd and menu screens
   story/     story_scene.gd
+  brawl/     brawl_stage.gd (beat 'em up manager: waves, depth lanes, co-op, bosses), brawl_ai.gd, brawl_hud.gd
   audio/     sound_manager.gd (SFX synthesis + music sequencer)
 data/
   roster.json, stages.json, story.json
+  npcs.json   beat 'em up enemy types (stats, AI style, look and variants)
+  brawl.json  beat 'em up levels (areas, waves, mini-bosses, bosses)
   fighters/*.json   one file per fighter: stats, look, alternate costumes, moves, quotes, ending
   moves/base_normals.json   shared normal moves that fighters override
 tests/       TestRunner + FlowTest (automated), RenderCheck (art validation), Screenshot (dev helper)
@@ -141,9 +154,11 @@ godot --headless --path . --import          # first time only
 godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn            # full run (~20 min)
 godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn -- quick   # 28 matchups (~3 min)
 godot --headless --path . --fixed-fps 60 res://tests/FlowTest.tscn              # end-to-end mode flows (~1 min)
+godot --headless --path . --fixed-fps 60 res://tests/BrawlTest.tscn             # beat 'em up soak: AI plays all 5 levels solo and co-op
+godot --headless --path . --fixed-fps 60 res://tests/BrawlTest.tscn -- quick    # first 2 levels in co-op (~1 min)
 ```
 
-`FlowTest` drives every mode through real scene changes by pressing confirm and forcing round results. It covers Story (all chapters, the champion select, unlocks and credits), Arcade (7 fights and the ending), Survival, Versus and Training. It restores your save file when it finishes.
+`FlowTest` drives every mode through real scene changes by pressing confirm and forcing round results. It covers Story (all chapters, the champion select, unlocks and credits), Arcade (7 fights and the ending), Survival, Versus, Training and Beat 'em Up (level clear, game over and continue). It restores your save file when it finishes.
 
 The runner checks for:
 - data validation errors

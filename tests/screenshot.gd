@@ -2,6 +2,8 @@ extends Node
 ## Dev helper: renders scenes and saves PNG screenshots.
 ## xvfb-run godot --path . --rendering-driver opengl3 res://tests/Screenshot.tscn -- <out_dir> [shots...]
 ## shots: menu select stage fight:<p1>:<p2>:<stage>:<frames> story training
+##   big:<zoom>:<id[@costume[@pose]]>...  (prefix an id with ~ for an NPC: ~thug@<variant>)
+##   brawl:<p1[,p2]>:<level>:<frames>
 
 var out_dir := "user://shots"
 var shots: Array = []
@@ -21,14 +23,22 @@ class BigSheet extends Node2D:
 		draw_rect(Rect2(0, 0, 640, 360), Color(0.3, 0.32, 0.38))
 		for i in ids.size():
 			var parts: PackedStringArray = str(ids[i]).split("@")
-			var f: Dictionary = Data.fighter(parts[0])
-			var look: Dictionary = f["look"]
-			if parts.size() > 1 and f.has("costumes"):
-				look = f["costumes"][int(parts[1])]["look"]
+			var f: Dictionary
+			var look: Dictionary
+			if parts[0].begins_with("~"):
+				f = Data.npcs[parts[0].substr(1)]
+				look = f["look"]
+				if parts.size() > 1 and int(parts[1]) < f["variants"].size():
+					look = f["variants"][int(parts[1])]
+			else:
+				f = Data.fighter(parts[0])
+				look = f["look"]
+				if parts.size() > 1 and f.has("costumes"):
+					look = f["costumes"][int(parts[1])]["look"]
 			var pose_name: String = parts[2] if parts.size() > 2 else "idle"
 			var x := 640.0 / ids.size() * (i + 0.5)
 			draw_set_transform(Vector2(x, 350), 0.0, Vector2(zoom, zoom))
-			Rig.draw(self, Vector2.ZERO, 1, Poses.get_pose(pose_name), look, float(f["height"]))
+			Rig.draw(self, Vector2.ZERO, 1, Poses.get_pose(pose_name), look, float(look.get("height", f["height"])))
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
@@ -118,6 +128,12 @@ func _start(s: String) -> void:
 				Game.training["boxes"] = true
 			current = load("res://scenes/fight/TrainingRoom.tscn" if parts[0] == "training" else "res://scenes/fight/FightStage.tscn").instantiate()
 			wait = int(parts[4]) if parts.size() > 4 else 300
+		"brawl":
+			Game.brawl = {"players": Array(parts[1].split(",")), "costumes": [0, 0], "level": int(parts[2]), "continues": 0}
+			current = load("res://scenes/brawl/BrawlStage.tscn").instantiate()
+			wait = int(parts[3]) if parts.size() > 3 else 600
 	add_child(current)
+	if parts[0] == "brawl":
+		current.enable_autoplay()
 	if parts[0] == "fight":
 		current.enable_autoplay()

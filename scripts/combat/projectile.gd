@@ -22,10 +22,16 @@ var alive := true
 var delay := 0
 var origin := Vector2.ZERO
 var detonated := false
+var floor_y := FLOOR_Y
+var depth := 0.0
+var team := 0
 
 
 func setup(src: Node2D, d: Dictionary, start: Vector2, dir: int, col: Color) -> void:
 	owner_fighter = src
+	floor_y = float(src.floor_y)
+	depth = float(src.depth)
+	team = int(src.team)
 	data = d
 	kind = d.get("kind", "bolt")
 	facing = dir
@@ -75,9 +81,9 @@ func step() -> void:
 	vel.y += gravity
 	pos += vel
 	if data.get("ground", false):
-		pos.y = FLOOR_Y - size.y * 0.5
-	if pos.y + size.y * 0.5 >= FLOOR_Y and vel.y > 0 and not data.get("ground", false):
-		pos.y = FLOOR_Y - size.y * 0.5
+		pos.y = floor_y - size.y * 0.5
+	if pos.y + size.y * 0.5 >= floor_y and vel.y > 0 and not data.get("ground", false):
+		pos.y = floor_y - size.y * 0.5
 		alive = false
 	if age > life:
 		alive = false
@@ -93,7 +99,7 @@ func _draw() -> void:
 	if delay > 0:
 		# Warning marker where a rain projectile will fall.
 		if age % 6 < 3:
-			draw_rect(Rect2(-6, FLOOR_Y - pos.y - 3, 12, 3), Color(color.r, color.g, color.b, 0.7))
+			draw_rect(Rect2(-6, floor_y - pos.y - 3, 12, 3), Color(color.r, color.g, color.b, 0.7))
 		return
 	var f := facing
 	var t := float(age)

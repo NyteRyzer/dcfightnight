@@ -14,6 +14,7 @@ const SCENES := {
 	"options": "res://scenes/ui/Options.tscn",
 	"credits": "res://scenes/ui/Credits.tscn",
 	"howto": "res://scenes/ui/HowToPlay.tscn",
+	"brawl": "res://scenes/brawl/BrawlStage.tscn",
 }
 
 var font: Font
@@ -37,6 +38,8 @@ var story_champion := ""
 ## Cards for StoryScene: [{title, subtitle, lines: [[speaker, text], ...]}]
 var story_cards: Array = []
 var story_next := "menu"
+## Beat 'em up run: {players: [ids], costumes: [..], level, continues}
+var brawl := {"players": ["flash"], "costumes": [0, 0], "level": 0, "continues": 0}
 
 var training := {"dummy": "stand", "meter": "infinite", "boxes": false, "regen": true}
 
@@ -114,7 +117,7 @@ func _setup_theme() -> void:
 func goto(scene_key: String) -> void:
 	get_tree().paused = false
 	# Outside two-player versus, any controller can drive Player 1.
-	InputManager.set_shared(mode != "versus")
+	InputManager.set_shared(mode not in ["versus", "brawl_coop"])
 	var path: String = SCENES.get(scene_key, scene_key)
 	get_tree().change_scene_to_file.call_deferred(path)
 
@@ -163,6 +166,20 @@ func random_stage(include_locked := false) -> String:
 
 
 # --- Mode flows ---------------------------------------------------------------
+
+## Beat 'em up: 1 player ("brawl") or 2-player co-op ("brawl_coop").
+func choose_brawl(coop: bool) -> void:
+	mode = "brawl_coop" if coop else "brawl"
+	cpu = [false, false]
+	goto("select")
+
+
+func start_brawl(ids: Array) -> void:
+	brawl = {"players": ids.duplicate(), "costumes": costume_pref.duplicate(), "level": 0, "continues": 0}
+	if ids.size() > 1 and ids[0] == ids[1] and brawl["costumes"][0] == brawl["costumes"][1]:
+		brawl["costumes"][1] = (brawl["costumes"][0] + 1) % Data.fighter(ids[1])["costumes"].size()
+	goto("brawl")
+
 
 func start_versus(p2_cpu: bool) -> void:
 	mode = "versus_cpu" if p2_cpu else "versus"

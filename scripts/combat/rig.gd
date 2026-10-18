@@ -62,6 +62,17 @@ const HOCKEY := [Vector2(0.12, -0.86), Vector2(0.6, -0.83), Vector2(0.88, -0.46)
 	Vector2(0.7, 0.76), Vector2(0.25, 0.73), Vector2(0.05, 0.1)]
 const REIGN_MASK := [Vector2(0.05, -0.98), Vector2(0.6, -0.88), Vector2(0.9, -0.48), Vector2(0.99, -0.06), Vector2(0.6, 0.03),
 	Vector2(0.3, -0.08), Vector2(0.02, -0.42)]
+const MOHAWK := [Vector2(-0.75, -0.6), Vector2(-0.55, -1.25), Vector2(-0.15, -1.38), Vector2(0.35, -1.3), Vector2(0.62, -0.95),
+	Vector2(0.45, -0.88), Vector2(0.0, -0.98), Vector2(-0.45, -0.85)]
+const BEANIE := [Vector2(-0.98, -0.12), Vector2(-0.95, -0.7), Vector2(-0.55, -1.15), Vector2(0.05, -1.25), Vector2(0.55, -1.08),
+	Vector2(0.85, -0.66), Vector2(0.9, -0.35), Vector2(0.45, -0.4), Vector2(-0.3, -0.3)]
+const CAP := [Vector2(-0.95, -0.2), Vector2(-0.88, -0.75), Vector2(-0.4, -1.12), Vector2(0.2, -1.12), Vector2(0.7, -0.82),
+	Vector2(0.85, -0.5), Vector2(1.35, -0.45), Vector2(1.3, -0.33), Vector2(0.4, -0.35), Vector2(-0.4, -0.2)]
+const ARMY := [Vector2(-1.1, -0.05), Vector2(-1.0, -0.7), Vector2(-0.55, -1.18), Vector2(0.1, -1.25), Vector2(0.62, -1.05),
+	Vector2(0.95, -0.6), Vector2(1.08, -0.3), Vector2(0.95, -0.25), Vector2(0.2, -0.35), Vector2(-0.6, -0.1)]
+const SHADES := [Vector2(0.28, -0.34), Vector2(0.95, -0.32), Vector2(0.92, -0.06), Vector2(0.62, -0.03), Vector2(0.5, -0.16),
+	Vector2(0.3, -0.12)]
+const TV_BOX := [Vector2(-1.15, -1.15), Vector2(1.15, -1.15), Vector2(1.15, 0.75), Vector2(-1.15, 0.75)]
 const BEARD := [Vector2(-0.05, 0.22), Vector2(0.5, 0.28), Vector2(0.82, 0.34), Vector2(0.86, 0.55), Vector2(0.66, 0.86),
 	Vector2(0.3, 0.97), Vector2(-0.05, 0.82), Vector2(-0.28, 0.5)]
 const GOATEE := [Vector2(0.55, 0.45), Vector2(0.86, 0.42), Vector2(0.82, 0.72), Vector2(0.6, 0.76)]
@@ -307,8 +318,9 @@ static func _part(cx: Dictionary, poly: PackedVector2Array, col: Color, ld: Vect
 		_fill(ci, sp, _c(_shadow(col), o), false)
 		for p in _clip(poly, center - ld * hw * 0.05, ld):
 			_fill(ci, _tp(cx, p), _c(col, o))
-		for p in _clip(poly, center + ld * hw * 0.62, ld):
-			_fill(ci, _tp(cx, p), _c(_hilite(col), o))
+		if not o.get("lod", false):
+			for p in _clip(poly, center + ld * hw * 0.62, ld):
+				_fill(ci, _tp(cx, p), _c(_hilite(col), o))
 	if outline:
 		var cl := sp.duplicate()
 		cl.append(sp[0])
@@ -833,12 +845,15 @@ static func _head(cx: Dictionary, j: Dictionary, look: Dictionary, r: float, pos
 	if style == "hood" or style == "visor" or style == "prometheus":
 		var hood := _col(look, "hood", Color(0.2, 0.45, 0.2))
 		_part(cx, _hpoly(c, r, a, HOOD_BACK), hood.darkened(0.12), ld, c, r * 1.2)
+	if style == "tv":
+		_tv_head(cx, c, r, a, look)
+		return
 	# Skull / face.
 	_part(cx, _hpoly(c, r, a, HEAD), skin, ld, c, r)
 	if solid:
 		return
 	# Ear.
-	if style in ["short", "long", "wavy", "slick", "bald", "shaggy"]:
+	if style in ["short", "long", "wavy", "slick", "bald", "shaggy", "mohawk", "shaved"]:
 		_part(cx, _circle(_hp(c, r, a, Vector2(-0.18, 0.04)), r * 0.2, 6), skin.darkened(0.08), ld, _hp(c, r, a, Vector2(-0.18, 0.04)), r * 0.2)
 	# Facial features.
 	var eye := _hp(c, r, a, Vector2(0.56, -0.14))
@@ -874,6 +889,15 @@ static func _head(cx: Dictionary, j: Dictionary, look: Dictionary, r: float, pos
 			_hair(cx, _hpoly(c, r, a, HAIR_SHAGGY), hair, c, r)
 		"bald":
 			pass
+		"shaved":
+			var stub := hair
+			stub.a = 0.45
+			_flat(cx, _hpoly(c, r, a, HAIR_SLICK), stub)
+		"mohawk":
+			var side := hair
+			side.a = 0.35
+			_flat(cx, _hpoly(c, r, a, HAIR_SLICK), side)
+			_hair(cx, _hpoly(c, r, a, MOHAWK), hair, _hp(c, r, a, Vector2(0, -1.0)), r * 0.4)
 
 	# Masks / face coverings.
 	match face:
@@ -912,6 +936,22 @@ static func _head(cx: Dictionary, j: Dictionary, look: Dictionary, r: float, pos
 			_line(cx, _hp(c, r, a, Vector2(0.45, -0.2)), _hp(c, r, a, Vector2(-0.8, -0.45)), Color(0.05, 0.05, 0.06), 1.0)
 		"reign":
 			_part(cx, _hpoly(c, r, a, REIGN_MASK), mask, ld, eye, r * 0.4)
+		"shades":
+			_part(cx, _hpoly(c, r, a, SHADES), _col(look, "mask", Color(0.06, 0.06, 0.08)), ld, eye, r * 0.3)
+			_line(cx, _hp(c, r, a, Vector2(0.55, -0.28)), _hp(c, r, a, Vector2(0.75, -0.27)), Color(0.75, 0.85, 1.0, 0.8), 1.0)
+			_line(cx, _hp(c, r, a, Vector2(0.3, -0.25)), _hp(c, r, a, Vector2(-0.3, -0.2)), Color(0.06, 0.06, 0.08), 1.0)
+
+	# Hats.
+	var hat_col := _col(look, "hat_color", Color(0.2, 0.2, 0.22))
+	match str(look.get("hat", "")):
+		"beanie":
+			_part(cx, _hpoly(c, r, a, BEANIE), hat_col, ld, c, r)
+			_line(cx, _hp(c, r, a, Vector2(-0.95, -0.25)), _hp(c, r, a, Vector2(0.88, -0.45)), _shadow(hat_col), 2.0)
+		"cap":
+			_part(cx, _hpoly(c, r, a, CAP), hat_col, ld, c, r)
+		"army":
+			_part(cx, _hpoly(c, r, a, ARMY), hat_col, ld, c, r)
+			_line(cx, _hp(c, r, a, Vector2(-0.9, -0.42)), _hp(c, r, a, Vector2(0.9, -0.55)), _shadow(hat_col).darkened(0.2), 1.0)
 
 	# Full-head coverings.
 	match style:
@@ -961,6 +1001,23 @@ static func _head(cx: Dictionary, j: Dictionary, look: Dictionary, r: float, pos
 		halo.a = 0.35
 		_flat(cx, _circle(gp, 3.6, 7), halo)
 		_flat(cx, _circle(gp, 1.7, 6), gc.lightened(0.4))
+
+
+static func _tv_head(cx: Dictionary, c: Vector2, r: float, a: float, look: Dictionary) -> void:
+	var box := _hpoly(c, r, a, TV_BOX)
+	_part(cx, box, _col(look, "mask", Color(0.32, 0.24, 0.2)), cx["light"], c, r)
+	if cx["o"].has("solid"):
+		return
+	var t := float(cx["o"].get("time", 0.0))
+	var scr := _hpoly(c, r, a, [Vector2(-0.6, -0.85), Vector2(0.95, -0.85), Vector2(0.95, 0.5), Vector2(-0.6, 0.5)])
+	var sc := _col(look, "lens", Color(0.4, 1.0, 0.75))
+	_flat(cx, scr, sc.darkened(0.3 + 0.2 * sin(t * 9.0)))
+	for k in 3:
+		var y := -0.6 + k * 0.4 + fmod(t * 2.0, 0.4)
+		_line(cx, _hp(c, r, a, Vector2(-0.55, y)), _hp(c, r, a, Vector2(0.9, y)), sc.lightened(0.3), 1.0)
+	_flat(cx, _circle(_hp(c, r, a, Vector2(-0.88, 0.2)), r * 0.12, 5), Color(0.8, 0.2, 0.2))
+	_line(cx, _hp(c, r, a, Vector2(-0.3, -1.15)), _hp(c, r, a, Vector2(-0.8, -1.9)), OUTLINE, 1.0)
+	_line(cx, _hp(c, r, a, Vector2(0.3, -1.15)), _hp(c, r, a, Vector2(0.75, -1.85)), OUTLINE, 1.0)
 
 
 static func _hair(cx: Dictionary, poly: PackedVector2Array, col: Color, c: Vector2, r: float) -> void:

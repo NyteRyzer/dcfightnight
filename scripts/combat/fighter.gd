@@ -20,6 +20,18 @@ const STANCES := {
 }
 
 var manager: Node = null
+## Ground line for this fighter. The beat 'em up mode moves it to give depth.
+var floor_y := FLOOR_Y
+## Beat 'em up: depth lane (0 = back), team (0 players, 1 enemies), facing that
+## follows movement instead of the opponent, and per-fighter damage scaling.
+var depth := 0.0
+var team := 0
+var free_facing := false
+var depth_walk := false
+var dmg_mult := 1.0
+## Cheaper rendering for crowds (no highlight band, no rim light).
+var lod := false
+var rim_enabled := true
 var def: Dictionary = {}
 var look: Dictionary = {}
 var pid := 0
@@ -233,7 +245,7 @@ func can_use(id: String) -> bool:
 # --- Queries -----------------------------------------------------------------------
 
 func grounded() -> bool:
-	return pos.y >= FLOOR_Y - 0.5
+	return pos.y >= floor_y - 0.5
 
 
 func is_crouching() -> bool:
@@ -339,12 +351,13 @@ func active_hitbox() -> Rect2:
 func current_attack() -> Dictionary:
 	var a := move
 	var last := hits_done + 1 >= max_hits()
-	if (last and move.has("launch_last")) or amplified:
+	if (last and move.has("launch_last")) or amplified or dmg_mult != 1.0:
 		a = move.duplicate()
+		a["damage"] = float(move.get("damage", 0)) * dmg_mult
 		if last and move.has("launch_last"):
 			a["launch"] = move["launch_last"]
 		if amplified:
-			a["damage"] = float(move.get("damage", 0)) * 1.35
+			a["damage"] = float(move.get("damage", 0)) * 1.35 * dmg_mult
 			a["hitstun"] = int(move.get("hitstun", 15)) + 3
 			a["amp"] = true
 	return a
@@ -359,7 +372,7 @@ func set_state(s: String) -> void:
 
 
 func face_opponent() -> void:
-	if opponent == null:
+	if opponent == null or free_facing:
 		return
 	var dx: float = opponent.pos.x - pos.x
 	if absf(dx) > 1.0:
@@ -511,6 +524,11 @@ func _neutral() -> void:
 			set_state("idle")
 		return
 	face_opponent()
+	if free_facing:
+		if held("r"):
+			facing = 1
+		elif held("l"):
+			facing = -1
 	var crouching := held("d")
 	var id := _take_buffered("crouch" if crouching else "ground")
 	if id != "":
@@ -555,7 +573,7 @@ func _launch_jump() -> void:
 		jump_dir = -1
 	var j: Array = def.get("jump", [4.5, -16.0])
 	vel = Vector2(float(j[0]) * jump_dir * facing, float(j[1]))
-	pos.y = FLOOR_Y - 1.0
+	pos.y = floor_y - 1.0
 	used_air_attack = false
 	air_time = 0
 	air_total = int(2.0 * absf(float(j[1])) / m_stat("gravity", 0.8))
@@ -580,12 +598,12 @@ func _air() -> void:
 func _physics_air() -> void:
 	vel.y += m_stat("gravity", 0.8)
 	pos += vel
-	if pos.y >= FLOOR_Y:
-		pos.y = FLOOR_Y
+	if pos.y >= floor_y:
+		pos.y = floor_y
 
 
 func _land() -> void:
-	pos.y = FLOOR_Y
+	pos.y = floor_y
 	vel = Vector2.ZERO
 	set_state("land")
 	face_opponent()
@@ -615,8 +633,8 @@ func _slide() -> void:
 	if not grounded():
 		vel.y += m_stat("gravity", 0.8)
 		pos.y += vel.y
-		if pos.y >= FLOOR_Y:
-			pos.y = FLOOR_Y
+		if pos.y >= floor_y:
+			pos.y = floor_y
 
 
 func _try_breaker() -> bool:
@@ -634,13 +652,13 @@ func _try_breaker() -> bool:
 func _airhit() -> void:
 	vel.y += m_stat("gravity", 0.8) * 0.9
 	pos += vel
-	if wall_bounce_ok and not wall_bounced and manager != null and absf(vel.x) > 3.0 and pos.y < FLOOR_Y - 20.0 and manager.at_wall(self):
+	if wall_bounce_ok and not wall_bounced and manager != null and absf(vel.x) > 3.0 and pos.y < floor_y - 20.0 and manager.at_wall(self):
 		wall_bounced = true
 		vel.x = -vel.x * 0.35
 		vel.y = minf(vel.y, -6.5)
 		manager.fx_wallbounce(self)
-	if pos.y >= FLOOR_Y and vel.y > 0:
-		pos.y = FLOOR_Y
+	if pos.y >= floor_y and vel.y > 0:
+		pos.y = floor_y
 		vel = Vector2.ZERO
 		if manager != null:
 			manager.fx_dust(pos, 1.6)
@@ -656,8 +674,8 @@ func _ko_fall() -> void:
 	if not grounded():
 		vel.y += m_stat("gravity", 0.8)
 		pos += vel
-		if pos.y >= FLOOR_Y:
-			pos.y = FLOOR_Y
+		if pos.y >= floor_y:
+			pos.y = floor_y
 			vel = Vector2.ZERO
 	else:
 		vel = Vector2.ZERO
@@ -723,18 +741,18 @@ func _process_move() -> void:
 	if m.has("impulse") and f == int(m.get("impulse_frame", 1)):
 		var imp: Array = m["impulse"]
 		vel = Vector2(float(imp[0]) * facing, float(imp[1]))
-		pos.y = minf(pos.y, FLOOR_Y - 1.0)
+		pos.y = minf(pos.y, floor_y - 1.0)
 	# Gravity for airborne moves.
 	var airborne := not grounded() or vel.y < 0
 	if airborne and not (flying and m.has("vel") and in_move_window(m.get("vel_frames", [1, 1]))):
 		if not (m.has("teleport") and m["teleport"].get("to", "") == "above" and f <= int(m["teleport"]["frame"]) + 2):
 			vel.y += m_stat("gravity", 0.8)
 	pos += vel
-	if flying and pos.y < FLOOR_Y and not airborne:
-		pos.y = FLOOR_Y
+	if flying and pos.y < floor_y and not airborne:
+		pos.y = floor_y
 	# Landing.
-	if airborne and pos.y >= FLOOR_Y:
-		pos.y = FLOOR_Y
+	if airborne and pos.y >= floor_y:
+		pos.y = floor_y
 		vel.y = 0
 		if m.get("air", false) or m.get("land_cancel", false) or m.has("impulse"):
 			if m.has("on_land_projectile") and manager != null:
@@ -745,7 +763,7 @@ func _process_move() -> void:
 				sf = -6
 			return
 	elif not airborne:
-		pos.y = FLOOR_Y
+		pos.y = floor_y
 	# Projectiles.
 	if m.has("projectile") and manager != null:
 		var p: Dictionary = m["projectile"]
@@ -785,7 +803,7 @@ func _teleport(tp: Dictionary) -> void:
 			pos.x = opponent.pos.x + side2 * dist
 		"above":
 			pos.x = opponent.pos.x - float(opponent.facing) * 0.0
-			pos.y = FLOOR_Y - H * 1.15
+			pos.y = floor_y - H * 1.15
 			vel = Vector2.ZERO
 	if manager != null:
 		manager.clamp_fighter(self)
@@ -799,7 +817,7 @@ func _throwing() -> void:
 		end_move()
 		return
 	if sf < 18:
-		throw_victim.pos = Vector2(pos.x + facing * H * 0.32, FLOOR_Y)
+		throw_victim.pos = Vector2(pos.x + facing * H * 0.32, floor_y)
 	elif sf == 18:
 		var dmg := float(def["moves"]["throw"].get("damage", 120))
 		throw_victim.thrown_release(self, dmg)
@@ -839,7 +857,7 @@ func thrown_release(by: Node2D, dmg: float) -> void:
 	combo_hits += 1
 	combo_damage += dmg
 	pos.x = by.pos.x - by.facing * H * 0.25
-	pos.y = FLOOR_Y - 30
+	pos.y = floor_y - 30
 	vel = Vector2(-by.facing * 4.0, -7.0)
 	flash = 1.0
 	set_state("airhit")
@@ -922,7 +940,7 @@ func receive_hit(a: Dictionary, src: Node2D, is_proj: bool) -> String:
 		elif a.get("knockdown", false):
 			lv = Vector2(5.0, -7.0)
 		vel = Vector2(lv.x * away, lv.y)
-		pos.y = minf(pos.y, FLOOR_Y - 1.0)
+		pos.y = minf(pos.y, floor_y - 1.0)
 		wall_bounce_ok = lv.x >= 5.0 and air_juggle <= 2
 		set_state("airhit")
 	else:
@@ -970,6 +988,8 @@ func _trail_update() -> void:
 func _compute_pose() -> Dictionary:
 	match state:
 		"idle":
+			if depth_walk:
+				return Poses.cycle(["walk1", "walk2", "walk3", "walk4"], frame, 7)
 			var breathe := (sin(frame * 0.09) + 1.0) * 0.5
 			return Poses.blend(Poses.get_pose(stance_names[0]), Poses.get_pose(stance_names[1]), breathe * breathe * (3.0 - 2.0 * breathe))
 		"walk_f":
@@ -1068,8 +1088,8 @@ func _move_pose() -> Dictionary:
 
 
 func _draw() -> void:
-	var gy := FLOOR_Y - pos.y
-	var sh_scale := clampf(1.0 - (FLOOR_Y - pos.y) / 300.0, 0.4, 1.0)
+	var gy := floor_y - pos.y
+	var sh_scale := clampf(1.0 - (floor_y - pos.y) / 300.0, 0.4, 1.0)
 	draw_set_transform(Vector2(0, gy), 0.0, Vector2(1.0, 0.22))
 	draw_circle(Vector2.ZERO, 0.19 * H * float(look.get("bulk", 1.0)) * sh_scale, Color(0, 0, 0, 0.35))
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
@@ -1078,13 +1098,13 @@ func _draw() -> void:
 		var c := Color(power.r, power.g, power.b, 0.35 * float(ai["life"]))
 		Rig.draw(self, (ai["p"] as Vector2) - pos, ai["f"], ai["pose"], look, H, {"solid": c})
 	_draw_smear(power)
-	var o := {"flash": flash, "alpha": alpha, "sway": cape_sway, "time": frame / 60.0}
+	var o := {"flash": flash, "alpha": alpha, "sway": cape_sway, "time": frame / 60.0, "lod": lod}
 	if amplified and state == "attack":
 		o["outline"] = power.lightened(0.3)
 	if meter >= 1000.0 and state in NEUTRAL:
 		var pulse := (sin(frame * 0.2) + 1.0) * 0.5
 		o["outline"] = Rig.OUTLINE.lerp(power, 0.2 + 0.35 * pulse)
-	if alpha > 0.9:
+	if alpha > 0.9 and rim_enabled and not lod:
 		Rig.draw(self, Vector2(-1.5 * facing, -1.0), facing, display_pose, look, H, {"solid": rim, "sway": cape_sway, "time": frame / 60.0})
 	Rig.draw(self, Vector2.ZERO, facing, display_pose, look, H, o)
 	if show_boxes:

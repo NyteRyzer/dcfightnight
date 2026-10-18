@@ -44,6 +44,19 @@ const PAGES := [
 		["Blocking", "Standing block stops jump-ins. Crouching block stops sweeps.", ""],
 		["Throw Break", "Press Throw right after being grabbed.", ""],
 	]},
+	{"title": "BEAT 'EM UP MODE", "lines": [
+		["Fight through 5 levels of enemy waves with 1 or 2 players.", "", ""],
+		["", "", ""],
+		["Walk in depth", "Up / Down", "Only enemies in your lane can be hit"],
+		["Jump", "Throw button (away from enemies)", ""],
+		["Grab & throw", "Throw button next to an enemy", ""],
+		["Block", "Hold Block", "Amplify and Breaker work as in versus"],
+		["SUPER (3 bars)", "Light + Heavy together", "Hits everything in your lane"],
+		["Pickups", "Burgers and medkits heal, Speed Force cells give 1 bar", ""],
+		["Lives", "3 lives each. Continue restarts the current level.", ""],
+		["GO!", "When an area is clear, walk right to move on", ""],
+		["Each level ends with a boss from the roster.", "", ""],
+	]},
 ]
 
 

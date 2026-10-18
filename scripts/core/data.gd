@@ -14,6 +14,9 @@ var stages: Array = []
 var stage_map: Dictionary = {}
 var story: Dictionary = {}
 var base_moves: Dictionary = {}
+## Beat 'em up enemies (built like fighters) and level data.
+var npcs: Dictionary = {}
+var brawl: Dictionary = {}
 
 
 func _ready() -> void:
@@ -35,6 +38,22 @@ func reload() -> void:
 	for st in stages:
 		stage_map[st["id"]] = st
 	story = load_json("res://data/story.json")
+	npcs.clear()
+	var nd := load_json("res://data/npcs.json")
+	var nsrc: Dictionary = nd.get("npcs", {})
+	for id in nsrc:
+		var src: Dictionary = (nsrc[id] as Dictionary).duplicate(true)
+		src["id"] = id
+		var d := build_fighter(src)
+		var variants: Array = []
+		for v in src.get("variants", [{}]):
+			var merged: Dictionary = src.get("look", {}).duplicate()
+			for k in v:
+				merged[k] = v[k]
+			variants.append(parse_look(merged))
+		d["variants"] = variants
+		npcs[id] = d
+	brawl = load_json("res://data/brawl.json")
 
 
 func load_json(path: String) -> Dictionary:
@@ -145,6 +164,23 @@ func validate() -> Array:
 		for field in ["id", "name"]:
 			if not st.has(field):
 				errors.append("stage missing '%s'" % field)
+	for id in npcs:
+		for key in npcs[id]["moves"]:
+			for p in npcs[id]["moves"][key].get("pose", []):
+				if not Poses.has_pose(p):
+					errors.append("npc %s.%s: unknown pose '%s'" % [id, key, p])
+	for lv in brawl.get("levels", []):
+		for area in lv.get("areas", []):
+			if not stage_map.has(area.get("stage", "")):
+				errors.append("brawl level '%s' has unknown stage" % lv.get("name", "?"))
+			for wave in area.get("waves", []):
+				for entry in wave:
+					if not npcs.has(entry[0]):
+						errors.append("brawl level '%s' has unknown npc '%s'" % [lv.get("name", "?"), entry[0]])
+			if area.has("miniboss") and not fighters.has(area["miniboss"].get("fighter", "")):
+				errors.append("brawl level '%s' has unknown miniboss" % lv.get("name", "?"))
+		if not fighters.has(lv.get("boss", {}).get("fighter", "")):
+			errors.append("brawl level '%s' has unknown boss" % lv.get("name", "?"))
 	for ch in story.get("chapters", []):
 		if not ch.get("choose", false) and not fighters.has(ch.get("player", "")):
 			errors.append("story chapter '%s' has unknown player" % ch.get("title", "?"))

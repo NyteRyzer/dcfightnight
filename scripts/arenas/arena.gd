@@ -13,6 +13,13 @@ var t := 0.0
 var dim := 0.0
 var glitch := false
 var preview := false
+## Beat 'em up: extra floor drawn below the normal floor for the depth lanes.
+var floor_extend := 0.0
+const FLOOR_BOTTOM := {
+	"star_labs": Color("0a1226"), "ccpd": Color("241a12"), "arrow_bunker": Color("0e1210"), "waverider": Color("16161a"),
+	"deo": Color("98a8bc"), "central_city": Color("100c18"), "star_city": Color("0a0e0c"), "national_city": Color("8a7060"),
+	"apocalypse": Color("1a0a06"), "earth_x": Color("0e0808"), "freak_studio": Color("16101e"),
+}
 var _seed := 0
 
 
@@ -59,6 +66,14 @@ func _draw() -> void:
 		"earth_x": _earth_x(sx)
 		"freak_studio": _studio(sx)
 		_: _star_labs(sx)
+	if floor_extend > 0.0:
+		var fc: Color = FLOOR_BOTTOM.get(stage_id, Color(0.08, 0.08, 0.1))
+		grad(sx - 10, FLOOR_Y + 58, W + 20, floor_extend, fc, fc.darkened(0.45))
+		var startx := floorf((sx - 10) / 80.0) * 80.0
+		var x := startx
+		while x < sx + W + 20:
+			draw_line(Vector2(x, FLOOR_Y + 58), Vector2(x + (x - sx - W * 0.5) * 0.25, FLOOR_Y + 58 + floor_extend), Color(fc.lightened(0.15), 0.5), 1.0)
+			x += 80.0
 	if glitch and not preview:
 		_glitch(sx)
 	if dim > 0.0:

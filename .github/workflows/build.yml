@@ -36,6 +36,7 @@ jobs:
         run: |
           godot --headless --path . --fixed-fps 60 res://tests/TestRunner.tscn -- quick
           godot --headless --path . --fixed-fps 60 res://tests/FlowTest.tscn
+          godot --headless --path . --fixed-fps 60 res://tests/BrawlTest.tscn -- quick
 
       - name: Export Windows, macOS and Linux
         run: |

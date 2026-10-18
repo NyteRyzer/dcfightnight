@@ -6,7 +6,7 @@ extends Node
 
 const LIMIT := 60 * 60 * 20
 
-var flows := ["story", "arcade", "survival", "versus", "training"]
+var flows := ["story", "arcade", "survival", "versus", "training", "brawl"]
 var flow := ""
 var frames := 0
 var flow_frames := 0
@@ -72,6 +72,8 @@ func _start_next() -> void:
 			Game.stage_id = "national_city"
 			Game.fight_opts = {}
 			Game.begin_fight()
+		"brawl":
+			Game.choose_brawl(false)
 		"training":
 			Game.mode = "training"
 			Game.chars = ["martian_manhunter", "citizen_steel"]
@@ -103,6 +105,9 @@ func _process(_d: float) -> void:
 			return
 		"FightStage", "TrainingRoom":
 			_drive_fight(_scene())
+			return
+		"BrawlStage":
+			_drive_brawl(_scene())
 			return
 		"Credits":
 			if flow_frames > 30:
@@ -146,6 +151,41 @@ func _drive_fight(f: Node) -> void:
 				pulse_held = true
 
 
+## Beat 'em up: clear level 1 by force, walk through each GO, then lose all
+## lives to reach the game-over menu and Continue into level 2.
+func _drive_brawl(b: Node) -> void:
+	if int(Game.brawl.get("continues", 0)) > 0:
+		if b.level_i != 1:
+			_fail("continue restarted at level %d, expected 2" % (b.level_i + 1))
+		fights["brawl"] += 1
+		Game.goto("menu")
+		return
+	match b.phase:
+		"title":
+			if b.pt % 12 == 0:
+				Input.action_press("p1_m_accept")
+				pulse_held = true
+		"play", "boss":
+			if b.pt % 4 == 0:
+				for e in b.enemies:
+					if e.health > 0.0 and e.state != "intro":
+						e.health = 0.0
+						e.set_state("ko")
+		"go":
+			b.players[0].pos.x = b.STAGE_W
+		"gameover":
+			if b.pt > 10 and b.pt % 12 == 0:
+				Input.action_press("p1_m_accept")
+				pulse_held = true
+	if b.level_i >= 1 and b.phase == "play" and b.lives[0] >= 0:
+		if b.level_i == 1 and fights["brawl"] == 0:
+			fights["brawl"] = 1
+			print("  brawl level 1 cleared, score %d" % b.score[0])
+		b.lives[0] = 0
+		b.players[0].health = 0.0
+		b.players[0].set_state("ko")
+
+
 func _report() -> void:
 	var chapters: int = Data.story["chapters"].size()
 	if fights.get("story", 0) != chapters:
@@ -156,6 +196,8 @@ func _report() -> void:
 		_fail("survival ran %d fights" % fights.get("survival", 0))
 	if fights.get("versus", 0) != 1:
 		_fail("versus ran %d fights" % fights.get("versus", 0))
+	if fights.get("brawl", 0) != 2:
+		_fail("brawl flow reached %d checkpoints, expected 2" % fights.get("brawl", 0))
 	if not Game.save.get("story_done", false):
 		_fail("story completion was not saved")
 	if not Game.is_unlocked("control_freak"):

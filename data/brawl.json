@@ -1,0 +1,369 @@
+{
+ "_doc": "Beat 'em up levels. Each area is one stage screen with enemy waves ([[npc, count], ...]); the boss is a full fighter.",
+ "levels": [
+  {
+   "name": "Streets of Star City",
+   "subtitle": "Level 1",
+   "intro": "Control Freak's simulation is flooding Star City with copies of every crook the heroes ever fought. Clear the Glades.",
+   "areas": [
+    {
+     "stage": "star_city",
+     "waves": [
+      [
+       [
+        "thug",
+        3
+       ]
+      ],
+      [
+       [
+        "thug",
+        2
+       ],
+       [
+        "punk",
+        2
+       ]
+      ],
+      [
+       [
+        "punk",
+        2
+       ],
+       [
+        "gunner",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "stage": "arrow_bunker",
+     "waves": [
+      [
+       [
+        "punk",
+        2
+       ],
+       [
+        "thug",
+        2
+       ]
+      ],
+      [
+       [
+        "bratva",
+        1
+       ],
+       [
+        "thug",
+        2
+       ]
+      ]
+     ]
+    }
+   ],
+   "boss": {
+    "fighter": "vigilante",
+    "stage": "star_city",
+    "health": 1300,
+    "line": "Star City doesn't need heroes. It needs an executioner."
+   }
+  },
+  {
+   "name": "Central City Breakout",
+   "subtitle": "Level 2",
+   "intro": "Iron Heights' simulated cells just opened. Metahuman inmates are loose in Central City.",
+   "areas": [
+    {
+     "stage": "central_city",
+     "waves": [
+      [
+       [
+        "convict",
+        1
+       ],
+       [
+        "thug",
+        2
+       ]
+      ],
+      [
+       [
+        "meta",
+        2
+       ],
+       [
+        "thug",
+        1
+       ]
+      ],
+      [
+       [
+        "convict",
+        2
+       ],
+       [
+        "meta",
+        1
+       ]
+      ]
+     ]
+    },
+    {
+     "stage": "ccpd",
+     "waves": [
+      [
+       [
+        "meta",
+        2
+       ],
+       [
+        "punk",
+        1
+       ]
+      ],
+      [
+       [
+        "convict",
+        1
+       ],
+       [
+        "gunner",
+        2
+       ]
+      ]
+     ]
+    }
+   ],
+   "boss": {
+    "fighter": "reverse_flash",
+    "stage": "star_labs",
+    "health": 1350,
+    "line": "You're always too late, Flash. Even in here."
+   }
+  },
+  {
+   "name": "Siege of the D.E.O.",
+   "subtitle": "Level 3",
+   "intro": "Worldkiller cultists have taken the D.E.O. and are calling their queen.",
+   "areas": [
+    {
+     "stage": "deo",
+     "waves": [
+      [
+       [
+        "cultist",
+        3
+       ]
+      ],
+      [
+       [
+        "cultist",
+        2
+       ],
+       [
+        "gunner",
+        2
+       ]
+      ],
+      [
+       [
+        "meta",
+        2
+       ],
+       [
+        "cultist",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "stage": "national_city",
+     "waves": [
+      [
+       [
+        "cultist",
+        2
+       ],
+       [
+        "assassin",
+        1
+       ]
+      ],
+      [
+       [
+        "assassin",
+        2
+       ],
+       [
+        "gunner",
+        1
+       ]
+      ]
+     ]
+    }
+   ],
+   "boss": {
+    "fighter": "reign",
+    "stage": "national_city",
+    "health": 1450,
+    "line": "Kneel. Your world has already been judged."
+   }
+  },
+  {
+   "name": "The Savage Future",
+   "subtitle": "Level 4",
+   "intro": "The heroes are thrown into 2166, where Vandal Savage's legions rule the ruins.",
+   "areas": [
+    {
+     "stage": "apocalypse",
+     "waves": [
+      [
+       [
+        "soldier",
+        2
+       ],
+       [
+        "thug",
+        1
+       ]
+      ],
+      [
+       [
+        "soldier",
+        2
+       ],
+       [
+        "assassin",
+        1
+       ]
+      ],
+      [
+       [
+        "bratva",
+        1
+       ],
+       [
+        "soldier",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "stage": "waverider",
+     "waves": [
+      [
+       [
+        "assassin",
+        2
+       ],
+       [
+        "soldier",
+        1
+       ]
+      ],
+      [
+       [
+        "soldier",
+        3
+       ]
+      ]
+     ]
+    }
+   ],
+   "boss": {
+    "fighter": "vandal_savage",
+    "stage": "apocalypse",
+    "health": 1500,
+    "line": "I have outlived every hero who ever stood against me."
+   }
+  },
+  {
+   "name": "Season Finale",
+   "subtitle": "Level 5",
+   "intro": "Earth-X troopers guard the way to Control Freak's studio. Deathstroke waits at the door.",
+   "areas": [
+    {
+     "stage": "earth_x",
+     "waves": [
+      [
+       [
+        "trooper",
+        3
+       ]
+      ],
+      [
+       [
+        "trooper",
+        2
+       ],
+       [
+        "convict",
+        1
+       ]
+      ],
+      [
+       [
+        "trooper",
+        2
+       ],
+       [
+        "assassin",
+        2
+       ]
+      ]
+     ]
+    },
+    {
+     "stage": "earth_x",
+     "waves": [
+      [
+       [
+        "tvhead",
+        3
+       ]
+      ],
+      [
+       [
+        "tvhead",
+        2
+       ],
+       [
+        "trooper",
+        2
+       ]
+      ]
+     ],
+     "miniboss": {
+      "fighter": "deathstroke",
+      "health": 1100
+     }
+    },
+    {
+     "stage": "freak_studio",
+     "waves": [
+      [
+       [
+        "tvhead",
+        3
+       ],
+       [
+        "meta",
+        1
+       ]
+      ]
+     ]
+    }
+   ],
+   "boss": {
+    "fighter": "control_freak",
+    "stage": "freak_studio",
+    "health": 1700,
+    "line": "You can't beat-em-up the SHOWRUNNER!"
+   }
+  }
+ ]
+}

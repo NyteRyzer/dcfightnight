@@ -1,0 +1,865 @@
+{
+ "_doc": "Beat 'em up enemy NPCs. Each NPC is a lightweight fighter: base normals + overrides. 'variants' are random look overrides so crowds look varied. ai: brawler, knife, brute, gunner, caster, agile.",
+ "npcs": {
+  "thug": {
+   "name": "Street Thug",
+   "height": 168,
+   "health": 220,
+   "walk": 2.6,
+   "back_walk": 2.2,
+   "ai": "brawler",
+   "score": 100,
+   "look": {
+    "build": "male",
+    "skin": "#c08a66",
+    "suit": "#3a3e46",
+    "arms": "#3a3e46",
+    "forearm": "#3a3e46",
+    "gloves": "#c08a66",
+    "legs": "#2e3a52",
+    "boots": "#d8d8d8",
+    "boot_len": 0.22,
+    "hair": "#1a1210",
+    "head": "short",
+    "hat": "beanie",
+    "hat_color": "#1c1c20",
+    "power": "#ffffff",
+    "bulk": 1.05,
+    "seams": "#2a2e36"
+   },
+   "variants": [
+    {
+     "suit": "#3a3e46",
+     "arms": "#3a3e46",
+     "forearm": "#3a3e46",
+     "hat_color": "#1c1c20"
+    },
+    {
+     "suit": "#2a3a5a",
+     "arms": "#2a3a5a",
+     "forearm": "#2a3a5a",
+     "hat_color": "#8a1a1a"
+    },
+    {
+     "suit": "#4a4a2a",
+     "arms": "#4a4a2a",
+     "forearm": "#4a4a2a",
+     "hat": "none",
+     "head": "shaved"
+    },
+    {
+     "suit": "#5a1a20",
+     "arms": "#5a1a20",
+     "forearm": "#5a1a20",
+     "hat": "cap",
+     "hat_color": "#e8e8e8",
+     "face": "bandana",
+     "mask": "#1a1a1a"
+    }
+   ],
+   "moves": {
+    "L": {
+     "damage": 30
+    },
+    "M": {
+     "damage": 45
+    },
+    "H": {
+     "damage": 70,
+     "startup": 13
+    }
+   }
+  },
+  "punk": {
+   "name": "Glades Knife Punk",
+   "height": 164,
+   "health": 180,
+   "walk": 3.4,
+   "back_walk": 3.0,
+   "ai": "knife",
+   "score": 120,
+   "look": {
+    "build": "male",
+    "skin": "#d9a588",
+    "suit": "#c8c8c8",
+    "shirt": "#a01818",
+    "arms": "#1c1a1a",
+    "forearm": "#1c1a1a",
+    "gloves": "#d9a588",
+    "legs": "#141414",
+    "boots": "#2a1a12",
+    "boot_len": 0.62,
+    "hair": "#d02040",
+    "head": "mohawk",
+    "weapon": "dagger",
+    "blade_color": "#c8ccd4",
+    "coat": "#1c1a1a",
+    "coat_len": 0.12,
+    "power": "#ff6080",
+    "bulk": 0.95,
+    "pads": true,
+    "pad_color": "#2a2626"
+   },
+   "variants": [
+    {
+     "hair": "#d02040"
+    },
+    {
+     "hair": "#30c060",
+     "shirt": "#e0e0e0"
+    },
+    {
+     "hair": "#3080ff",
+     "shirt": "#202020"
+    },
+    {
+     "hair": "#f0d040",
+     "face": "shades"
+    }
+   ],
+   "moves": {
+    "L": {
+     "name": "Knife Jab",
+     "pose": [
+      "jab_w",
+      "stab_s"
+     ],
+     "damage": 28,
+     "sfx": "slash",
+     "fx_hit": "slash"
+    },
+    "M": {
+     "damage": 40
+    },
+    "fS": {
+     "name": "Knife Lunge",
+     "pose": [
+      "hslash_w",
+      "stab_s"
+     ],
+     "startup": 12,
+     "active": 6,
+     "recovery": 20,
+     "vel": [
+      8,
+      0
+     ],
+     "vel_frames": [
+      10,
+      16
+     ],
+     "stop_on_hit": true,
+     "hitbox": [
+      0.1,
+      -0.9,
+      0.5,
+      0.36
+     ],
+     "damage": 55,
+     "hitstun": 20,
+     "blockstun": 12,
+     "level": "mid",
+     "sfx": "slash",
+     "fx_hit": "slash"
+    }
+   }
+  },
+  "bratva": {
+   "name": "Bratva Enforcer",
+   "height": 184,
+   "health": 360,
+   "walk": 2.2,
+   "back_walk": 2.0,
+   "ai": "brute",
+   "score": 250,
+   "stance": "heavy",
+   "look": {
+    "build": "male",
+    "skin": "#f0c8a8",
+    "suit": "#121214",
+    "shirt": "#e8e8ea",
+    "emblem": "tie",
+    "accent": "#141418",
+    "coat": "#0e0e10",
+    "coat_len": 0.42,
+    "arms": "#121214",
+    "forearm": "#121214",
+    "gloves": "#1a1a1a",
+    "glove_len": 0.3,
+    "legs": "#121214",
+    "boots": "#0a0a0a",
+    "boot_len": 0.3,
+    "hair": "#2a1e14",
+    "head": "slick",
+    "face": "shades",
+    "power": "#c8d8ff",
+    "bulk": 1.3
+   },
+   "variants": [
+    {
+     "hair": "#2a1e14"
+    },
+    {
+     "hair": "#b0a080",
+     "beard": "#8a7a60"
+    },
+    {
+     "head": "shaved",
+     "hair": "#3a2a1a"
+    },
+    {
+     "suit": "#2a2a30",
+     "coat": "#3a3028"
+    }
+   ],
+   "moves": {
+    "L": {
+     "damage": 36
+    },
+    "M": {
+     "damage": 50
+    },
+    "H": {
+     "damage": 90,
+     "startup": 15,
+     "armor": {
+      "frames": [
+       3,
+       15
+      ],
+      "hits": 1
+     }
+    },
+    "fS": {
+     "name": "Shoulder Charge",
+     "pose": [
+      "charge_s",
+      "charge_s"
+     ],
+     "startup": 14,
+     "active": 12,
+     "recovery": 24,
+     "vel": [
+      7,
+      0
+     ],
+     "vel_frames": [
+      12,
+      24
+     ],
+     "stop_on_hit": true,
+     "armor": {
+      "frames": [
+       1,
+       22
+      ],
+      "hits": 1
+     },
+     "hitbox": [
+      0.1,
+      -0.92,
+      0.38,
+      0.6
+     ],
+     "damage": 70,
+     "hitstun": 22,
+     "level": "mid",
+     "knockdown": true
+    }
+   }
+  },
+  "gunner": {
+   "name": "H.I.V.E. Gunner",
+   "height": 172,
+   "health": 200,
+   "walk": 2.6,
+   "back_walk": 2.6,
+   "ai": "gunner",
+   "score": 180,
+   "look": {
+    "build": "male",
+    "skin": "#c08a66",
+    "suit": "#22242a",
+    "arms": "#2a2c32",
+    "forearm": "#2a2c32",
+    "gloves": "#121214",
+    "glove_len": 0.5,
+    "legs": "#22242a",
+    "boots": "#101012",
+    "boot_len": 0.6,
+    "head": "visor",
+    "mask": "#16161a",
+    "hood": "#2a2c32",
+    "lens": "#ff7a20",
+    "emblem": "vest",
+    "vest": "#14161a",
+    "belt": "#1a1a1c",
+    "pouches": true,
+    "kneepads": "#2a2c32",
+    "power": "#ff8a40",
+    "bulk": 1.05
+   },
+   "variants": [
+    {
+     "lens": "#ff7a20"
+    },
+    {
+     "lens": "#30d0ff",
+     "suit": "#1a2430",
+     "arms": "#1e2a36"
+    },
+    {
+     "lens": "#ff2040",
+     "hood": "#3a1a1a"
+    }
+   ],
+   "moves": {
+    "S": {
+     "name": "Burst Fire",
+     "pose": [
+      "shoot_w",
+      "shoot_s"
+     ],
+     "startup": 14,
+     "active": 2,
+     "recovery": 26,
+     "sfx": "shot",
+     "projectile": {
+      "kind": "bullet",
+      "frame": 14,
+      "count": 2,
+      "every": 6,
+      "offset": [
+       0.5,
+       -0.78
+      ],
+      "speed": 11,
+      "damage": 26,
+      "hitstun": 14,
+      "blockstun": 8,
+      "size": [
+       12,
+       4
+      ],
+      "level": "high"
+     }
+    }
+   }
+  },
+  "convict": {
+   "name": "Iron Heights Convict",
+   "height": 186,
+   "health": 420,
+   "walk": 2.0,
+   "back_walk": 1.8,
+   "ai": "brute",
+   "score": 300,
+   "stance": "heavy",
+   "look": {
+    "build": "male",
+    "skin": "#a06a4a",
+    "suit": "#e0701c",
+    "arms": "#a06a4a",
+    "forearm": "#a06a4a",
+    "gloves": "#a06a4a",
+    "legs": "#d8681a",
+    "boots": "#f0f0f0",
+    "boot_len": 0.2,
+    "head": "shaved",
+    "hair": "#1a1210",
+    "muscles": true,
+    "seams": "#a04a10",
+    "power": "#ffa040",
+    "bulk": 1.45
+   },
+   "variants": [
+    {
+     "skin": "#d9a588"
+    },
+    {
+     "skin": "#c08a66"
+    },
+    {
+     "skin": "#a06a4a"
+    },
+    {
+     "skin": "#7a4e34"
+    },
+    {
+     "beard": "#2a1a10",
+     "skin": "#f0c8a8"
+    }
+   ],
+   "moves": {
+    "L": {
+     "damage": 38,
+     "startup": 6
+    },
+    "H": {
+     "damage": 100,
+     "startup": 16,
+     "armor": {
+      "frames": [
+       2,
+       16
+      ],
+      "hits": 1
+     }
+    },
+    "fS": {
+     "name": "Bull Rush",
+     "pose": [
+      "charge_s",
+      "charge_s"
+     ],
+     "startup": 14,
+     "active": 14,
+     "recovery": 26,
+     "vel": [
+      7.5,
+      0
+     ],
+     "vel_frames": [
+      12,
+      26
+     ],
+     "stop_on_hit": true,
+     "armor": {
+      "frames": [
+       1,
+       24
+      ],
+      "hits": 2
+     },
+     "hitbox": [
+      0.1,
+      -0.95,
+      0.38,
+      0.62
+     ],
+     "damage": 80,
+     "hitstun": 24,
+     "level": "mid",
+     "knockdown": true
+    }
+   }
+  },
+  "meta": {
+   "name": "Metahuman Goon",
+   "height": 170,
+   "health": 260,
+   "walk": 2.8,
+   "back_walk": 2.6,
+   "ai": "caster",
+   "score": 220,
+   "look": {
+    "build": "male",
+    "skin": "#d9a588",
+    "suit": "#3a1a4a",
+    "arms": "#3a1a4a",
+    "forearm": "#3a1a4a",
+    "gloves": "#c060ff",
+    "glove_len": 0.25,
+    "legs": "#1e1e28",
+    "boots": "#121214",
+    "boot_len": 0.35,
+    "hair": "#1a1210",
+    "head": "short",
+    "glow_eyes": "#d080ff",
+    "power": "#c060ff",
+    "bulk": 1.0
+   },
+   "variants": [
+    {
+     "gloves": "#c060ff",
+     "glow_eyes": "#d080ff",
+     "power": "#c060ff"
+    },
+    {
+     "gloves": "#30c0ff",
+     "glow_eyes": "#80e0ff",
+     "power": "#30c0ff",
+     "suit": "#1a2a4a",
+     "arms": "#1a2a4a",
+     "forearm": "#1a2a4a"
+    },
+    {
+     "gloves": "#ff6020",
+     "glow_eyes": "#ffa060",
+     "power": "#ff6020",
+     "suit": "#4a1a14",
+     "arms": "#4a1a14",
+     "forearm": "#4a1a14",
+     "head": "shaved"
+    }
+   ],
+   "moves": {
+    "S": {
+     "name": "Meta Blast",
+     "pose": [
+      "cast_w",
+      "cast_s"
+     ],
+     "startup": 16,
+     "active": 2,
+     "recovery": 26,
+     "sfx": "vibe",
+     "projectile": {
+      "kind": "vibe",
+      "frame": 16,
+      "offset": [
+       0.45,
+       -0.8
+      ],
+      "speed": 6,
+      "damage": 45,
+      "hitstun": 20,
+      "blockstun": 12,
+      "size": [
+       26,
+       26
+      ],
+      "level": "mid"
+     }
+    }
+   }
+  },
+  "assassin": {
+   "name": "League Assassin",
+   "height": 172,
+   "health": 230,
+   "walk": 3.6,
+   "back_walk": 3.2,
+   "ai": "agile",
+   "score": 260,
+   "stance": "sword",
+   "flip_jump": true,
+   "look": {
+    "build": "male",
+    "skin": "#c08a66",
+    "suit": "#121214",
+    "arms": "#141416",
+    "forearm": "#1a1a1e",
+    "gloves": "#0e0e10",
+    "glove_len": 0.6,
+    "legs": "#121214",
+    "boots": "#0e0e10",
+    "boot_len": 0.7,
+    "head": "hood",
+    "hood": "#16161a",
+    "face": "bandana",
+    "mask": "#0a0a0c",
+    "coat": "#121214",
+    "coat_len": 0.4,
+    "belt": "#6a1010",
+    "weapon": "katana",
+    "power": "#ff3030",
+    "bulk": 0.95
+   },
+   "variants": [
+    {
+     "belt": "#6a1010"
+    },
+    {
+     "belt": "#c09030",
+     "hood": "#2a1a10",
+     "coat": "#2a1a10"
+    },
+    {
+     "hood": "#3a0a0e",
+     "coat": "#2a0a0c",
+     "belt": "#0a0a0a"
+    }
+   ],
+   "moves": {
+    "H": {
+     "name": "Blade Arc",
+     "pose": [
+      "slash_w",
+      "slash_s"
+     ],
+     "damage": 75,
+     "hitbox": [
+      0.15,
+      -0.98,
+      0.55,
+      0.6
+     ],
+     "sfx": "slash",
+     "fx_hit": "slash"
+    },
+    "fS": {
+     "name": "Shadow Lunge",
+     "pose": [
+      "hslash_w",
+      "stab_s"
+     ],
+     "startup": 10,
+     "active": 8,
+     "recovery": 20,
+     "vel": [
+      10,
+      0
+     ],
+     "vel_frames": [
+      8,
+      16
+     ],
+     "stop_on_hit": true,
+     "hitbox": [
+      0.1,
+      -0.9,
+      0.55,
+      0.36
+     ],
+     "damage": 60,
+     "hitstun": 20,
+     "level": "mid",
+     "knockdown": true,
+     "sfx": "slash",
+     "fx_hit": "slash",
+     "trail": true
+    }
+   }
+  },
+  "trooper": {
+   "name": "Earth-X Trooper",
+   "height": 176,
+   "health": 240,
+   "walk": 2.4,
+   "back_walk": 2.4,
+   "ai": "gunner",
+   "score": 200,
+   "look": {
+    "build": "male",
+    "skin": "#f0c8a8",
+    "suit": "#34362f",
+    "arms": "#34362f",
+    "forearm": "#34362f",
+    "gloves": "#141414",
+    "glove_len": 0.3,
+    "legs": "#2c2e28",
+    "boots": "#0e0e0e",
+    "boot_len": 0.7,
+    "hat": "army",
+    "hat_color": "#2a2c26",
+    "head": "shaved",
+    "hair": "#3a2a1a",
+    "stripe": "#a01818",
+    "belt": "#1a1a14",
+    "pouches": true,
+    "emblem": "vest",
+    "vest": "#26281f",
+    "power": "#ff4040",
+    "bulk": 1.05
+   },
+   "variants": [
+    {
+     "skin": "#f0c8a8"
+    },
+    {
+     "skin": "#d9a588",
+     "hat_color": "#1e1e1c"
+    },
+    {
+     "face": "shades"
+    }
+   ],
+   "moves": {
+    "S": {
+     "name": "Rifle Shot",
+     "pose": [
+      "shoot_w",
+      "shoot_s"
+     ],
+     "startup": 16,
+     "active": 2,
+     "recovery": 28,
+     "sfx": "shot",
+     "projectile": {
+      "kind": "bullet",
+      "frame": 16,
+      "offset": [
+       0.5,
+       -0.78
+      ],
+      "speed": 12,
+      "damage": 32,
+      "hitstun": 15,
+      "blockstun": 8,
+      "size": [
+       14,
+       4
+      ],
+      "level": "high"
+     }
+    }
+   }
+  },
+  "cultist": {
+   "name": "Worldkiller Cultist",
+   "height": 168,
+   "health": 210,
+   "walk": 2.8,
+   "back_walk": 2.4,
+   "ai": "brawler",
+   "score": 150,
+   "look": {
+    "build": "male",
+    "skin": "#f0c8a8",
+    "suit": "#5a0a10",
+    "arms": "#5a0a10",
+    "forearm": "#5a0a10",
+    "gloves": "#f0c8a8",
+    "legs": "#3a060a",
+    "boots": "#1a0a0a",
+    "boot_len": 0.4,
+    "head": "hood",
+    "hood": "#6a0c12",
+    "coat": "#5a0a10",
+    "coat_len": 0.5,
+    "glow_eyes": "#ff3020",
+    "emblem": "glyph",
+    "accent": "#e0b030",
+    "power": "#ff3020",
+    "bulk": 1.0
+   },
+   "variants": [
+    {
+     "build": "male"
+    },
+    {
+     "build": "female",
+     "height": 160,
+     "lips": "#7a2a2a"
+    },
+    {
+     "hood": "#3a0a0e",
+     "coat": "#2a0608",
+     "glow_eyes": "#ff8030"
+    }
+   ]
+  },
+  "soldier": {
+   "name": "Savage Legionnaire",
+   "height": 180,
+   "health": 300,
+   "walk": 2.4,
+   "back_walk": 2.2,
+   "ai": "gunner",
+   "score": 240,
+   "look": {
+    "build": "male",
+    "skin": "#c08a66",
+    "suit": "#3a3428",
+    "plates": "#5a4e38",
+    "arms": "#3a3428",
+    "forearm": "#4a4232",
+    "gloves": "#1a1612",
+    "glove_len": 0.6,
+    "legs": "#2e2a22",
+    "boots": "#141210",
+    "boot_len": 0.7,
+    "kneepads": "#5a4e38",
+    "pads": true,
+    "pad_color": "#5a4e38",
+    "head": "visor",
+    "mask": "#2a2620",
+    "hood": "#3a3428",
+    "lens": "#ff8020",
+    "belt": "#1a1612",
+    "power": "#ff7a2a",
+    "bulk": 1.15
+   },
+   "variants": [
+    {
+     "lens": "#ff8020"
+    },
+    {
+     "lens": "#ff2020",
+     "plates": "#4a3a3a"
+    },
+    {
+     "plates": "#6a6040",
+     "lens": "#ffd040"
+    }
+   ],
+   "moves": {
+    "S": {
+     "name": "Plasma Rifle",
+     "pose": [
+      "shoot_w",
+      "shoot_s"
+     ],
+     "startup": 15,
+     "active": 2,
+     "recovery": 26,
+     "sfx": "zap",
+     "projectile": {
+      "kind": "bolt",
+      "frame": 15,
+      "offset": [
+       0.5,
+       -0.78
+      ],
+      "speed": 9,
+      "damage": 36,
+      "hitstun": 16,
+      "blockstun": 10,
+      "size": [
+       30,
+       10
+      ],
+      "level": "mid",
+      "color": "#ff8020"
+     }
+    }
+   }
+  },
+  "tvhead": {
+   "name": "Freak's TV Minion",
+   "height": 166,
+   "health": 200,
+   "walk": 3.0,
+   "back_walk": 2.6,
+   "ai": "brawler",
+   "score": 160,
+   "look": {
+    "build": "male",
+    "skin": "#f0c09a",
+    "suit": "#5c3a96",
+    "arms": "#5c3a96",
+    "forearm": "#5c3a96",
+    "gloves": "#1a1a1a",
+    "glove_len": 0.4,
+    "legs": "#2a3e7a",
+    "boots": "#1a1a1a",
+    "boot_len": 0.4,
+    "head": "tv",
+    "mask": "#3a2a20",
+    "lens": "#40ffb0",
+    "belt": "#1a1a1a",
+    "power": "#40ffb0",
+    "bulk": 1.05
+   },
+   "variants": [
+    {
+     "lens": "#40ffb0"
+    },
+    {
+     "lens": "#ff60c0",
+     "suit": "#2a2a2a",
+     "arms": "#2a2a2a",
+     "forearm": "#2a2a2a"
+    },
+    {
+     "lens": "#ffd040",
+     "mask": "#5a5a60",
+     "suit": "#1a4a3a",
+     "arms": "#1a4a3a",
+     "forearm": "#1a4a3a"
+    }
+   ]
+  }
+ }
+}

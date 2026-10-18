@@ -58,6 +58,18 @@ Use this alongside the automated runner (`res://tests/TestRunner.tscn`). It foll
 - [ ] Survival: health carries over (+25% between fights). The win count goes up. The CPU gets harder every 3 wins.
 - [ ] Training: the timer shows "--". Health regenerates. Dummy modes (Stand / Crouch / Jump / Block / CPU), the Hitboxes toggle and R (reset) all work. The frame-data line updates.
 
+## Beat 'em Up
+- [ ] Beat 'em Up (solo) picks one fighter. Beat 'em Up Co-op picks two, and each controller drives its own player.
+- [ ] Up/Down walks in depth. Attacks only connect with enemies in roughly the same lane.
+- [ ] Throw jumps in open space and grabs an enemy when one is adjacent. Light + Heavy fires the super at 3 bars.
+- [ ] Enemies take turns: no more than two close in on one player at a time, the rest circle or hang back.
+- [ ] Gunners, H.I.V.E. agents and Earth-X soldiers shoot. Punks and convicts lunge with forward specials.
+- [ ] The GO arrow appears when an area is clear and walking right moves on. The camera never scrolls past live enemies.
+- [ ] Pickups: burgers heal 250, medkits 500, Speed Force cells give 1 bar. They blink before vanishing.
+- [ ] Each level ends with the boss intro line and a boss health bar. Level 5 has a Deathstroke mini-boss.
+- [ ] Losing all lives shows GAME OVER with Continue (restarts the level) or Main Menu.
+- [ ] Clearing level 5 shows the ending card, then the credits. The best score is saved.
+
 ## Visual / audio
 - [ ] Pixel art stays crisp at 1280×720 and in fullscreen with Pixel Scaling set to CRISP.
 - [ ] Fighters are roughly half the screen height and easy to read on every stage.

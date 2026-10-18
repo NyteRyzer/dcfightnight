@@ -27,6 +27,8 @@ func _ready() -> void:
 	items += [
 		{"id": "arcade", "label": "Arcade"},
 		{"id": "survival", "label": "Survival"},
+		{"id": "brawl", "label": "Beat 'em Up"},
+		{"id": "brawl_coop", "label": "Beat 'em Up Co-op"},
 		{"id": "versus", "label": "Versus (2 Players)"},
 		{"id": "versus_cpu", "label": "Versus CPU"},
 		{"id": "training", "label": "Training"},
@@ -64,6 +66,10 @@ func _on_choice(id: String) -> void:
 			Game.start_versus(true)
 		"training":
 			Game.start_training()
+		"brawl":
+			Game.choose_brawl(false)
+		"brawl_coop":
+			Game.choose_brawl(true)
 		"howto":
 			Game.goto("howto")
 		"options":

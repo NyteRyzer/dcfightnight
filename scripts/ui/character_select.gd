@@ -31,8 +31,8 @@ func _ready() -> void:
 	Sound.play_music("select")
 	ids = Data.roster.duplicate()
 	ids.append("random")
-	two_humans = Game.mode == "versus"
-	single = Game.mode in ["arcade", "survival", "story_choose"]
+	two_humans = Game.mode in ["versus", "brawl_coop"]
+	single = Game.mode in ["arcade", "survival", "story_choose", "brawl"]
 	var prev0: int = ids.find(Game.chars[0])
 	var prev1: int = ids.find(Game.chars[1])
 	cursor = [maxi(0, prev0), maxi(0, prev1 if prev1 != prev0 else (prev0 + 1) % (ids.size() - 1))]
@@ -157,6 +157,8 @@ func _after_pick(slot: int) -> void:
 			"story_choose":
 				Game.story_champion = id
 				Game.story_fight()
+			"brawl":
+				Game.start_brawl([id])
 		return
 	if not two_humans and slot == 0:
 		step = 1
@@ -164,7 +166,10 @@ func _after_pick(slot: int) -> void:
 	if picked[0] != "" and picked[1] != "":
 		Game.chars = [picked[0], picked[1]]
 		await get_tree().create_timer(0.35).timeout
-		Game.goto("stage")
+		if Game.mode == "brawl_coop":
+			Game.start_brawl([picked[0], picked[1]])
+		else:
+			Game.goto("stage")
 
 
 func _text(pos: Vector2, s: String, size: int, col: Color, center := false, outline := 3) -> void:
@@ -203,6 +208,8 @@ func _draw() -> void:
 		"arcade": title = "ARCADE - SELECT YOUR FIGHTER"
 		"survival": title = "SURVIVAL - SELECT YOUR FIGHTER"
 		"story_choose": title = "CHOOSE YOUR CHAMPION"
+		"brawl": title = "BEAT 'EM UP - SELECT YOUR FIGHTER"
+		"brawl_coop": title = "BEAT 'EM UP CO-OP - SELECT FIGHTERS"
 		"training": title = "TRAINING - SELECT FIGHTER" if step == 0 else "TRAINING - SELECT DUMMY"
 		"versus_cpu": title = "SELECT YOUR FIGHTER" if step == 0 else "SELECT CPU OPPONENT"
 	_text(Vector2(320, 26), title, 16, Color(1, 0.85, 0.25), true, 4)
